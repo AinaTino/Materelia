@@ -1397,6 +1397,129 @@ fix(affectation)   : correction état après révocation
 style(dashboard)   : alignement cartes statistiques
 ```
 
+## Structure complète — Feature-First simplifié
+
+```text
+MateRelia/
+├── .env                          ← clés Supabase (jamais sur GitHub)
+├── .gitignore
+├── pubspec.yaml
+│
+└── lib/
+    ├── main.dart                 ← init Supabase + GoRouter + Riverpod
+    │
+    ├── core/
+    │   ├── theme/
+    │   │   ├── app_theme.dart    ← Material Design 3 + couleurs
+    │   │   └── app_colors.dart   ← palette complète
+    │   ├── constants/
+    │   │   └── app_constants.dart ← VALIDITE_HEURES, etc.
+    │   ├── router/
+    │   │   └── app_router.dart   ← GoRouter toutes les routes
+    │   └── utils/
+    │       └── date_utils.dart   ← formatters de dates
+    │
+    ├── shared/
+    │   ├── models/               ← TOUS les modèles Dart
+    │   │   ├── utilisateur.dart
+    │   │   ├── materiel.dart
+    │   │   ├── categorie.dart
+    │   │   ├── zone.dart
+    │   │   ├── stock.dart
+    │   │   ├── ticket.dart
+    │   │   ├── ligne_ticket.dart
+    │   │   ├── demande_affectation.dart
+    │   │   ├── affectation.dart
+    │   │   └── notification.dart
+    │   ├── widgets/              ← composants réutilisables
+    │   │   ├── app_bar.dart
+    │   │   ├── bottom_nav.dart
+    │   │   ├── badge_etat.dart   ← badge coloré par état
+    │   │   ├── empty_state.dart  ← écran vide générique
+    │   │   └── loading.dart      ← indicateur chargement
+    │   └── services/
+    │       └── supabase_service.dart ← client Supabase singleton
+    │
+    └── features/
+        ├── auth/
+        │   ├── auth_page.dart
+        │   ├── auth_provider.dart
+        │   └── auth_service.dart
+        │
+        ├── ticket/
+        │   ├── ticket_page.dart        ← liste tickets
+        │   ├── ticket_detail_page.dart ← détail + code remise
+        │   ├── ticket_provider.dart
+        │   ├── ticket_service.dart
+        │   └── widgets/
+        │       └── ticket_card.dart
+        │
+        ├── panier/
+        │   ├── panier_page.dart        ← liste catégories
+        │   ├── panier_recap_page.dart  ← lieu + date fin
+        │   ├── panier_provider.dart    ← state local Riverpod
+        │   └── widgets/
+        │       └── categorie_card.dart
+        │
+        ├── affectation/
+        │   ├── affectation_page.dart
+        │   ├── affectation_detail_page.dart
+        │   ├── affectation_form_page.dart
+        │   ├── affectation_provider.dart
+        │   ├── affectation_service.dart
+        │   └── widgets/
+        │       └── affectation_card.dart
+        │
+        ├── materiel/
+        │   ├── materiel_page.dart
+        │   ├── materiel_detail_page.dart
+        │   ├── materiel_form_page.dart
+        │   ├── materiel_provider.dart
+        │   ├── materiel_service.dart
+        │   └── widgets/
+        │       └── materiel_card.dart
+        │
+        ├── notification/
+        │   ├── notification_page.dart
+        │   ├── notification_provider.dart
+        │   └── notification_service.dart
+        │
+        └── dashboard/
+            ├── dashboard_page.dart
+            ├── dashboard_provider.dart
+            └── dashboard_service.dart
+```
+
+---
+
+## Règle des 3 fichiers par feature
+
+```text
+_page.dart      → UI uniquement, aucune logique
+_provider.dart  → Riverpod, état + actions
+_service.dart   → appels Supabase uniquement
+```
+
+---
+
+## Qui crée quoi
+
+```text
+TINO (setup initial)
+  core/           → tout
+  shared/         → tout
+  main.dart
+  features/auth/
+  features/notification/
+  features/affectation/
+  features/dashboard/
+
+JOCELYN
+  features/ticket/
+  features/panier/
+  features/materiel/
+```
+
 ---
 
 ## ✅ Récapitulatif final
