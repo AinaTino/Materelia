@@ -76,6 +76,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - .env
+    - lib/assets/images/logo-nobg.png
+    - lib/assets/images/logo-withbg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
