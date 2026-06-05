@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Gerer {
 
- String get id_utilisateur; String get id_zone;
+@JsonKey(name: 'id_utilisateur') String get idUtilisateur;@JsonKey(name: 'id_zone') String get idZone;
 /// Create a copy of Gerer
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $GererCopyWith<Gerer> get copyWith => _$GererCopyWithImpl<Gerer>(this as Gerer, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Gerer&&(identical(other.id_utilisateur, id_utilisateur) || other.id_utilisateur == id_utilisateur)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Gerer&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.idZone, idZone) || other.idZone == idZone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_utilisateur,id_zone);
+int get hashCode => Object.hash(runtimeType,idUtilisateur,idZone);
 
 @override
 String toString() {
-  return 'Gerer(id_utilisateur: $id_utilisateur, id_zone: $id_zone)';
+  return 'Gerer(idUtilisateur: $idUtilisateur, idZone: $idZone)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $GererCopyWith<$Res>  {
   factory $GererCopyWith(Gerer value, $Res Function(Gerer) _then) = _$GererCopyWithImpl;
 @useResult
 $Res call({
- String id_utilisateur, String id_zone
+@JsonKey(name: 'id_utilisateur') String idUtilisateur,@JsonKey(name: 'id_zone') String idZone
 });
 
 
@@ -65,10 +65,10 @@ class _$GererCopyWithImpl<$Res>
 
 /// Create a copy of Gerer
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_utilisateur = null,Object? id_zone = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? idUtilisateur = null,Object? idZone = null,}) {
   return _then(_self.copyWith(
-id_utilisateur: null == id_utilisateur ? _self.id_utilisateur : id_utilisateur // ignore: cast_nullable_to_non_nullable
-as String,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
+idUtilisateur: null == idUtilisateur ? _self.idUtilisateur : idUtilisateur // ignore: cast_nullable_to_non_nullable
+as String,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -154,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_utilisateur,  String id_zone)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'id_zone')  String idZone)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Gerer() when $default != null:
-return $default(_that.id_utilisateur,_that.id_zone);case _:
+return $default(_that.idUtilisateur,_that.idZone);case _:
   return orElse();
 
 }
@@ -175,10 +175,10 @@ return $default(_that.id_utilisateur,_that.id_zone);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_utilisateur,  String id_zone)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'id_zone')  String idZone)  $default,) {final _that = this;
 switch (_that) {
 case _Gerer():
-return $default(_that.id_utilisateur,_that.id_zone);case _:
+return $default(_that.idUtilisateur,_that.idZone);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +195,10 @@ return $default(_that.id_utilisateur,_that.id_zone);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_utilisateur,  String id_zone)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'id_zone')  String idZone)?  $default,) {final _that = this;
 switch (_that) {
 case _Gerer() when $default != null:
-return $default(_that.id_utilisateur,_that.id_zone);case _:
+return $default(_that.idUtilisateur,_that.idZone);case _:
   return null;
 
 }
@@ -210,11 +210,11 @@ return $default(_that.id_utilisateur,_that.id_zone);case _:
 @JsonSerializable()
 
 class _Gerer implements Gerer {
-  const _Gerer({required this.id_utilisateur, required this.id_zone});
+  const _Gerer({@JsonKey(name: 'id_utilisateur') required this.idUtilisateur, @JsonKey(name: 'id_zone') required this.idZone});
   factory _Gerer.fromJson(Map<String, dynamic> json) => _$GererFromJson(json);
 
-@override final  String id_utilisateur;
-@override final  String id_zone;
+@override@JsonKey(name: 'id_utilisateur') final  String idUtilisateur;
+@override@JsonKey(name: 'id_zone') final  String idZone;
 
 /// Create a copy of Gerer
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +229,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Gerer&&(identical(other.id_utilisateur, id_utilisateur) || other.id_utilisateur == id_utilisateur)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Gerer&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.idZone, idZone) || other.idZone == idZone));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_utilisateur,id_zone);
+int get hashCode => Object.hash(runtimeType,idUtilisateur,idZone);
 
 @override
 String toString() {
-  return 'Gerer(id_utilisateur: $id_utilisateur, id_zone: $id_zone)';
+  return 'Gerer(idUtilisateur: $idUtilisateur, idZone: $idZone)';
 }
 
 
@@ -249,7 +249,7 @@ abstract mixin class _$GererCopyWith<$Res> implements $GererCopyWith<$Res> {
   factory _$GererCopyWith(_Gerer value, $Res Function(_Gerer) _then) = __$GererCopyWithImpl;
 @override @useResult
 $Res call({
- String id_utilisateur, String id_zone
+@JsonKey(name: 'id_utilisateur') String idUtilisateur,@JsonKey(name: 'id_zone') String idZone
 });
 
 
@@ -266,10 +266,10 @@ class __$GererCopyWithImpl<$Res>
 
 /// Create a copy of Gerer
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_utilisateur = null,Object? id_zone = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? idUtilisateur = null,Object? idZone = null,}) {
   return _then(_Gerer(
-id_utilisateur: null == id_utilisateur ? _self.id_utilisateur : id_utilisateur // ignore: cast_nullable_to_non_nullable
-as String,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
+idUtilisateur: null == idUtilisateur ? _self.idUtilisateur : idUtilisateur // ignore: cast_nullable_to_non_nullable
+as String,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

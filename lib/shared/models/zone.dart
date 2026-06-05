@@ -6,11 +6,11 @@ part 'zone.g.dart';
 
 @freezed
 abstract class Zone with _$Zone {
-  factory Zone({
-    required String id_zone,
-    required String nom,
-    String? description,
-    DateTime? created_at
+  const factory Zone({
+    @JsonKey(name: 'id_zone') required String id,
+    @JsonKey(name: 'nom') required String nom,
+    @JsonKey(name: 'description') String? description,
+    @JsonKey(name: 'created_at') DateTime? createdAt
   }) = _Zone;
 	
   factory Zone.fromJson(Map<String, dynamic> json) =>

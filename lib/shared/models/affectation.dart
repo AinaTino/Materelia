@@ -7,15 +7,15 @@ part 'affectation.g.dart';
 @freezed
 abstract class Affectation with _$Affectation {
   const factory Affectation({
-    required String id_affectation,
-    required DateTime date_debut,
-    required DateTime date_fin_prevue,
-    DateTime? date_fin_effective,
-    required String etat,
-    required String id_materiel,
-    required String id_beneficiaire,
-    required String id_demande,
-    required DateTime date_fin
+    @JsonKey(name: 'id_affectation') required String id,
+    @JsonKey(name: 'date_debut') required DateTime dateDebut,
+    @JsonKey(name: 'date_fin_prevue') required DateTime dateFinPrevue,
+    @JsonKey(name: 'date_fin_effective') DateTime? dateFinEffective,
+    @JsonKey(name: 'etat') required String etat,
+    @JsonKey(name: 'id_materiel') required String idMateriel,
+    @JsonKey(name: 'id_beneficiaire') required String idBeneficiaire,
+    @JsonKey(name: 'id_demande') required String idDemande,
+    @JsonKey(name: 'date_fin') required DateTime dateFin
   }) = _Affectation;
 	
   factory Affectation.fromJson(Map<String, dynamic> json) =>

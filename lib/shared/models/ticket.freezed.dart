@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Ticket {
 
- String get id_ticket; String get lieu_utilisation; DateTime get date_fin_prevue; DateTime? get date_creation; String get etat; int? get code_remise; DateTime? get date_expiration_code; DateTime? get date_validation; String? get motif_refus; String get id_demandeur; String? get id_valideur; String? get id_remetteur; String get id_zone; DateTime? get created_at;
+@JsonKey(name: 'id_ticket') String get id;@JsonKey(name: 'lieu_utilisation') String get lieuUtilisation;@JsonKey(name: 'date_fin_prevue') DateTime get dateFinPrevue;@JsonKey(name: 'date_creation') DateTime? get dateCreation;@JsonKey(name: 'etat') String get etat;@JsonKey(name: 'code_remise') int? get codeRemise;@JsonKey(name: 'date_expiration_code') DateTime? get dateExpirationCode;@JsonKey(name: 'date_validation') DateTime? get dateValidation;@JsonKey(name: 'motif_refus') String? get motifRefus;@JsonKey(name: 'id_demandeur') String get idDemandeur;@JsonKey(name: 'id_valideur') String? get idValideur;@JsonKey(name: 'id_remetteur') String? get idRemetteur;@JsonKey(name: 'id_zone') String get idZone;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Ticket
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TicketCopyWith<Ticket> get copyWith => _$TicketCopyWithImpl<Ticket>(this as Tic
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Ticket&&(identical(other.id_ticket, id_ticket) || other.id_ticket == id_ticket)&&(identical(other.lieu_utilisation, lieu_utilisation) || other.lieu_utilisation == lieu_utilisation)&&(identical(other.date_fin_prevue, date_fin_prevue) || other.date_fin_prevue == date_fin_prevue)&&(identical(other.date_creation, date_creation) || other.date_creation == date_creation)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.code_remise, code_remise) || other.code_remise == code_remise)&&(identical(other.date_expiration_code, date_expiration_code) || other.date_expiration_code == date_expiration_code)&&(identical(other.date_validation, date_validation) || other.date_validation == date_validation)&&(identical(other.motif_refus, motif_refus) || other.motif_refus == motif_refus)&&(identical(other.id_demandeur, id_demandeur) || other.id_demandeur == id_demandeur)&&(identical(other.id_valideur, id_valideur) || other.id_valideur == id_valideur)&&(identical(other.id_remetteur, id_remetteur) || other.id_remetteur == id_remetteur)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Ticket&&(identical(other.id, id) || other.id == id)&&(identical(other.lieuUtilisation, lieuUtilisation) || other.lieuUtilisation == lieuUtilisation)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.dateCreation, dateCreation) || other.dateCreation == dateCreation)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.codeRemise, codeRemise) || other.codeRemise == codeRemise)&&(identical(other.dateExpirationCode, dateExpirationCode) || other.dateExpirationCode == dateExpirationCode)&&(identical(other.dateValidation, dateValidation) || other.dateValidation == dateValidation)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idRemetteur, idRemetteur) || other.idRemetteur == idRemetteur)&&(identical(other.idZone, idZone) || other.idZone == idZone)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_ticket,lieu_utilisation,date_fin_prevue,date_creation,etat,code_remise,date_expiration_code,date_validation,motif_refus,id_demandeur,id_valideur,id_remetteur,id_zone,created_at);
+int get hashCode => Object.hash(runtimeType,id,lieuUtilisation,dateFinPrevue,dateCreation,etat,codeRemise,dateExpirationCode,dateValidation,motifRefus,idDemandeur,idValideur,idRemetteur,idZone,createdAt);
 
 @override
 String toString() {
-  return 'Ticket(id_ticket: $id_ticket, lieu_utilisation: $lieu_utilisation, date_fin_prevue: $date_fin_prevue, date_creation: $date_creation, etat: $etat, code_remise: $code_remise, date_expiration_code: $date_expiration_code, date_validation: $date_validation, motif_refus: $motif_refus, id_demandeur: $id_demandeur, id_valideur: $id_valideur, id_remetteur: $id_remetteur, id_zone: $id_zone, created_at: $created_at)';
+  return 'Ticket(id: $id, lieuUtilisation: $lieuUtilisation, dateFinPrevue: $dateFinPrevue, dateCreation: $dateCreation, etat: $etat, codeRemise: $codeRemise, dateExpirationCode: $dateExpirationCode, dateValidation: $dateValidation, motifRefus: $motifRefus, idDemandeur: $idDemandeur, idValideur: $idValideur, idRemetteur: $idRemetteur, idZone: $idZone, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TicketCopyWith<$Res>  {
   factory $TicketCopyWith(Ticket value, $Res Function(Ticket) _then) = _$TicketCopyWithImpl;
 @useResult
 $Res call({
- String id_ticket, String lieu_utilisation, DateTime date_fin_prevue, DateTime? date_creation, String etat, int? code_remise, DateTime? date_expiration_code, DateTime? date_validation, String? motif_refus, String id_demandeur, String? id_valideur, String? id_remetteur, String id_zone, DateTime? created_at
+@JsonKey(name: 'id_ticket') String id,@JsonKey(name: 'lieu_utilisation') String lieuUtilisation,@JsonKey(name: 'date_fin_prevue') DateTime dateFinPrevue,@JsonKey(name: 'date_creation') DateTime? dateCreation,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'code_remise') int? codeRemise,@JsonKey(name: 'date_expiration_code') DateTime? dateExpirationCode,@JsonKey(name: 'date_validation') DateTime? dateValidation,@JsonKey(name: 'motif_refus') String? motifRefus,@JsonKey(name: 'id_demandeur') String idDemandeur,@JsonKey(name: 'id_valideur') String? idValideur,@JsonKey(name: 'id_remetteur') String? idRemetteur,@JsonKey(name: 'id_zone') String idZone,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,22 +65,22 @@ class _$TicketCopyWithImpl<$Res>
 
 /// Create a copy of Ticket
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_ticket = null,Object? lieu_utilisation = null,Object? date_fin_prevue = null,Object? date_creation = freezed,Object? etat = null,Object? code_remise = freezed,Object? date_expiration_code = freezed,Object? date_validation = freezed,Object? motif_refus = freezed,Object? id_demandeur = null,Object? id_valideur = freezed,Object? id_remetteur = freezed,Object? id_zone = null,Object? created_at = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? lieuUtilisation = null,Object? dateFinPrevue = null,Object? dateCreation = freezed,Object? etat = null,Object? codeRemise = freezed,Object? dateExpirationCode = freezed,Object? dateValidation = freezed,Object? motifRefus = freezed,Object? idDemandeur = null,Object? idValideur = freezed,Object? idRemetteur = freezed,Object? idZone = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
-id_ticket: null == id_ticket ? _self.id_ticket : id_ticket // ignore: cast_nullable_to_non_nullable
-as String,lieu_utilisation: null == lieu_utilisation ? _self.lieu_utilisation : lieu_utilisation // ignore: cast_nullable_to_non_nullable
-as String,date_fin_prevue: null == date_fin_prevue ? _self.date_fin_prevue : date_fin_prevue // ignore: cast_nullable_to_non_nullable
-as DateTime,date_creation: freezed == date_creation ? _self.date_creation : date_creation // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,lieuUtilisation: null == lieuUtilisation ? _self.lieuUtilisation : lieuUtilisation // ignore: cast_nullable_to_non_nullable
+as String,dateFinPrevue: null == dateFinPrevue ? _self.dateFinPrevue : dateFinPrevue // ignore: cast_nullable_to_non_nullable
+as DateTime,dateCreation: freezed == dateCreation ? _self.dateCreation : dateCreation // ignore: cast_nullable_to_non_nullable
 as DateTime?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,code_remise: freezed == code_remise ? _self.code_remise : code_remise // ignore: cast_nullable_to_non_nullable
-as int?,date_expiration_code: freezed == date_expiration_code ? _self.date_expiration_code : date_expiration_code // ignore: cast_nullable_to_non_nullable
-as DateTime?,date_validation: freezed == date_validation ? _self.date_validation : date_validation // ignore: cast_nullable_to_non_nullable
-as DateTime?,motif_refus: freezed == motif_refus ? _self.motif_refus : motif_refus // ignore: cast_nullable_to_non_nullable
-as String?,id_demandeur: null == id_demandeur ? _self.id_demandeur : id_demandeur // ignore: cast_nullable_to_non_nullable
-as String,id_valideur: freezed == id_valideur ? _self.id_valideur : id_valideur // ignore: cast_nullable_to_non_nullable
-as String?,id_remetteur: freezed == id_remetteur ? _self.id_remetteur : id_remetteur // ignore: cast_nullable_to_non_nullable
-as String?,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,codeRemise: freezed == codeRemise ? _self.codeRemise : codeRemise // ignore: cast_nullable_to_non_nullable
+as int?,dateExpirationCode: freezed == dateExpirationCode ? _self.dateExpirationCode : dateExpirationCode // ignore: cast_nullable_to_non_nullable
+as DateTime?,dateValidation: freezed == dateValidation ? _self.dateValidation : dateValidation // ignore: cast_nullable_to_non_nullable
+as DateTime?,motifRefus: freezed == motifRefus ? _self.motifRefus : motifRefus // ignore: cast_nullable_to_non_nullable
+as String?,idDemandeur: null == idDemandeur ? _self.idDemandeur : idDemandeur // ignore: cast_nullable_to_non_nullable
+as String,idValideur: freezed == idValideur ? _self.idValideur : idValideur // ignore: cast_nullable_to_non_nullable
+as String?,idRemetteur: freezed == idRemetteur ? _self.idRemetteur : idRemetteur // ignore: cast_nullable_to_non_nullable
+as String?,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -166,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_ticket,  String lieu_utilisation,  DateTime date_fin_prevue,  DateTime? date_creation,  String etat,  int? code_remise,  DateTime? date_expiration_code,  DateTime? date_validation,  String? motif_refus,  String id_demandeur,  String? id_valideur,  String? id_remetteur,  String id_zone,  DateTime? created_at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_ticket')  String id, @JsonKey(name: 'lieu_utilisation')  String lieuUtilisation, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_creation')  DateTime? dateCreation, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'code_remise')  int? codeRemise, @JsonKey(name: 'date_expiration_code')  DateTime? dateExpirationCode, @JsonKey(name: 'date_validation')  DateTime? dateValidation, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_remetteur')  String? idRemetteur, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Ticket() when $default != null:
-return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_that.date_creation,_that.etat,_that.code_remise,_that.date_expiration_code,_that.date_validation,_that.motif_refus,_that.id_demandeur,_that.id_valideur,_that.id_remetteur,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.lieuUtilisation,_that.dateFinPrevue,_that.dateCreation,_that.etat,_that.codeRemise,_that.dateExpirationCode,_that.dateValidation,_that.motifRefus,_that.idDemandeur,_that.idValideur,_that.idRemetteur,_that.idZone,_that.createdAt);case _:
   return orElse();
 
 }
@@ -187,10 +187,10 @@ return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_ticket,  String lieu_utilisation,  DateTime date_fin_prevue,  DateTime? date_creation,  String etat,  int? code_remise,  DateTime? date_expiration_code,  DateTime? date_validation,  String? motif_refus,  String id_demandeur,  String? id_valideur,  String? id_remetteur,  String id_zone,  DateTime? created_at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_ticket')  String id, @JsonKey(name: 'lieu_utilisation')  String lieuUtilisation, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_creation')  DateTime? dateCreation, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'code_remise')  int? codeRemise, @JsonKey(name: 'date_expiration_code')  DateTime? dateExpirationCode, @JsonKey(name: 'date_validation')  DateTime? dateValidation, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_remetteur')  String? idRemetteur, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Ticket():
-return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_that.date_creation,_that.etat,_that.code_remise,_that.date_expiration_code,_that.date_validation,_that.motif_refus,_that.id_demandeur,_that.id_valideur,_that.id_remetteur,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.lieuUtilisation,_that.dateFinPrevue,_that.dateCreation,_that.etat,_that.codeRemise,_that.dateExpirationCode,_that.dateValidation,_that.motifRefus,_that.idDemandeur,_that.idValideur,_that.idRemetteur,_that.idZone,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +207,10 @@ return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_ticket,  String lieu_utilisation,  DateTime date_fin_prevue,  DateTime? date_creation,  String etat,  int? code_remise,  DateTime? date_expiration_code,  DateTime? date_validation,  String? motif_refus,  String id_demandeur,  String? id_valideur,  String? id_remetteur,  String id_zone,  DateTime? created_at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_ticket')  String id, @JsonKey(name: 'lieu_utilisation')  String lieuUtilisation, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_creation')  DateTime? dateCreation, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'code_remise')  int? codeRemise, @JsonKey(name: 'date_expiration_code')  DateTime? dateExpirationCode, @JsonKey(name: 'date_validation')  DateTime? dateValidation, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_remetteur')  String? idRemetteur, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Ticket() when $default != null:
-return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_that.date_creation,_that.etat,_that.code_remise,_that.date_expiration_code,_that.date_validation,_that.motif_refus,_that.id_demandeur,_that.id_valideur,_that.id_remetteur,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.lieuUtilisation,_that.dateFinPrevue,_that.dateCreation,_that.etat,_that.codeRemise,_that.dateExpirationCode,_that.dateValidation,_that.motifRefus,_that.idDemandeur,_that.idValideur,_that.idRemetteur,_that.idZone,_that.createdAt);case _:
   return null;
 
 }
@@ -222,23 +222,23 @@ return $default(_that.id_ticket,_that.lieu_utilisation,_that.date_fin_prevue,_th
 @JsonSerializable()
 
 class _Ticket implements Ticket {
-  const _Ticket({required this.id_ticket, required this.lieu_utilisation, required this.date_fin_prevue, this.date_creation, required this.etat, this.code_remise, this.date_expiration_code, this.date_validation, this.motif_refus, required this.id_demandeur, this.id_valideur, this.id_remetteur, required this.id_zone, this.created_at});
+  const _Ticket({@JsonKey(name: 'id_ticket') required this.id, @JsonKey(name: 'lieu_utilisation') required this.lieuUtilisation, @JsonKey(name: 'date_fin_prevue') required this.dateFinPrevue, @JsonKey(name: 'date_creation') this.dateCreation, @JsonKey(name: 'etat') required this.etat, @JsonKey(name: 'code_remise') this.codeRemise, @JsonKey(name: 'date_expiration_code') this.dateExpirationCode, @JsonKey(name: 'date_validation') this.dateValidation, @JsonKey(name: 'motif_refus') this.motifRefus, @JsonKey(name: 'id_demandeur') required this.idDemandeur, @JsonKey(name: 'id_valideur') this.idValideur, @JsonKey(name: 'id_remetteur') this.idRemetteur, @JsonKey(name: 'id_zone') required this.idZone, @JsonKey(name: 'created_at') this.createdAt});
   factory _Ticket.fromJson(Map<String, dynamic> json) => _$TicketFromJson(json);
 
-@override final  String id_ticket;
-@override final  String lieu_utilisation;
-@override final  DateTime date_fin_prevue;
-@override final  DateTime? date_creation;
-@override final  String etat;
-@override final  int? code_remise;
-@override final  DateTime? date_expiration_code;
-@override final  DateTime? date_validation;
-@override final  String? motif_refus;
-@override final  String id_demandeur;
-@override final  String? id_valideur;
-@override final  String? id_remetteur;
-@override final  String id_zone;
-@override final  DateTime? created_at;
+@override@JsonKey(name: 'id_ticket') final  String id;
+@override@JsonKey(name: 'lieu_utilisation') final  String lieuUtilisation;
+@override@JsonKey(name: 'date_fin_prevue') final  DateTime dateFinPrevue;
+@override@JsonKey(name: 'date_creation') final  DateTime? dateCreation;
+@override@JsonKey(name: 'etat') final  String etat;
+@override@JsonKey(name: 'code_remise') final  int? codeRemise;
+@override@JsonKey(name: 'date_expiration_code') final  DateTime? dateExpirationCode;
+@override@JsonKey(name: 'date_validation') final  DateTime? dateValidation;
+@override@JsonKey(name: 'motif_refus') final  String? motifRefus;
+@override@JsonKey(name: 'id_demandeur') final  String idDemandeur;
+@override@JsonKey(name: 'id_valideur') final  String? idValideur;
+@override@JsonKey(name: 'id_remetteur') final  String? idRemetteur;
+@override@JsonKey(name: 'id_zone') final  String idZone;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of Ticket
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Ticket&&(identical(other.id_ticket, id_ticket) || other.id_ticket == id_ticket)&&(identical(other.lieu_utilisation, lieu_utilisation) || other.lieu_utilisation == lieu_utilisation)&&(identical(other.date_fin_prevue, date_fin_prevue) || other.date_fin_prevue == date_fin_prevue)&&(identical(other.date_creation, date_creation) || other.date_creation == date_creation)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.code_remise, code_remise) || other.code_remise == code_remise)&&(identical(other.date_expiration_code, date_expiration_code) || other.date_expiration_code == date_expiration_code)&&(identical(other.date_validation, date_validation) || other.date_validation == date_validation)&&(identical(other.motif_refus, motif_refus) || other.motif_refus == motif_refus)&&(identical(other.id_demandeur, id_demandeur) || other.id_demandeur == id_demandeur)&&(identical(other.id_valideur, id_valideur) || other.id_valideur == id_valideur)&&(identical(other.id_remetteur, id_remetteur) || other.id_remetteur == id_remetteur)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Ticket&&(identical(other.id, id) || other.id == id)&&(identical(other.lieuUtilisation, lieuUtilisation) || other.lieuUtilisation == lieuUtilisation)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.dateCreation, dateCreation) || other.dateCreation == dateCreation)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.codeRemise, codeRemise) || other.codeRemise == codeRemise)&&(identical(other.dateExpirationCode, dateExpirationCode) || other.dateExpirationCode == dateExpirationCode)&&(identical(other.dateValidation, dateValidation) || other.dateValidation == dateValidation)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idRemetteur, idRemetteur) || other.idRemetteur == idRemetteur)&&(identical(other.idZone, idZone) || other.idZone == idZone)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_ticket,lieu_utilisation,date_fin_prevue,date_creation,etat,code_remise,date_expiration_code,date_validation,motif_refus,id_demandeur,id_valideur,id_remetteur,id_zone,created_at);
+int get hashCode => Object.hash(runtimeType,id,lieuUtilisation,dateFinPrevue,dateCreation,etat,codeRemise,dateExpirationCode,dateValidation,motifRefus,idDemandeur,idValideur,idRemetteur,idZone,createdAt);
 
 @override
 String toString() {
-  return 'Ticket(id_ticket: $id_ticket, lieu_utilisation: $lieu_utilisation, date_fin_prevue: $date_fin_prevue, date_creation: $date_creation, etat: $etat, code_remise: $code_remise, date_expiration_code: $date_expiration_code, date_validation: $date_validation, motif_refus: $motif_refus, id_demandeur: $id_demandeur, id_valideur: $id_valideur, id_remetteur: $id_remetteur, id_zone: $id_zone, created_at: $created_at)';
+  return 'Ticket(id: $id, lieuUtilisation: $lieuUtilisation, dateFinPrevue: $dateFinPrevue, dateCreation: $dateCreation, etat: $etat, codeRemise: $codeRemise, dateExpirationCode: $dateExpirationCode, dateValidation: $dateValidation, motifRefus: $motifRefus, idDemandeur: $idDemandeur, idValideur: $idValideur, idRemetteur: $idRemetteur, idZone: $idZone, createdAt: $createdAt)';
 }
 
 
@@ -273,7 +273,7 @@ abstract mixin class _$TicketCopyWith<$Res> implements $TicketCopyWith<$Res> {
   factory _$TicketCopyWith(_Ticket value, $Res Function(_Ticket) _then) = __$TicketCopyWithImpl;
 @override @useResult
 $Res call({
- String id_ticket, String lieu_utilisation, DateTime date_fin_prevue, DateTime? date_creation, String etat, int? code_remise, DateTime? date_expiration_code, DateTime? date_validation, String? motif_refus, String id_demandeur, String? id_valideur, String? id_remetteur, String id_zone, DateTime? created_at
+@JsonKey(name: 'id_ticket') String id,@JsonKey(name: 'lieu_utilisation') String lieuUtilisation,@JsonKey(name: 'date_fin_prevue') DateTime dateFinPrevue,@JsonKey(name: 'date_creation') DateTime? dateCreation,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'code_remise') int? codeRemise,@JsonKey(name: 'date_expiration_code') DateTime? dateExpirationCode,@JsonKey(name: 'date_validation') DateTime? dateValidation,@JsonKey(name: 'motif_refus') String? motifRefus,@JsonKey(name: 'id_demandeur') String idDemandeur,@JsonKey(name: 'id_valideur') String? idValideur,@JsonKey(name: 'id_remetteur') String? idRemetteur,@JsonKey(name: 'id_zone') String idZone,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -290,22 +290,22 @@ class __$TicketCopyWithImpl<$Res>
 
 /// Create a copy of Ticket
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_ticket = null,Object? lieu_utilisation = null,Object? date_fin_prevue = null,Object? date_creation = freezed,Object? etat = null,Object? code_remise = freezed,Object? date_expiration_code = freezed,Object? date_validation = freezed,Object? motif_refus = freezed,Object? id_demandeur = null,Object? id_valideur = freezed,Object? id_remetteur = freezed,Object? id_zone = null,Object? created_at = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? lieuUtilisation = null,Object? dateFinPrevue = null,Object? dateCreation = freezed,Object? etat = null,Object? codeRemise = freezed,Object? dateExpirationCode = freezed,Object? dateValidation = freezed,Object? motifRefus = freezed,Object? idDemandeur = null,Object? idValideur = freezed,Object? idRemetteur = freezed,Object? idZone = null,Object? createdAt = freezed,}) {
   return _then(_Ticket(
-id_ticket: null == id_ticket ? _self.id_ticket : id_ticket // ignore: cast_nullable_to_non_nullable
-as String,lieu_utilisation: null == lieu_utilisation ? _self.lieu_utilisation : lieu_utilisation // ignore: cast_nullable_to_non_nullable
-as String,date_fin_prevue: null == date_fin_prevue ? _self.date_fin_prevue : date_fin_prevue // ignore: cast_nullable_to_non_nullable
-as DateTime,date_creation: freezed == date_creation ? _self.date_creation : date_creation // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,lieuUtilisation: null == lieuUtilisation ? _self.lieuUtilisation : lieuUtilisation // ignore: cast_nullable_to_non_nullable
+as String,dateFinPrevue: null == dateFinPrevue ? _self.dateFinPrevue : dateFinPrevue // ignore: cast_nullable_to_non_nullable
+as DateTime,dateCreation: freezed == dateCreation ? _self.dateCreation : dateCreation // ignore: cast_nullable_to_non_nullable
 as DateTime?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,code_remise: freezed == code_remise ? _self.code_remise : code_remise // ignore: cast_nullable_to_non_nullable
-as int?,date_expiration_code: freezed == date_expiration_code ? _self.date_expiration_code : date_expiration_code // ignore: cast_nullable_to_non_nullable
-as DateTime?,date_validation: freezed == date_validation ? _self.date_validation : date_validation // ignore: cast_nullable_to_non_nullable
-as DateTime?,motif_refus: freezed == motif_refus ? _self.motif_refus : motif_refus // ignore: cast_nullable_to_non_nullable
-as String?,id_demandeur: null == id_demandeur ? _self.id_demandeur : id_demandeur // ignore: cast_nullable_to_non_nullable
-as String,id_valideur: freezed == id_valideur ? _self.id_valideur : id_valideur // ignore: cast_nullable_to_non_nullable
-as String?,id_remetteur: freezed == id_remetteur ? _self.id_remetteur : id_remetteur // ignore: cast_nullable_to_non_nullable
-as String?,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,codeRemise: freezed == codeRemise ? _self.codeRemise : codeRemise // ignore: cast_nullable_to_non_nullable
+as int?,dateExpirationCode: freezed == dateExpirationCode ? _self.dateExpirationCode : dateExpirationCode // ignore: cast_nullable_to_non_nullable
+as DateTime?,dateValidation: freezed == dateValidation ? _self.dateValidation : dateValidation // ignore: cast_nullable_to_non_nullable
+as DateTime?,motifRefus: freezed == motifRefus ? _self.motifRefus : motifRefus // ignore: cast_nullable_to_non_nullable
+as String?,idDemandeur: null == idDemandeur ? _self.idDemandeur : idDemandeur // ignore: cast_nullable_to_non_nullable
+as String,idValideur: freezed == idValideur ? _self.idValideur : idValideur // ignore: cast_nullable_to_non_nullable
+as String?,idRemetteur: freezed == idRemetteur ? _self.idRemetteur : idRemetteur // ignore: cast_nullable_to_non_nullable
+as String?,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

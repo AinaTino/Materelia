@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LigneTicket {
 
- String get id_ligne_ticket; String get id_ticket; String get id_materiel; DateTime? get created_at;
+@JsonKey(name: 'id_ligne_ticket') String get id;@JsonKey(name: 'id_ticket') String get idTicket;@JsonKey(name: 'id_materiel') String get idMateriel;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of LigneTicket
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $LigneTicketCopyWith<LigneTicket> get copyWith => _$LigneTicketCopyWithImpl<Lign
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LigneTicket&&(identical(other.id_ligne_ticket, id_ligne_ticket) || other.id_ligne_ticket == id_ligne_ticket)&&(identical(other.id_ticket, id_ticket) || other.id_ticket == id_ticket)&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LigneTicket&&(identical(other.id, id) || other.id == id)&&(identical(other.idTicket, idTicket) || other.idTicket == idTicket)&&(identical(other.idMateriel, idMateriel) || other.idMateriel == idMateriel)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_ligne_ticket,id_ticket,id_materiel,created_at);
+int get hashCode => Object.hash(runtimeType,id,idTicket,idMateriel,createdAt);
 
 @override
 String toString() {
-  return 'LigneTicket(id_ligne_ticket: $id_ligne_ticket, id_ticket: $id_ticket, id_materiel: $id_materiel, created_at: $created_at)';
+  return 'LigneTicket(id: $id, idTicket: $idTicket, idMateriel: $idMateriel, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $LigneTicketCopyWith<$Res>  {
   factory $LigneTicketCopyWith(LigneTicket value, $Res Function(LigneTicket) _then) = _$LigneTicketCopyWithImpl;
 @useResult
 $Res call({
- String id_ligne_ticket, String id_ticket, String id_materiel, DateTime? created_at
+@JsonKey(name: 'id_ligne_ticket') String id,@JsonKey(name: 'id_ticket') String idTicket,@JsonKey(name: 'id_materiel') String idMateriel,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,12 +65,12 @@ class _$LigneTicketCopyWithImpl<$Res>
 
 /// Create a copy of LigneTicket
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_ligne_ticket = null,Object? id_ticket = null,Object? id_materiel = null,Object? created_at = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? idTicket = null,Object? idMateriel = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
-id_ligne_ticket: null == id_ligne_ticket ? _self.id_ligne_ticket : id_ligne_ticket // ignore: cast_nullable_to_non_nullable
-as String,id_ticket: null == id_ticket ? _self.id_ticket : id_ticket // ignore: cast_nullable_to_non_nullable
-as String,id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,idTicket: null == idTicket ? _self.idTicket : idTicket // ignore: cast_nullable_to_non_nullable
+as String,idMateriel: null == idMateriel ? _self.idMateriel : idMateriel // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -156,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_ligne_ticket,  String id_ticket,  String id_materiel,  DateTime? created_at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_ligne_ticket')  String id, @JsonKey(name: 'id_ticket')  String idTicket, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LigneTicket() when $default != null:
-return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.created_at);case _:
+return $default(_that.id,_that.idTicket,_that.idMateriel,_that.createdAt);case _:
   return orElse();
 
 }
@@ -177,10 +177,10 @@ return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.cr
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_ligne_ticket,  String id_ticket,  String id_materiel,  DateTime? created_at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_ligne_ticket')  String id, @JsonKey(name: 'id_ticket')  String idTicket, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _LigneTicket():
-return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.created_at);case _:
+return $default(_that.id,_that.idTicket,_that.idMateriel,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +197,10 @@ return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.cr
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_ligne_ticket,  String id_ticket,  String id_materiel,  DateTime? created_at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_ligne_ticket')  String id, @JsonKey(name: 'id_ticket')  String idTicket, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _LigneTicket() when $default != null:
-return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.created_at);case _:
+return $default(_that.id,_that.idTicket,_that.idMateriel,_that.createdAt);case _:
   return null;
 
 }
@@ -212,13 +212,13 @@ return $default(_that.id_ligne_ticket,_that.id_ticket,_that.id_materiel,_that.cr
 @JsonSerializable()
 
 class _LigneTicket implements LigneTicket {
-  const _LigneTicket({required this.id_ligne_ticket, required this.id_ticket, required this.id_materiel, this.created_at});
+  const _LigneTicket({@JsonKey(name: 'id_ligne_ticket') required this.id, @JsonKey(name: 'id_ticket') required this.idTicket, @JsonKey(name: 'id_materiel') required this.idMateriel, @JsonKey(name: 'created_at') this.createdAt});
   factory _LigneTicket.fromJson(Map<String, dynamic> json) => _$LigneTicketFromJson(json);
 
-@override final  String id_ligne_ticket;
-@override final  String id_ticket;
-@override final  String id_materiel;
-@override final  DateTime? created_at;
+@override@JsonKey(name: 'id_ligne_ticket') final  String id;
+@override@JsonKey(name: 'id_ticket') final  String idTicket;
+@override@JsonKey(name: 'id_materiel') final  String idMateriel;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of LigneTicket
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LigneTicket&&(identical(other.id_ligne_ticket, id_ligne_ticket) || other.id_ligne_ticket == id_ligne_ticket)&&(identical(other.id_ticket, id_ticket) || other.id_ticket == id_ticket)&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LigneTicket&&(identical(other.id, id) || other.id == id)&&(identical(other.idTicket, idTicket) || other.idTicket == idTicket)&&(identical(other.idMateriel, idMateriel) || other.idMateriel == idMateriel)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_ligne_ticket,id_ticket,id_materiel,created_at);
+int get hashCode => Object.hash(runtimeType,id,idTicket,idMateriel,createdAt);
 
 @override
 String toString() {
-  return 'LigneTicket(id_ligne_ticket: $id_ligne_ticket, id_ticket: $id_ticket, id_materiel: $id_materiel, created_at: $created_at)';
+  return 'LigneTicket(id: $id, idTicket: $idTicket, idMateriel: $idMateriel, createdAt: $createdAt)';
 }
 
 
@@ -253,7 +253,7 @@ abstract mixin class _$LigneTicketCopyWith<$Res> implements $LigneTicketCopyWith
   factory _$LigneTicketCopyWith(_LigneTicket value, $Res Function(_LigneTicket) _then) = __$LigneTicketCopyWithImpl;
 @override @useResult
 $Res call({
- String id_ligne_ticket, String id_ticket, String id_materiel, DateTime? created_at
+@JsonKey(name: 'id_ligne_ticket') String id,@JsonKey(name: 'id_ticket') String idTicket,@JsonKey(name: 'id_materiel') String idMateriel,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -270,12 +270,12 @@ class __$LigneTicketCopyWithImpl<$Res>
 
 /// Create a copy of LigneTicket
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_ligne_ticket = null,Object? id_ticket = null,Object? id_materiel = null,Object? created_at = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? idTicket = null,Object? idMateriel = null,Object? createdAt = freezed,}) {
   return _then(_LigneTicket(
-id_ligne_ticket: null == id_ligne_ticket ? _self.id_ligne_ticket : id_ligne_ticket // ignore: cast_nullable_to_non_nullable
-as String,id_ticket: null == id_ticket ? _self.id_ticket : id_ticket // ignore: cast_nullable_to_non_nullable
-as String,id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,idTicket: null == idTicket ? _self.idTicket : idTicket // ignore: cast_nullable_to_non_nullable
+as String,idMateriel: null == idMateriel ? _self.idMateriel : idMateriel // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

@@ -7,10 +7,10 @@ part 'stock.g.dart';
 @freezed
 abstract class Stock with _$Stock {
   const factory Stock({
-    required String id_stock,
-    required String nom,
-    required String id_zone,
-    DateTime? created_at
+    @JsonKey(name: 'id_stock') required String id,
+    @JsonKey(name: 'nom') required String nom,
+    @JsonKey(name: 'id_zone') required String idZone,
+    @JsonKey(name: 'created_at') DateTime? createdAt
   }) = _Stock;
 	
   factory Stock.fromJson(Map<String, dynamic> json) =>

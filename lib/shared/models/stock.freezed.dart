@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Stock {
 
- String get id_stock; String get nom; String get id_zone; DateTime? get created_at;
+@JsonKey(name: 'id_stock') String get id;@JsonKey(name: 'nom') String get nom;@JsonKey(name: 'id_zone') String get idZone;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Stock
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $StockCopyWith<Stock> get copyWith => _$StockCopyWithImpl<Stock>(this as Stock, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Stock&&(identical(other.id_stock, id_stock) || other.id_stock == id_stock)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Stock&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.idZone, idZone) || other.idZone == idZone)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_stock,nom,id_zone,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,idZone,createdAt);
 
 @override
 String toString() {
-  return 'Stock(id_stock: $id_stock, nom: $nom, id_zone: $id_zone, created_at: $created_at)';
+  return 'Stock(id: $id, nom: $nom, idZone: $idZone, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $StockCopyWith<$Res>  {
   factory $StockCopyWith(Stock value, $Res Function(Stock) _then) = _$StockCopyWithImpl;
 @useResult
 $Res call({
- String id_stock, String nom, String id_zone, DateTime? created_at
+@JsonKey(name: 'id_stock') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'id_zone') String idZone,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,12 +65,12 @@ class _$StockCopyWithImpl<$Res>
 
 /// Create a copy of Stock
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_stock = null,Object? nom = null,Object? id_zone = null,Object? created_at = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? nom = null,Object? idZone = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
-id_stock: null == id_stock ? _self.id_stock : id_stock // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
-as String,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -156,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_stock,  String nom,  String id_zone,  DateTime? created_at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_stock')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Stock() when $default != null:
-return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.idZone,_that.createdAt);case _:
   return orElse();
 
 }
@@ -177,10 +177,10 @@ return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_stock,  String nom,  String id_zone,  DateTime? created_at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_stock')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Stock():
-return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.idZone,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +197,10 @@ return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_stock,  String nom,  String id_zone,  DateTime? created_at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_stock')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'id_zone')  String idZone, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Stock() when $default != null:
-return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.idZone,_that.createdAt);case _:
   return null;
 
 }
@@ -212,13 +212,13 @@ return $default(_that.id_stock,_that.nom,_that.id_zone,_that.created_at);case _:
 @JsonSerializable()
 
 class _Stock implements Stock {
-  const _Stock({required this.id_stock, required this.nom, required this.id_zone, this.created_at});
+  const _Stock({@JsonKey(name: 'id_stock') required this.id, @JsonKey(name: 'nom') required this.nom, @JsonKey(name: 'id_zone') required this.idZone, @JsonKey(name: 'created_at') this.createdAt});
   factory _Stock.fromJson(Map<String, dynamic> json) => _$StockFromJson(json);
 
-@override final  String id_stock;
-@override final  String nom;
-@override final  String id_zone;
-@override final  DateTime? created_at;
+@override@JsonKey(name: 'id_stock') final  String id;
+@override@JsonKey(name: 'nom') final  String nom;
+@override@JsonKey(name: 'id_zone') final  String idZone;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of Stock
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Stock&&(identical(other.id_stock, id_stock) || other.id_stock == id_stock)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.id_zone, id_zone) || other.id_zone == id_zone)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Stock&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.idZone, idZone) || other.idZone == idZone)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_stock,nom,id_zone,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,idZone,createdAt);
 
 @override
 String toString() {
-  return 'Stock(id_stock: $id_stock, nom: $nom, id_zone: $id_zone, created_at: $created_at)';
+  return 'Stock(id: $id, nom: $nom, idZone: $idZone, createdAt: $createdAt)';
 }
 
 
@@ -253,7 +253,7 @@ abstract mixin class _$StockCopyWith<$Res> implements $StockCopyWith<$Res> {
   factory _$StockCopyWith(_Stock value, $Res Function(_Stock) _then) = __$StockCopyWithImpl;
 @override @useResult
 $Res call({
- String id_stock, String nom, String id_zone, DateTime? created_at
+@JsonKey(name: 'id_stock') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'id_zone') String idZone,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -270,12 +270,12 @@ class __$StockCopyWithImpl<$Res>
 
 /// Create a copy of Stock
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_stock = null,Object? nom = null,Object? id_zone = null,Object? created_at = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? nom = null,Object? idZone = null,Object? createdAt = freezed,}) {
   return _then(_Stock(
-id_stock: null == id_stock ? _self.id_stock : id_stock // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
-as String,id_zone: null == id_zone ? _self.id_zone : id_zone // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,idZone: null == idZone ? _self.idZone : idZone // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

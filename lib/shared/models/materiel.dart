@@ -7,15 +7,15 @@ part 'materiel.g.dart';
 @freezed
 abstract class Materiel with _$Materiel {
   const factory Materiel({
-    required String id_materiel,
-    required String nom,
-    required String reference,
-    String? description,
-    required String etat,
-    required String date_acquisition,
-    required String id_categorie,
-    required String id_stock,
-    DateTime? created_at
+    @JsonKey(name: 'id_materiel') required String id,
+    @JsonKey(name: 'nom') required String nom,
+    @JsonKey(name: 'reference') required String reference,
+    @JsonKey(name: 'description') String? description,
+    @JsonKey(name: 'etat') required String etat,
+    @JsonKey(name: 'date_acquisition') required String dateAcquisition,
+    @JsonKey(name: 'id_categorie') required String idCategorie,
+    @JsonKey(name: 'id_stock') required String idStock,
+    @JsonKey(name: 'created_at') DateTime? createdAt
   }) = _Materiel;
 	
   factory Materiel.fromJson(Map<String, dynamic> json) =>

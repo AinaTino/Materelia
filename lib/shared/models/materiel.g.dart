@@ -7,27 +7,27 @@ part of 'materiel.dart';
 // **************************************************************************
 
 _Materiel _$MaterielFromJson(Map<String, dynamic> json) => _Materiel(
-  id_materiel: json['id_materiel'] as String,
+  id: json['id_materiel'] as String,
   nom: json['nom'] as String,
   reference: json['reference'] as String,
   description: json['description'] as String?,
   etat: json['etat'] as String,
-  date_acquisition: json['date_acquisition'] as String,
-  id_categorie: json['id_categorie'] as String,
-  id_stock: json['id_stock'] as String,
-  created_at: json['created_at'] == null
+  dateAcquisition: json['date_acquisition'] as String,
+  idCategorie: json['id_categorie'] as String,
+  idStock: json['id_stock'] as String,
+  createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
 );
 
 Map<String, dynamic> _$MaterielToJson(_Materiel instance) => <String, dynamic>{
-  'id_materiel': instance.id_materiel,
+  'id_materiel': instance.id,
   'nom': instance.nom,
   'reference': instance.reference,
   'description': instance.description,
   'etat': instance.etat,
-  'date_acquisition': instance.date_acquisition,
-  'id_categorie': instance.id_categorie,
-  'id_stock': instance.id_stock,
-  'created_at': instance.created_at?.toIso8601String(),
+  'date_acquisition': instance.dateAcquisition,
+  'id_categorie': instance.idCategorie,
+  'id_stock': instance.idStock,
+  'created_at': instance.createdAt?.toIso8601String(),
 };

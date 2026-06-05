@@ -7,11 +7,11 @@ part 'utilisateur.g.dart';
 @freezed
 abstract class Utilisateur with _$Utilisateur {
   const factory Utilisateur({
-    required String id_utilisateur,
-    required String nom,
-    required String prenom,
-    required String role,
-    DateTime? created_at,
+    @JsonKey(name: 'id_utilisateur') required String id,
+    @JsonKey(name: 'nom') required String nom,
+    @JsonKey(name: 'prenom') required String prenom,
+    @JsonKey(name: 'role') required String role,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _Utilisateur;
 	
   factory Utilisateur.fromJson(Map<String, dynamic> json) =>

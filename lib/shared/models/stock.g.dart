@@ -7,17 +7,17 @@ part of 'stock.dart';
 // **************************************************************************
 
 _Stock _$StockFromJson(Map<String, dynamic> json) => _Stock(
-  id_stock: json['id_stock'] as String,
+  id: json['id_stock'] as String,
   nom: json['nom'] as String,
-  id_zone: json['id_zone'] as String,
-  created_at: json['created_at'] == null
+  idZone: json['id_zone'] as String,
+  createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
 );
 
 Map<String, dynamic> _$StockToJson(_Stock instance) => <String, dynamic>{
-  'id_stock': instance.id_stock,
+  'id_stock': instance.id,
   'nom': instance.nom,
-  'id_zone': instance.id_zone,
-  'created_at': instance.created_at?.toIso8601String(),
+  'id_zone': instance.idZone,
+  'created_at': instance.createdAt?.toIso8601String(),
 };

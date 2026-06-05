@@ -7,8 +7,8 @@ part 'gerer.g.dart';
 @freezed
 abstract class Gerer with _$Gerer {
   const factory Gerer({
-    required String id_utilisateur,
-    required String id_zone,
+    @JsonKey(name: 'id_utilisateur') required String idUtilisateur,
+    @JsonKey(name: 'id_zone') required String idZone,
   }) = _Gerer;
 	
   factory Gerer.fromJson(Map<String, dynamic> json) =>

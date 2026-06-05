@@ -7,10 +7,10 @@ part 'categorie.g.dart';
 @freezed
 abstract class Categorie with _$Categorie {
   const factory Categorie({
-    required String id_categorie,
-    required String nom,
-    String? description,
-    DateTime? created_at
+    @JsonKey(name: 'id_categorie') required String id,
+    @JsonKey(name: 'nom') required String nom,
+    @JsonKey(name: 'description') String? description,
+    @JsonKey(name: 'created_at') DateTime? createdAt
   }) = _Categorie;
 	
   factory Categorie.fromJson(Map<String, dynamic> json) =>

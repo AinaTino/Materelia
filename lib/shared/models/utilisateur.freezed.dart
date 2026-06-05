@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Utilisateur {
 
- String get id_utilisateur; String get nom; String get prenom; String get role; DateTime? get created_at;
+@JsonKey(name: 'id_utilisateur') String get id;@JsonKey(name: 'nom') String get nom;@JsonKey(name: 'prenom') String get prenom;@JsonKey(name: 'role') String get role;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Utilisateur
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UtilisateurCopyWith<Utilisateur> get copyWith => _$UtilisateurCopyWithImpl<Util
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Utilisateur&&(identical(other.id_utilisateur, id_utilisateur) || other.id_utilisateur == id_utilisateur)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.prenom, prenom) || other.prenom == prenom)&&(identical(other.role, role) || other.role == role)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Utilisateur&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.prenom, prenom) || other.prenom == prenom)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_utilisateur,nom,prenom,role,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,prenom,role,createdAt);
 
 @override
 String toString() {
-  return 'Utilisateur(id_utilisateur: $id_utilisateur, nom: $nom, prenom: $prenom, role: $role, created_at: $created_at)';
+  return 'Utilisateur(id: $id, nom: $nom, prenom: $prenom, role: $role, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UtilisateurCopyWith<$Res>  {
   factory $UtilisateurCopyWith(Utilisateur value, $Res Function(Utilisateur) _then) = _$UtilisateurCopyWithImpl;
 @useResult
 $Res call({
- String id_utilisateur, String nom, String prenom, String role, DateTime? created_at
+@JsonKey(name: 'id_utilisateur') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'prenom') String prenom,@JsonKey(name: 'role') String role,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,13 +65,13 @@ class _$UtilisateurCopyWithImpl<$Res>
 
 /// Create a copy of Utilisateur
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_utilisateur = null,Object? nom = null,Object? prenom = null,Object? role = null,Object? created_at = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? nom = null,Object? prenom = null,Object? role = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
-id_utilisateur: null == id_utilisateur ? _self.id_utilisateur : id_utilisateur // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,prenom: null == prenom ? _self.prenom : prenom // ignore: cast_nullable_to_non_nullable
 as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -157,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_utilisateur,  String nom,  String prenom,  String role,  DateTime? created_at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_utilisateur')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'prenom')  String prenom, @JsonKey(name: 'role')  String role, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Utilisateur() when $default != null:
-return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.prenom,_that.role,_that.createdAt);case _:
   return orElse();
 
 }
@@ -178,10 +178,10 @@ return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.cre
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_utilisateur,  String nom,  String prenom,  String role,  DateTime? created_at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_utilisateur')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'prenom')  String prenom, @JsonKey(name: 'role')  String role, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Utilisateur():
-return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.prenom,_that.role,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +198,10 @@ return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.cre
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_utilisateur,  String nom,  String prenom,  String role,  DateTime? created_at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_utilisateur')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'prenom')  String prenom, @JsonKey(name: 'role')  String role, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Utilisateur() when $default != null:
-return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.prenom,_that.role,_that.createdAt);case _:
   return null;
 
 }
@@ -213,14 +213,14 @@ return $default(_that.id_utilisateur,_that.nom,_that.prenom,_that.role,_that.cre
 @JsonSerializable()
 
 class _Utilisateur implements Utilisateur {
-  const _Utilisateur({required this.id_utilisateur, required this.nom, required this.prenom, required this.role, this.created_at});
+  const _Utilisateur({@JsonKey(name: 'id_utilisateur') required this.id, @JsonKey(name: 'nom') required this.nom, @JsonKey(name: 'prenom') required this.prenom, @JsonKey(name: 'role') required this.role, @JsonKey(name: 'created_at') this.createdAt});
   factory _Utilisateur.fromJson(Map<String, dynamic> json) => _$UtilisateurFromJson(json);
 
-@override final  String id_utilisateur;
-@override final  String nom;
-@override final  String prenom;
-@override final  String role;
-@override final  DateTime? created_at;
+@override@JsonKey(name: 'id_utilisateur') final  String id;
+@override@JsonKey(name: 'nom') final  String nom;
+@override@JsonKey(name: 'prenom') final  String prenom;
+@override@JsonKey(name: 'role') final  String role;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of Utilisateur
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Utilisateur&&(identical(other.id_utilisateur, id_utilisateur) || other.id_utilisateur == id_utilisateur)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.prenom, prenom) || other.prenom == prenom)&&(identical(other.role, role) || other.role == role)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Utilisateur&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.prenom, prenom) || other.prenom == prenom)&&(identical(other.role, role) || other.role == role)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_utilisateur,nom,prenom,role,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,prenom,role,createdAt);
 
 @override
 String toString() {
-  return 'Utilisateur(id_utilisateur: $id_utilisateur, nom: $nom, prenom: $prenom, role: $role, created_at: $created_at)';
+  return 'Utilisateur(id: $id, nom: $nom, prenom: $prenom, role: $role, createdAt: $createdAt)';
 }
 
 
@@ -255,7 +255,7 @@ abstract mixin class _$UtilisateurCopyWith<$Res> implements $UtilisateurCopyWith
   factory _$UtilisateurCopyWith(_Utilisateur value, $Res Function(_Utilisateur) _then) = __$UtilisateurCopyWithImpl;
 @override @useResult
 $Res call({
- String id_utilisateur, String nom, String prenom, String role, DateTime? created_at
+@JsonKey(name: 'id_utilisateur') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'prenom') String prenom,@JsonKey(name: 'role') String role,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -272,13 +272,13 @@ class __$UtilisateurCopyWithImpl<$Res>
 
 /// Create a copy of Utilisateur
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_utilisateur = null,Object? nom = null,Object? prenom = null,Object? role = null,Object? created_at = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? nom = null,Object? prenom = null,Object? role = null,Object? createdAt = freezed,}) {
   return _then(_Utilisateur(
-id_utilisateur: null == id_utilisateur ? _self.id_utilisateur : id_utilisateur // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,prenom: null == prenom ? _self.prenom : prenom // ignore: cast_nullable_to_non_nullable
 as String,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

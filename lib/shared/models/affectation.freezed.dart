@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Affectation {
 
- String get id_affectation; DateTime get date_debut; DateTime get date_fin_prevue; DateTime? get date_fin_effective; String get etat; String get id_materiel; String get id_beneficiaire; String get id_demande; DateTime get date_fin;
+@JsonKey(name: 'id_affectation') String get id;@JsonKey(name: 'date_debut') DateTime get dateDebut;@JsonKey(name: 'date_fin_prevue') DateTime get dateFinPrevue;@JsonKey(name: 'date_fin_effective') DateTime? get dateFinEffective;@JsonKey(name: 'etat') String get etat;@JsonKey(name: 'id_materiel') String get idMateriel;@JsonKey(name: 'id_beneficiaire') String get idBeneficiaire;@JsonKey(name: 'id_demande') String get idDemande;@JsonKey(name: 'date_fin') DateTime get dateFin;
 /// Create a copy of Affectation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AffectationCopyWith<Affectation> get copyWith => _$AffectationCopyWithImpl<Affe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Affectation&&(identical(other.id_affectation, id_affectation) || other.id_affectation == id_affectation)&&(identical(other.date_debut, date_debut) || other.date_debut == date_debut)&&(identical(other.date_fin_prevue, date_fin_prevue) || other.date_fin_prevue == date_fin_prevue)&&(identical(other.date_fin_effective, date_fin_effective) || other.date_fin_effective == date_fin_effective)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.id_beneficiaire, id_beneficiaire) || other.id_beneficiaire == id_beneficiaire)&&(identical(other.id_demande, id_demande) || other.id_demande == id_demande)&&(identical(other.date_fin, date_fin) || other.date_fin == date_fin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Affectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.dateFinEffective, dateFinEffective) || other.dateFinEffective == dateFinEffective)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.idMateriel, idMateriel) || other.idMateriel == idMateriel)&&(identical(other.idBeneficiaire, idBeneficiaire) || other.idBeneficiaire == idBeneficiaire)&&(identical(other.idDemande, idDemande) || other.idDemande == idDemande)&&(identical(other.dateFin, dateFin) || other.dateFin == dateFin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_affectation,date_debut,date_fin_prevue,date_fin_effective,etat,id_materiel,id_beneficiaire,id_demande,date_fin);
+int get hashCode => Object.hash(runtimeType,id,dateDebut,dateFinPrevue,dateFinEffective,etat,idMateriel,idBeneficiaire,idDemande,dateFin);
 
 @override
 String toString() {
-  return 'Affectation(id_affectation: $id_affectation, date_debut: $date_debut, date_fin_prevue: $date_fin_prevue, date_fin_effective: $date_fin_effective, etat: $etat, id_materiel: $id_materiel, id_beneficiaire: $id_beneficiaire, id_demande: $id_demande, date_fin: $date_fin)';
+  return 'Affectation(id: $id, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, dateFinEffective: $dateFinEffective, etat: $etat, idMateriel: $idMateriel, idBeneficiaire: $idBeneficiaire, idDemande: $idDemande, dateFin: $dateFin)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AffectationCopyWith<$Res>  {
   factory $AffectationCopyWith(Affectation value, $Res Function(Affectation) _then) = _$AffectationCopyWithImpl;
 @useResult
 $Res call({
- String id_affectation, DateTime date_debut, DateTime date_fin_prevue, DateTime? date_fin_effective, String etat, String id_materiel, String id_beneficiaire, String id_demande, DateTime date_fin
+@JsonKey(name: 'id_affectation') String id,@JsonKey(name: 'date_debut') DateTime dateDebut,@JsonKey(name: 'date_fin_prevue') DateTime dateFinPrevue,@JsonKey(name: 'date_fin_effective') DateTime? dateFinEffective,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'id_materiel') String idMateriel,@JsonKey(name: 'id_beneficiaire') String idBeneficiaire,@JsonKey(name: 'id_demande') String idDemande,@JsonKey(name: 'date_fin') DateTime dateFin
 });
 
 
@@ -65,17 +65,17 @@ class _$AffectationCopyWithImpl<$Res>
 
 /// Create a copy of Affectation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_affectation = null,Object? date_debut = null,Object? date_fin_prevue = null,Object? date_fin_effective = freezed,Object? etat = null,Object? id_materiel = null,Object? id_beneficiaire = null,Object? id_demande = null,Object? date_fin = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? dateDebut = null,Object? dateFinPrevue = null,Object? dateFinEffective = freezed,Object? etat = null,Object? idMateriel = null,Object? idBeneficiaire = null,Object? idDemande = null,Object? dateFin = null,}) {
   return _then(_self.copyWith(
-id_affectation: null == id_affectation ? _self.id_affectation : id_affectation // ignore: cast_nullable_to_non_nullable
-as String,date_debut: null == date_debut ? _self.date_debut : date_debut // ignore: cast_nullable_to_non_nullable
-as DateTime,date_fin_prevue: null == date_fin_prevue ? _self.date_fin_prevue : date_fin_prevue // ignore: cast_nullable_to_non_nullable
-as DateTime,date_fin_effective: freezed == date_fin_effective ? _self.date_fin_effective : date_fin_effective // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,dateDebut: null == dateDebut ? _self.dateDebut : dateDebut // ignore: cast_nullable_to_non_nullable
+as DateTime,dateFinPrevue: null == dateFinPrevue ? _self.dateFinPrevue : dateFinPrevue // ignore: cast_nullable_to_non_nullable
+as DateTime,dateFinEffective: freezed == dateFinEffective ? _self.dateFinEffective : dateFinEffective // ignore: cast_nullable_to_non_nullable
 as DateTime?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
-as String,id_beneficiaire: null == id_beneficiaire ? _self.id_beneficiaire : id_beneficiaire // ignore: cast_nullable_to_non_nullable
-as String,id_demande: null == id_demande ? _self.id_demande : id_demande // ignore: cast_nullable_to_non_nullable
-as String,date_fin: null == date_fin ? _self.date_fin : date_fin // ignore: cast_nullable_to_non_nullable
+as String,idMateriel: null == idMateriel ? _self.idMateriel : idMateriel // ignore: cast_nullable_to_non_nullable
+as String,idBeneficiaire: null == idBeneficiaire ? _self.idBeneficiaire : idBeneficiaire // ignore: cast_nullable_to_non_nullable
+as String,idDemande: null == idDemande ? _self.idDemande : idDemande // ignore: cast_nullable_to_non_nullable
+as String,dateFin: null == dateFin ? _self.dateFin : dateFin // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
@@ -161,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_affectation,  DateTime date_debut,  DateTime date_fin_prevue,  DateTime? date_fin_effective,  String etat,  String id_materiel,  String id_beneficiaire,  String id_demande,  DateTime date_fin)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_affectation')  String id, @JsonKey(name: 'date_debut')  DateTime dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_fin_effective')  DateTime? dateFinEffective, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'id_beneficiaire')  String idBeneficiaire, @JsonKey(name: 'id_demande')  String idDemande, @JsonKey(name: 'date_fin')  DateTime dateFin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Affectation() when $default != null:
-return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_that.date_fin_effective,_that.etat,_that.id_materiel,_that.id_beneficiaire,_that.id_demande,_that.date_fin);case _:
+return $default(_that.id,_that.dateDebut,_that.dateFinPrevue,_that.dateFinEffective,_that.etat,_that.idMateriel,_that.idBeneficiaire,_that.idDemande,_that.dateFin);case _:
   return orElse();
 
 }
@@ -182,10 +182,10 @@ return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_affectation,  DateTime date_debut,  DateTime date_fin_prevue,  DateTime? date_fin_effective,  String etat,  String id_materiel,  String id_beneficiaire,  String id_demande,  DateTime date_fin)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_affectation')  String id, @JsonKey(name: 'date_debut')  DateTime dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_fin_effective')  DateTime? dateFinEffective, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'id_beneficiaire')  String idBeneficiaire, @JsonKey(name: 'id_demande')  String idDemande, @JsonKey(name: 'date_fin')  DateTime dateFin)  $default,) {final _that = this;
 switch (_that) {
 case _Affectation():
-return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_that.date_fin_effective,_that.etat,_that.id_materiel,_that.id_beneficiaire,_that.id_demande,_that.date_fin);case _:
+return $default(_that.id,_that.dateDebut,_that.dateFinPrevue,_that.dateFinEffective,_that.etat,_that.idMateriel,_that.idBeneficiaire,_that.idDemande,_that.dateFin);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +202,10 @@ return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_affectation,  DateTime date_debut,  DateTime date_fin_prevue,  DateTime? date_fin_effective,  String etat,  String id_materiel,  String id_beneficiaire,  String id_demande,  DateTime date_fin)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_affectation')  String id, @JsonKey(name: 'date_debut')  DateTime dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime dateFinPrevue, @JsonKey(name: 'date_fin_effective')  DateTime? dateFinEffective, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'id_materiel')  String idMateriel, @JsonKey(name: 'id_beneficiaire')  String idBeneficiaire, @JsonKey(name: 'id_demande')  String idDemande, @JsonKey(name: 'date_fin')  DateTime dateFin)?  $default,) {final _that = this;
 switch (_that) {
 case _Affectation() when $default != null:
-return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_that.date_fin_effective,_that.etat,_that.id_materiel,_that.id_beneficiaire,_that.id_demande,_that.date_fin);case _:
+return $default(_that.id,_that.dateDebut,_that.dateFinPrevue,_that.dateFinEffective,_that.etat,_that.idMateriel,_that.idBeneficiaire,_that.idDemande,_that.dateFin);case _:
   return null;
 
 }
@@ -217,18 +217,18 @@ return $default(_that.id_affectation,_that.date_debut,_that.date_fin_prevue,_tha
 @JsonSerializable()
 
 class _Affectation implements Affectation {
-  const _Affectation({required this.id_affectation, required this.date_debut, required this.date_fin_prevue, this.date_fin_effective, required this.etat, required this.id_materiel, required this.id_beneficiaire, required this.id_demande, required this.date_fin});
+  const _Affectation({@JsonKey(name: 'id_affectation') required this.id, @JsonKey(name: 'date_debut') required this.dateDebut, @JsonKey(name: 'date_fin_prevue') required this.dateFinPrevue, @JsonKey(name: 'date_fin_effective') this.dateFinEffective, @JsonKey(name: 'etat') required this.etat, @JsonKey(name: 'id_materiel') required this.idMateriel, @JsonKey(name: 'id_beneficiaire') required this.idBeneficiaire, @JsonKey(name: 'id_demande') required this.idDemande, @JsonKey(name: 'date_fin') required this.dateFin});
   factory _Affectation.fromJson(Map<String, dynamic> json) => _$AffectationFromJson(json);
 
-@override final  String id_affectation;
-@override final  DateTime date_debut;
-@override final  DateTime date_fin_prevue;
-@override final  DateTime? date_fin_effective;
-@override final  String etat;
-@override final  String id_materiel;
-@override final  String id_beneficiaire;
-@override final  String id_demande;
-@override final  DateTime date_fin;
+@override@JsonKey(name: 'id_affectation') final  String id;
+@override@JsonKey(name: 'date_debut') final  DateTime dateDebut;
+@override@JsonKey(name: 'date_fin_prevue') final  DateTime dateFinPrevue;
+@override@JsonKey(name: 'date_fin_effective') final  DateTime? dateFinEffective;
+@override@JsonKey(name: 'etat') final  String etat;
+@override@JsonKey(name: 'id_materiel') final  String idMateriel;
+@override@JsonKey(name: 'id_beneficiaire') final  String idBeneficiaire;
+@override@JsonKey(name: 'id_demande') final  String idDemande;
+@override@JsonKey(name: 'date_fin') final  DateTime dateFin;
 
 /// Create a copy of Affectation
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Affectation&&(identical(other.id_affectation, id_affectation) || other.id_affectation == id_affectation)&&(identical(other.date_debut, date_debut) || other.date_debut == date_debut)&&(identical(other.date_fin_prevue, date_fin_prevue) || other.date_fin_prevue == date_fin_prevue)&&(identical(other.date_fin_effective, date_fin_effective) || other.date_fin_effective == date_fin_effective)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.id_beneficiaire, id_beneficiaire) || other.id_beneficiaire == id_beneficiaire)&&(identical(other.id_demande, id_demande) || other.id_demande == id_demande)&&(identical(other.date_fin, date_fin) || other.date_fin == date_fin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Affectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.dateFinEffective, dateFinEffective) || other.dateFinEffective == dateFinEffective)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.idMateriel, idMateriel) || other.idMateriel == idMateriel)&&(identical(other.idBeneficiaire, idBeneficiaire) || other.idBeneficiaire == idBeneficiaire)&&(identical(other.idDemande, idDemande) || other.idDemande == idDemande)&&(identical(other.dateFin, dateFin) || other.dateFin == dateFin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_affectation,date_debut,date_fin_prevue,date_fin_effective,etat,id_materiel,id_beneficiaire,id_demande,date_fin);
+int get hashCode => Object.hash(runtimeType,id,dateDebut,dateFinPrevue,dateFinEffective,etat,idMateriel,idBeneficiaire,idDemande,dateFin);
 
 @override
 String toString() {
-  return 'Affectation(id_affectation: $id_affectation, date_debut: $date_debut, date_fin_prevue: $date_fin_prevue, date_fin_effective: $date_fin_effective, etat: $etat, id_materiel: $id_materiel, id_beneficiaire: $id_beneficiaire, id_demande: $id_demande, date_fin: $date_fin)';
+  return 'Affectation(id: $id, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, dateFinEffective: $dateFinEffective, etat: $etat, idMateriel: $idMateriel, idBeneficiaire: $idBeneficiaire, idDemande: $idDemande, dateFin: $dateFin)';
 }
 
 
@@ -263,7 +263,7 @@ abstract mixin class _$AffectationCopyWith<$Res> implements $AffectationCopyWith
   factory _$AffectationCopyWith(_Affectation value, $Res Function(_Affectation) _then) = __$AffectationCopyWithImpl;
 @override @useResult
 $Res call({
- String id_affectation, DateTime date_debut, DateTime date_fin_prevue, DateTime? date_fin_effective, String etat, String id_materiel, String id_beneficiaire, String id_demande, DateTime date_fin
+@JsonKey(name: 'id_affectation') String id,@JsonKey(name: 'date_debut') DateTime dateDebut,@JsonKey(name: 'date_fin_prevue') DateTime dateFinPrevue,@JsonKey(name: 'date_fin_effective') DateTime? dateFinEffective,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'id_materiel') String idMateriel,@JsonKey(name: 'id_beneficiaire') String idBeneficiaire,@JsonKey(name: 'id_demande') String idDemande,@JsonKey(name: 'date_fin') DateTime dateFin
 });
 
 
@@ -280,17 +280,17 @@ class __$AffectationCopyWithImpl<$Res>
 
 /// Create a copy of Affectation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_affectation = null,Object? date_debut = null,Object? date_fin_prevue = null,Object? date_fin_effective = freezed,Object? etat = null,Object? id_materiel = null,Object? id_beneficiaire = null,Object? id_demande = null,Object? date_fin = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? dateDebut = null,Object? dateFinPrevue = null,Object? dateFinEffective = freezed,Object? etat = null,Object? idMateriel = null,Object? idBeneficiaire = null,Object? idDemande = null,Object? dateFin = null,}) {
   return _then(_Affectation(
-id_affectation: null == id_affectation ? _self.id_affectation : id_affectation // ignore: cast_nullable_to_non_nullable
-as String,date_debut: null == date_debut ? _self.date_debut : date_debut // ignore: cast_nullable_to_non_nullable
-as DateTime,date_fin_prevue: null == date_fin_prevue ? _self.date_fin_prevue : date_fin_prevue // ignore: cast_nullable_to_non_nullable
-as DateTime,date_fin_effective: freezed == date_fin_effective ? _self.date_fin_effective : date_fin_effective // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,dateDebut: null == dateDebut ? _self.dateDebut : dateDebut // ignore: cast_nullable_to_non_nullable
+as DateTime,dateFinPrevue: null == dateFinPrevue ? _self.dateFinPrevue : dateFinPrevue // ignore: cast_nullable_to_non_nullable
+as DateTime,dateFinEffective: freezed == dateFinEffective ? _self.dateFinEffective : dateFinEffective // ignore: cast_nullable_to_non_nullable
 as DateTime?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
-as String,id_beneficiaire: null == id_beneficiaire ? _self.id_beneficiaire : id_beneficiaire // ignore: cast_nullable_to_non_nullable
-as String,id_demande: null == id_demande ? _self.id_demande : id_demande // ignore: cast_nullable_to_non_nullable
-as String,date_fin: null == date_fin ? _self.date_fin : date_fin // ignore: cast_nullable_to_non_nullable
+as String,idMateriel: null == idMateriel ? _self.idMateriel : idMateriel // ignore: cast_nullable_to_non_nullable
+as String,idBeneficiaire: null == idBeneficiaire ? _self.idBeneficiaire : idBeneficiaire // ignore: cast_nullable_to_non_nullable
+as String,idDemande: null == idDemande ? _self.idDemande : idDemande // ignore: cast_nullable_to_non_nullable
+as String,dateFin: null == dateFin ? _self.dateFin : dateFin // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }

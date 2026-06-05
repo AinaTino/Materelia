@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Materiel {
 
- String get id_materiel; String get nom; String get reference; String? get description; String get etat; String get date_acquisition; String get id_categorie; String get id_stock; DateTime? get created_at;
+@JsonKey(name: 'id_materiel') String get id;@JsonKey(name: 'nom') String get nom;@JsonKey(name: 'reference') String get reference;@JsonKey(name: 'description') String? get description;@JsonKey(name: 'etat') String get etat;@JsonKey(name: 'date_acquisition') String get dateAcquisition;@JsonKey(name: 'id_categorie') String get idCategorie;@JsonKey(name: 'id_stock') String get idStock;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Materiel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MaterielCopyWith<Materiel> get copyWith => _$MaterielCopyWithImpl<Materiel>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Materiel&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.description, description) || other.description == description)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.date_acquisition, date_acquisition) || other.date_acquisition == date_acquisition)&&(identical(other.id_categorie, id_categorie) || other.id_categorie == id_categorie)&&(identical(other.id_stock, id_stock) || other.id_stock == id_stock)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Materiel&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.description, description) || other.description == description)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.dateAcquisition, dateAcquisition) || other.dateAcquisition == dateAcquisition)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.idStock, idStock) || other.idStock == idStock)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_materiel,nom,reference,description,etat,date_acquisition,id_categorie,id_stock,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,reference,description,etat,dateAcquisition,idCategorie,idStock,createdAt);
 
 @override
 String toString() {
-  return 'Materiel(id_materiel: $id_materiel, nom: $nom, reference: $reference, description: $description, etat: $etat, date_acquisition: $date_acquisition, id_categorie: $id_categorie, id_stock: $id_stock, created_at: $created_at)';
+  return 'Materiel(id: $id, nom: $nom, reference: $reference, description: $description, etat: $etat, dateAcquisition: $dateAcquisition, idCategorie: $idCategorie, idStock: $idStock, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MaterielCopyWith<$Res>  {
   factory $MaterielCopyWith(Materiel value, $Res Function(Materiel) _then) = _$MaterielCopyWithImpl;
 @useResult
 $Res call({
- String id_materiel, String nom, String reference, String? description, String etat, String date_acquisition, String id_categorie, String id_stock, DateTime? created_at
+@JsonKey(name: 'id_materiel') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'reference') String reference,@JsonKey(name: 'description') String? description,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'date_acquisition') String dateAcquisition,@JsonKey(name: 'id_categorie') String idCategorie,@JsonKey(name: 'id_stock') String idStock,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,17 +65,17 @@ class _$MaterielCopyWithImpl<$Res>
 
 /// Create a copy of Materiel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id_materiel = null,Object? nom = null,Object? reference = null,Object? description = freezed,Object? etat = null,Object? date_acquisition = null,Object? id_categorie = null,Object? id_stock = null,Object? created_at = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? nom = null,Object? reference = null,Object? description = freezed,Object? etat = null,Object? dateAcquisition = null,Object? idCategorie = null,Object? idStock = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
-id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,reference: null == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,date_acquisition: null == date_acquisition ? _self.date_acquisition : date_acquisition // ignore: cast_nullable_to_non_nullable
-as String,id_categorie: null == id_categorie ? _self.id_categorie : id_categorie // ignore: cast_nullable_to_non_nullable
-as String,id_stock: null == id_stock ? _self.id_stock : id_stock // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,dateAcquisition: null == dateAcquisition ? _self.dateAcquisition : dateAcquisition // ignore: cast_nullable_to_non_nullable
+as String,idCategorie: null == idCategorie ? _self.idCategorie : idCategorie // ignore: cast_nullable_to_non_nullable
+as String,idStock: null == idStock ? _self.idStock : idStock // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -161,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id_materiel,  String nom,  String reference,  String? description,  String etat,  String date_acquisition,  String id_categorie,  String id_stock,  DateTime? created_at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_materiel')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'reference')  String reference, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'date_acquisition')  String dateAcquisition, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'id_stock')  String idStock, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Materiel() when $default != null:
-return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_that.etat,_that.date_acquisition,_that.id_categorie,_that.id_stock,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.reference,_that.description,_that.etat,_that.dateAcquisition,_that.idCategorie,_that.idStock,_that.createdAt);case _:
   return orElse();
 
 }
@@ -182,10 +182,10 @@ return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id_materiel,  String nom,  String reference,  String? description,  String etat,  String date_acquisition,  String id_categorie,  String id_stock,  DateTime? created_at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_materiel')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'reference')  String reference, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'date_acquisition')  String dateAcquisition, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'id_stock')  String idStock, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Materiel():
-return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_that.etat,_that.date_acquisition,_that.id_categorie,_that.id_stock,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.reference,_that.description,_that.etat,_that.dateAcquisition,_that.idCategorie,_that.idStock,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +202,10 @@ return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id_materiel,  String nom,  String reference,  String? description,  String etat,  String date_acquisition,  String id_categorie,  String id_stock,  DateTime? created_at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_materiel')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'reference')  String reference, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'date_acquisition')  String dateAcquisition, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'id_stock')  String idStock, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Materiel() when $default != null:
-return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_that.etat,_that.date_acquisition,_that.id_categorie,_that.id_stock,_that.created_at);case _:
+return $default(_that.id,_that.nom,_that.reference,_that.description,_that.etat,_that.dateAcquisition,_that.idCategorie,_that.idStock,_that.createdAt);case _:
   return null;
 
 }
@@ -217,18 +217,18 @@ return $default(_that.id_materiel,_that.nom,_that.reference,_that.description,_t
 @JsonSerializable()
 
 class _Materiel implements Materiel {
-  const _Materiel({required this.id_materiel, required this.nom, required this.reference, this.description, required this.etat, required this.date_acquisition, required this.id_categorie, required this.id_stock, this.created_at});
+  const _Materiel({@JsonKey(name: 'id_materiel') required this.id, @JsonKey(name: 'nom') required this.nom, @JsonKey(name: 'reference') required this.reference, @JsonKey(name: 'description') this.description, @JsonKey(name: 'etat') required this.etat, @JsonKey(name: 'date_acquisition') required this.dateAcquisition, @JsonKey(name: 'id_categorie') required this.idCategorie, @JsonKey(name: 'id_stock') required this.idStock, @JsonKey(name: 'created_at') this.createdAt});
   factory _Materiel.fromJson(Map<String, dynamic> json) => _$MaterielFromJson(json);
 
-@override final  String id_materiel;
-@override final  String nom;
-@override final  String reference;
-@override final  String? description;
-@override final  String etat;
-@override final  String date_acquisition;
-@override final  String id_categorie;
-@override final  String id_stock;
-@override final  DateTime? created_at;
+@override@JsonKey(name: 'id_materiel') final  String id;
+@override@JsonKey(name: 'nom') final  String nom;
+@override@JsonKey(name: 'reference') final  String reference;
+@override@JsonKey(name: 'description') final  String? description;
+@override@JsonKey(name: 'etat') final  String etat;
+@override@JsonKey(name: 'date_acquisition') final  String dateAcquisition;
+@override@JsonKey(name: 'id_categorie') final  String idCategorie;
+@override@JsonKey(name: 'id_stock') final  String idStock;
+@override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of Materiel
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Materiel&&(identical(other.id_materiel, id_materiel) || other.id_materiel == id_materiel)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.description, description) || other.description == description)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.date_acquisition, date_acquisition) || other.date_acquisition == date_acquisition)&&(identical(other.id_categorie, id_categorie) || other.id_categorie == id_categorie)&&(identical(other.id_stock, id_stock) || other.id_stock == id_stock)&&(identical(other.created_at, created_at) || other.created_at == created_at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Materiel&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.reference, reference) || other.reference == reference)&&(identical(other.description, description) || other.description == description)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.dateAcquisition, dateAcquisition) || other.dateAcquisition == dateAcquisition)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.idStock, idStock) || other.idStock == idStock)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id_materiel,nom,reference,description,etat,date_acquisition,id_categorie,id_stock,created_at);
+int get hashCode => Object.hash(runtimeType,id,nom,reference,description,etat,dateAcquisition,idCategorie,idStock,createdAt);
 
 @override
 String toString() {
-  return 'Materiel(id_materiel: $id_materiel, nom: $nom, reference: $reference, description: $description, etat: $etat, date_acquisition: $date_acquisition, id_categorie: $id_categorie, id_stock: $id_stock, created_at: $created_at)';
+  return 'Materiel(id: $id, nom: $nom, reference: $reference, description: $description, etat: $etat, dateAcquisition: $dateAcquisition, idCategorie: $idCategorie, idStock: $idStock, createdAt: $createdAt)';
 }
 
 
@@ -263,7 +263,7 @@ abstract mixin class _$MaterielCopyWith<$Res> implements $MaterielCopyWith<$Res>
   factory _$MaterielCopyWith(_Materiel value, $Res Function(_Materiel) _then) = __$MaterielCopyWithImpl;
 @override @useResult
 $Res call({
- String id_materiel, String nom, String reference, String? description, String etat, String date_acquisition, String id_categorie, String id_stock, DateTime? created_at
+@JsonKey(name: 'id_materiel') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'reference') String reference,@JsonKey(name: 'description') String? description,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'date_acquisition') String dateAcquisition,@JsonKey(name: 'id_categorie') String idCategorie,@JsonKey(name: 'id_stock') String idStock,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -280,17 +280,17 @@ class __$MaterielCopyWithImpl<$Res>
 
 /// Create a copy of Materiel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id_materiel = null,Object? nom = null,Object? reference = null,Object? description = freezed,Object? etat = null,Object? date_acquisition = null,Object? id_categorie = null,Object? id_stock = null,Object? created_at = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? nom = null,Object? reference = null,Object? description = freezed,Object? etat = null,Object? dateAcquisition = null,Object? idCategorie = null,Object? idStock = null,Object? createdAt = freezed,}) {
   return _then(_Materiel(
-id_materiel: null == id_materiel ? _self.id_materiel : id_materiel // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,reference: null == reference ? _self.reference : reference // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,etat: null == etat ? _self.etat : etat // ignore: cast_nullable_to_non_nullable
-as String,date_acquisition: null == date_acquisition ? _self.date_acquisition : date_acquisition // ignore: cast_nullable_to_non_nullable
-as String,id_categorie: null == id_categorie ? _self.id_categorie : id_categorie // ignore: cast_nullable_to_non_nullable
-as String,id_stock: null == id_stock ? _self.id_stock : id_stock // ignore: cast_nullable_to_non_nullable
-as String,created_at: freezed == created_at ? _self.created_at : created_at // ignore: cast_nullable_to_non_nullable
+as String,dateAcquisition: null == dateAcquisition ? _self.dateAcquisition : dateAcquisition // ignore: cast_nullable_to_non_nullable
+as String,idCategorie: null == idCategorie ? _self.idCategorie : idCategorie // ignore: cast_nullable_to_non_nullable
+as String,idStock: null == idStock ? _self.idStock : idStock // ignore: cast_nullable_to_non_nullable
+as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
