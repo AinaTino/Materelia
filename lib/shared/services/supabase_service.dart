@@ -10,4 +10,12 @@ class SupabaseService {
 
   static Stream<AuthState> get authStateStream =>
       client.auth.onAuthStateChange;
+
+  static Future<dynamic> callFunction(
+    String name, {
+    Map<String, dynamic>? body,
+  }) async {
+    final res = await client.functions.invoke(name, body: body);
+    return res.data;
+  }
 }
