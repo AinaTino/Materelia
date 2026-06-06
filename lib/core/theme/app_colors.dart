@@ -2,28 +2,37 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Primary
-  static const primary = Color(0xFF3F51B5);
+  static const primary = Color(0xFF1E88E5);
   static const onPrimary = Color(0xFFFFFFFF);
-  static const primaryContainer = Color(0xFFE8EAF6);
-  static const onPrimaryContainer = Color(0xFF1A237E);
+  static const primaryContainer = Color(0xFFDCEFFF);
+  static const onPrimaryContainer = Color(0xFF002F6C);
 
-  // Sémantiques
+  // Secondary
+  static const secondary = Color(0xFF26A69A);
+  static const onSecondary = Color(0xFFFFFFFF);
+  static const secondaryContainer = Color(0xFFB2DFDB);
+  static const onSecondaryContainer = Color(0xFF00332B);
+
+  // Semantic
   static const success = Color(0xFF2E7D32);
   static const successLight = Color(0xFFE8F5E9);
-  static const warning = Color(0xFFE65100);
+  static const warning = Color(0xFFF57C00);
   static const warningLight = Color(0xFFFFF3E0);
-  static const danger = Color(0xFFC62828);
-  static const dangerLight = Color(0xFFFFEBEE);
-  static const info = Color(0xFF0277BD);
+  static const danger = Color(0xFFB00020);
+  static const dangerLight = Color(0xFFFCD8DD);
+  static const info = Color(0xFF0288D1);
   static const infoLight = Color(0xFFE1F5FE);
 
   // Neutres
-  static const surface = Color(0xFFF5F5F5);
+  static const surface = Color(0xFFF4F8FF);
   static const surfaceWhite = Color(0xFFFFFFFF);
-  static const outline = Color(0xFFE0E0E0);
-  static const textPrimary = Color(0xFF212121);
-  static const textSecondary = Color(0xFF757575);
-  static const textDisabled = Color(0xFFBDBDBD);
+  static const background = Color(0xFFF1F5FF);
+  static const surfaceVariant = Color(0xFFE3E9F7);
+  static const onSurfaceVariant = Color(0xFF484F5A);
+  static const outline = Color(0xFF9BB3D0);
+  static const textPrimary = Color(0xFF1B1F3B);
+  static const textSecondary = Color(0xFF5F6678);
+  static const textDisabled = Color(0xFF9AA3B1);
 
   // Badge par état ticket/affectation
   static Color badgeForeground(String etat) {
