@@ -11,11 +11,21 @@ class AppTheme {
       onPrimary: AppColors.onPrimary,
       primaryContainer: AppColors.primaryContainer,
       onPrimaryContainer: AppColors.onPrimaryContainer,
+      secondary: AppColors.secondary,
+      onSecondary: AppColors.onSecondary,
+      secondaryContainer: AppColors.secondaryContainer,
+      onSecondaryContainer: AppColors.onSecondaryContainer,
       surface: AppColors.surfaceWhite,
       onSurface: AppColors.textPrimary,
+      background: AppColors.background,
+      onBackground: AppColors.textPrimary,
+      surfaceVariant: AppColors.surfaceVariant,
+      onSurfaceVariant: AppColors.onSurfaceVariant,
+      outline: AppColors.outline,
       error: AppColors.danger,
+      onError: AppColors.surfaceWhite,
     ),
-    scaffoldBackgroundColor: AppColors.surface,
+    scaffoldBackgroundColor: AppColors.background,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.surfaceWhite,
       foregroundColor: AppColors.textPrimary,
@@ -28,7 +38,7 @@ class AppTheme {
         color: AppColors.textPrimary,
       ),
     ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.surfaceWhite,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: AppColors.textDisabled,
@@ -54,31 +64,35 @@ class AppTheme {
       filled: true,
       fillColor: AppColors.surfaceWhite,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.outline),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.outline),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.danger),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.danger, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: 14,
+        vertical: 16,
       ),
     ),
     cardTheme: CardThemeData(
       color: AppColors.surfaceWhite,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         side: const BorderSide(color: AppColors.outline),
       ),
     ),
