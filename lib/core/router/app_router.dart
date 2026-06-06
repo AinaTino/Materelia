@@ -1,5 +1,6 @@
 import "package:go_router/go_router.dart";
-import "package:materelia/features/home/homepage.dart";
+import "package:materelia/features/auth/signinpage.dart";
+
 import "package:materelia/shared/services/supabase_service.dart";
 
 final rootRouter = GoRouter(
@@ -9,7 +10,7 @@ final rootRouter = GoRouter(
     final allowedBefore = (objectif == '/signin') || (objectif == '/signup') ;
 
     if (!isLoggedIn && !allowedBefore) {
-      return '/signin';
+      return '/';
     }
 
     if (isLoggedIn && allowedBefore){
@@ -19,9 +20,18 @@ final rootRouter = GoRouter(
     return null;
   },
   routes: [
-    GoRoute(
-      path: '/', 
-      builder:(context, state) => HomePage(),
+    ShellRoute(
+      builder: (context, state, child) {
+        return child;
+      },
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) {
+            return SignInPage();
+          },
+        ),
+      ],
     ),
   ],
 );
