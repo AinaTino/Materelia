@@ -10,7 +10,7 @@ abstract class Notification with _$Notification {
     @JsonKey(name: 'id_notification') required String id,
     @JsonKey(name: 'message') required String message,
     @JsonKey(name: 'type') required String type,
-    @JsonKey(name: 'date_envoi') DateTime? date_envoi,
+    @JsonKey(name: 'date_envoi') DateTime? dateEnvoi,
     @JsonKey(name: 'lu') bool? lu,
     @JsonKey(name: 'id_utilisateur') required String idUtilisateur,
     @JsonKey(name: 'created_at') DateTime? createdAt
