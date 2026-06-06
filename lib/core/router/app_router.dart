@@ -1,4 +1,5 @@
 import "package:go_router/go_router.dart";
+import "package:materelia/features/auth/authpage.dart";
 import "package:materelia/features/auth/signinpage.dart";
 
 import "package:materelia/shared/services/supabase_service.dart";
@@ -22,7 +23,7 @@ final rootRouter = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) {
-        return child;
+        return AuthPage(child: child);
       },
       routes: [
         GoRoute(
