@@ -1,5 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'authvalidation.dart';
 import '../../shared/services/supabase_service.dart';
 
 class AuthService {
@@ -7,6 +7,8 @@ class AuthService {
     required String email,
     required String password,
   }) {
+    verifyMail(email);
+    verifyPassword(password);
     return SupabaseService.client.auth.signInWithPassword(
       email: email,
       password: password,
