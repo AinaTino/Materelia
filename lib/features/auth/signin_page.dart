@@ -72,7 +72,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     // Écoute les erreurs et redirige en cas de succès
     ref.listen(authControllerProvider, (_, next) {
       next.whenOrNull(
-        data: (_) => context.go('/utilisateur'),
+        data: (_) => context.go('/callback'),
         error: (e, _) {
           if (e is EmailErrorException || e is PasswordErrorException) {
             return;

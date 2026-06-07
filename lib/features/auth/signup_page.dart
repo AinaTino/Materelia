@@ -158,7 +158,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     padding: const EdgeInsets.only(top: 12.0),
                     child: Text(
                       _generalErrorText!,
-                      style: const TextStyle(color: Colors.red, fontSize: 14),
+                      style: _generalErrorText!.startsWith("Inscription réussie") ? const TextStyle(color: Colors.green, fontSize: 14) : const TextStyle(color: Colors.red, fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                   ),
