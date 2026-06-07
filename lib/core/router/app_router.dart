@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:materelia/core/shell/app_shell.dart";
 import "package:materelia/features/auth/auth_page.dart";
 import "package:materelia/features/auth/signin_page.dart";
 import "package:materelia/features/auth/signup_page.dart";
@@ -61,6 +62,26 @@ final rootRouter = GoRouter(
             ),
           ),
         )
+      ],
+    ),
+
+    ShellRoute(
+      builder: (context, state, child) {
+        return AppShell(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/user',
+          builder: (context, state) => const Text("user"),
+        ),
+        GoRoute(
+          path: '/dashboard',
+          builder: (context, state) => const Text("Dashboard"),
+        ),
+        GoRoute(
+          path: '/tickets',
+          builder: (context, state) => const Text("Tickets"),
+        ),
       ],
     ),
   ],
