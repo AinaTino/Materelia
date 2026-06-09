@@ -43,6 +43,8 @@ dependencies:
   json_annotation: ^4.9.0
   google_fonts: ^8.1.0
   flutter_launcher_icons: ^0.14.4
+  image_picker: ^1.2.2
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
