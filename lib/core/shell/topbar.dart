@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
 
 class TopBar extends ConsumerWidget {
-  const TopBar({super.key});
+  final String title;
+  const TopBar({super.key,required this.title});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Materelia"),
+      title: Text('Materelia - $title'),
 
       actions: [
         IconButton(

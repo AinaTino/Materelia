@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:materelia/core/constants/app_constants.dart';
+import 'package:materelia/core/router/app_router.dart';
 
 class SidebarDrawer extends StatelessWidget {
-  const SidebarDrawer({super.key});
+  final String role;
+  const SidebarDrawer({super.key,required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -10,30 +13,72 @@ class SidebarDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            child: Text(
-              "Materelia",
-              style: TextStyle(fontSize: 20),
+          Container(
+            height: 140,
+            color: Theme.of(context).primaryColor,
+            padding: const EdgeInsets.only(left: 16, bottom: 16),
+            alignment: Alignment.bottomLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.white,
+                  backgroundImage: const AssetImage('lib/assets/images/logo-withbg.png'),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Materelia",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
-
-          ListTile(
-            leading: const Icon(Icons.dashboard),
-            title: const Text("Dashboard"),
-            onTap: () {
-              context.go('/dashboard');
-              Navigator.pop(context);
-            },
+          
+          Row(
+            children: [
+              Icon(Icons.person),
+              Text("Mon profil")
+            ],
           ),
+          for (final s in routeSimple.entries) ...{
+            ListTile(
+              title: Text(s.value),
+              onTap: () {
+              context.go(s.key);
+                Navigator.pop(context);
+              },
+            ),
+          },
 
-          ListTile(
-            leading: const Icon(Icons.confirmation_number),
-            title: const Text("Tickets"),
-            onTap: () {
-              context.go('/tickets');
-              Navigator.pop(context);
+          if (role == AppConstants.roleTechnicien || role == AppConstants.roleAdmin)...{
+            for (final s in routeTechnicien.entries) ...{
+              ListTile(
+                title: Text(s.value),
+                onTap: () {
+                context.go(s.key);
+                  Navigator.pop(context);
+                },
+              ),
             },
-          ),
+          },
+
+          if (role == AppConstants.roleAdmin)...{
+            for (final s in routeAdmin.entries) ...{
+              ListTile(
+                title: Text(s.value),
+                onTap: () {
+                context.go(s.key);
+                  Navigator.pop(context);
+                },
+              ),
+            },
+          },
         ],
       ),
     );
