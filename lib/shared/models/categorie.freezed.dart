@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Categorie {
 
-@JsonKey(name: 'id_categorie') String get id;@JsonKey(name: 'nom') String get nom;@JsonKey(name: 'description') String? get description;@JsonKey(name: 'created_at') DateTime? get createdAt;
+@JsonKey(name: 'id_categorie') String get id;@JsonKey(name: 'nom') String get nom;@JsonKey(name: 'description') String? get description;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'image_url') String? get imageURL;
 /// Create a copy of Categorie
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CategorieCopyWith<Categorie> get copyWith => _$CategorieCopyWithImpl<Categorie>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Categorie&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Categorie&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.imageURL, imageURL) || other.imageURL == imageURL));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,nom,description,createdAt);
+int get hashCode => Object.hash(runtimeType,id,nom,description,createdAt,imageURL);
 
 @override
 String toString() {
-  return 'Categorie(id: $id, nom: $nom, description: $description, createdAt: $createdAt)';
+  return 'Categorie(id: $id, nom: $nom, description: $description, createdAt: $createdAt, imageURL: $imageURL)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CategorieCopyWith<$Res>  {
   factory $CategorieCopyWith(Categorie value, $Res Function(Categorie) _then) = _$CategorieCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'id_categorie') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'description') String? description,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'id_categorie') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'description') String? description,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'image_url') String? imageURL
 });
 
 
@@ -65,13 +65,14 @@ class _$CategorieCopyWithImpl<$Res>
 
 /// Create a copy of Categorie
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? nom = null,Object? description = freezed,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? nom = null,Object? description = freezed,Object? createdAt = freezed,Object? imageURL = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,imageURL: freezed == imageURL ? _self.imageURL : imageURL // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'image_url')  String? imageURL)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Categorie() when $default != null:
-return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
+return $default(_that.id,_that.nom,_that.description,_that.createdAt,_that.imageURL);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'image_url')  String? imageURL)  $default,) {final _that = this;
 switch (_that) {
 case _Categorie():
-return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
+return $default(_that.id,_that.nom,_that.description,_that.createdAt,_that.imageURL);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_categorie')  String id, @JsonKey(name: 'nom')  String nom, @JsonKey(name: 'description')  String? description, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'image_url')  String? imageURL)?  $default,) {final _that = this;
 switch (_that) {
 case _Categorie() when $default != null:
-return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
+return $default(_that.id,_that.nom,_that.description,_that.createdAt,_that.imageURL);case _:
   return null;
 
 }
@@ -212,13 +213,14 @@ return $default(_that.id,_that.nom,_that.description,_that.createdAt);case _:
 @JsonSerializable()
 
 class _Categorie implements Categorie {
-  const _Categorie({@JsonKey(name: 'id_categorie') required this.id, @JsonKey(name: 'nom') required this.nom, @JsonKey(name: 'description') this.description, @JsonKey(name: 'created_at') this.createdAt});
+  const _Categorie({@JsonKey(name: 'id_categorie') required this.id, @JsonKey(name: 'nom') required this.nom, @JsonKey(name: 'description') this.description, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'image_url') this.imageURL});
   factory _Categorie.fromJson(Map<String, dynamic> json) => _$CategorieFromJson(json);
 
 @override@JsonKey(name: 'id_categorie') final  String id;
 @override@JsonKey(name: 'nom') final  String nom;
 @override@JsonKey(name: 'description') final  String? description;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
+@override@JsonKey(name: 'image_url') final  String? imageURL;
 
 /// Create a copy of Categorie
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Categorie&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Categorie&&(identical(other.id, id) || other.id == id)&&(identical(other.nom, nom) || other.nom == nom)&&(identical(other.description, description) || other.description == description)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.imageURL, imageURL) || other.imageURL == imageURL));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,nom,description,createdAt);
+int get hashCode => Object.hash(runtimeType,id,nom,description,createdAt,imageURL);
 
 @override
 String toString() {
-  return 'Categorie(id: $id, nom: $nom, description: $description, createdAt: $createdAt)';
+  return 'Categorie(id: $id, nom: $nom, description: $description, createdAt: $createdAt, imageURL: $imageURL)';
 }
 
 
@@ -253,7 +255,7 @@ abstract mixin class _$CategorieCopyWith<$Res> implements $CategorieCopyWith<$Re
   factory _$CategorieCopyWith(_Categorie value, $Res Function(_Categorie) _then) = __$CategorieCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'id_categorie') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'description') String? description,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'id_categorie') String id,@JsonKey(name: 'nom') String nom,@JsonKey(name: 'description') String? description,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'image_url') String? imageURL
 });
 
 
@@ -270,13 +272,14 @@ class __$CategorieCopyWithImpl<$Res>
 
 /// Create a copy of Categorie
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? nom = null,Object? description = freezed,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? nom = null,Object? description = freezed,Object? createdAt = freezed,Object? imageURL = freezed,}) {
   return _then(_Categorie(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,nom: null == nom ? _self.nom : nom // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,imageURL: freezed == imageURL ? _self.imageURL : imageURL // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

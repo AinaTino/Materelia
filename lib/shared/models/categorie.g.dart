@@ -13,6 +13,7 @@ _Categorie _$CategorieFromJson(Map<String, dynamic> json) => _Categorie(
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
+  imageURL: json['image_url'] as String?,
 );
 
 Map<String, dynamic> _$CategorieToJson(_Categorie instance) =>
@@ -21,4 +22,5 @@ Map<String, dynamic> _$CategorieToJson(_Categorie instance) =>
       'nom': instance.nom,
       'description': instance.description,
       'created_at': instance.createdAt?.toIso8601String(),
+      'image_url': instance.imageURL,
     };

@@ -10,7 +10,8 @@ abstract class Categorie with _$Categorie {
     @JsonKey(name: 'id_categorie') required String id,
     @JsonKey(name: 'nom') required String nom,
     @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'created_at') DateTime? createdAt
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'image_url') String? imageURL,
   }) = _Categorie;
 	
   factory Categorie.fromJson(Map<String, dynamic> json) =>
