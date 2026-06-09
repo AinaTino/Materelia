@@ -33,9 +33,15 @@ class AppShell extends ConsumerWidget {
 
       body: Row(
         children: [
-          if (!isMobile) const SidebarRail(),
+          if (!isMobile) SidebarRail(role: role),
           const VerticalDivider(width: 1),
-          Expanded(child: child),
+          
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+              child: child,
+            ),
+          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:materelia/core/router/app_router.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
 
 class TopBar extends ConsumerWidget {
@@ -15,7 +16,9 @@ class TopBar extends ConsumerWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications),
-          onPressed: () {},
+          onPressed: () {
+            rootRouter.push('/notifications');
+          },
         ),
         IconButton(
           icon: const Icon(Icons.logout),
