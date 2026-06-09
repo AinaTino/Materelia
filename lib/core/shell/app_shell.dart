@@ -22,28 +22,48 @@ class AppShell extends ConsumerWidget {
       error: (error, stackTrace) => role="Erreur",
       loading: () => role="Chargement",
       );
-
-    return Scaffold(
+    if (isMobile){
+      return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: TopBar(title: title),
       ),
-
-      drawer: isMobile ? SidebarDrawer(role: role) : null,
-
+      drawer: SidebarDrawer(role: role) ,
       body: Row(
         children: [
-          if (!isMobile) SidebarRail(role: role),
           const VerticalDivider(width: 1),
-          
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 16.0),
               child: child,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
+        else {
+      return Scaffold(
+        body: Row(
+          children: [
+            SidebarRail(role: role),
+            Expanded(
+              child: Column(
+                children: [
+                  TopBar(title: title),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                      child: child,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
   }
 }
