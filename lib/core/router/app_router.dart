@@ -18,14 +18,14 @@ final rootRouter = GoRouter(
     final allowedBefore = (objectif == '/signin') || (objectif == '/signup') || (objectif == '/callback');
 
     if (objectif == '/'){
-      return isLoggedIn ? "/home" : "/signin";
+      return isLoggedIn ? "/catalogue" : "/signin";
     }
     if (!isLoggedIn && !allowedBefore) {
       return '/signin';
     }
 
     if (isLoggedIn && allowedBefore){
-      return "/home"; //mbola ovaina
+      return "/catalogue"; //mbola ovaina
     }
 
     return null;
@@ -76,24 +76,6 @@ final rootRouter = GoRouter(
     ),
   ],
 );
-/*
-
-🔧 Technicien
-• Tickets Zone
-• Historique
-
-──────────────
-
-⚙ Administration
-• Dashboard
-• Affectations
-• Matériels
-• Utilisateurs
-• Catalogue
-
-──────────────
-
-👤 Profil*/
 
 const routeSimple = {
   '/catalogue':'Catalogue',
@@ -113,6 +95,9 @@ const routeAdmin = {
   '/utilisateurs':'Utilisateurs',
   '/zones':'Zones',
   '/stocks':'Stocks'
+};
+
+const otherRoute = {
 
 };
 String _titleFromPath(String path) {
@@ -121,17 +106,34 @@ String _titleFromPath(String path) {
 
 List<RouteBase> _buildRoutes() {
   return [
-    GoRoute(path: '/home',            builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/catalogue',       builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/panier',          builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/mes-tickets',     builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/mes-affectations',builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/profil',          builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/tickets-zone',  builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/historique',    builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/dashboard',     builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/materiels',     builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
-      GoRoute(path: '/catalogue',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/tickets-zone',  builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/historique',    builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/dashboard',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/materiels',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/zones',         builder: (c, s) => const Text("ovao")),
+    GoRoute(path: "/stocks",        builder: (c, s) => const Text("ovao")), 
+    GoRoute(path: "/mon-profile",        builder: (c, s) => const Text("ovao")), 
     ];
 }
+
+const routeList = [
+  '/catalogue',
+  '/mes-tickets',
+  '/mes-affectations',
+  '/tickets-zone',
+  '/historique',
+  '/dashboard',
+  '/affectations',
+  '/materiels',
+  '/utilisateurs',
+  '/zones',
+  '/stocks',
+  '/mon-profile'
+];
