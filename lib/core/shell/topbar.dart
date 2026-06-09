@@ -9,7 +9,8 @@ class TopBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text('Materelia - $title'),
+      centerTitle: true,
+      title: Text('${MediaQuery.of(context).size.width < 800?'':'Materelia -'} $title'),
 
       actions: [
         IconButton(
