@@ -60,6 +60,19 @@ dev_dependencies:
   riverpod_generator: ^4.0.3
   json_serializable: ^6.9.0
   freezed: ^3.1.0
+  flutter_native_splash: ^2.4.6
+
+flutter_launcher_icons:
+  android: true
+  windows:
+    generate: true
+  image_path: "lib/assets/images/logo-nobg.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "lib/assets/images/logo-nobg.png"
+
+  android: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
