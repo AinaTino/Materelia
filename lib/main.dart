@@ -8,10 +8,19 @@ import 'core/router/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-  );
+  try {
+    await Supabase.initialize(
+      url: dotenv.env['SUPABASE_URL']!,
+      anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    );
+  } catch (e) {
+    runApp(
+      ProviderScope(
+        child: MaterialApp(home: Scaffold(body: Text("Aucune connexion internet"))),
+      ),
+    );
+    return;
+  }
 
   runApp(
     const ProviderScope(
