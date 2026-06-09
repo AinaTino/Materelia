@@ -179,7 +179,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: 'Prénom',
                     border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.person),
+                    prefixIcon: const Icon(Icons.person_2),
                     errorText: _prenomErrorText,
                   ),
                   keyboardType: TextInputType.text,
