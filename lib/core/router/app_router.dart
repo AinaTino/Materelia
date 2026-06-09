@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:materelia/core/shell/app_shell.dart";
-import "package:materelia/features/auth/auth_page.dart";
-import "package:materelia/features/auth/signin_page.dart";
-import "package:materelia/features/auth/signup_page.dart";
+import "package:materelia/features/auth/UI/auth_page.dart";
+import "package:materelia/features/auth/UI/signin_page.dart";
+import "package:materelia/features/auth/UI/signup_page.dart";
 import "package:materelia/shared/services/auth_notifier.dart";
 import "package:materelia/shared/services/supabase_service.dart";
 import "package:materelia/shared/widgets/loading.dart";
@@ -18,14 +18,14 @@ final rootRouter = GoRouter(
     final allowedBefore = (objectif == '/signin') || (objectif == '/signup') || (objectif == '/callback');
 
     if (objectif == '/'){
-      return isLoggedIn ? "/user" : "/signin";
+      return isLoggedIn ? "/home" : "/signin";
     }
     if (!isLoggedIn && !allowedBefore) {
       return '/signin';
     }
 
     if (isLoggedIn && allowedBefore){
-      return "/user"; //mbola ovaina
+      return "/home"; //mbola ovaina
     }
 
     return null;
@@ -67,22 +67,71 @@ final rootRouter = GoRouter(
 
     ShellRoute(
       builder: (context, state, child) {
-        return AppShell(child: child);
+        return AppShell(
+          title: _titleFromPath(state.matchedLocation),
+          child: child
+          );
       },
-      routes: [
-        GoRoute(
-          path: '/user',
-          builder: (context, state) => const Text("user"),
-        ),
-        GoRoute(
-          path: '/dashboard',
-          builder: (context, state) => const Text("Dashboard"),
-        ),
-        GoRoute(
-          path: '/tickets',
-          builder: (context, state) => const Text("Tickets"),
-        ),
-      ],
+      routes: _buildRoutes()
     ),
   ],
 );
+/*
+
+🔧 Technicien
+• Tickets Zone
+• Historique
+
+──────────────
+
+⚙ Administration
+• Dashboard
+• Affectations
+• Matériels
+• Utilisateurs
+• Catalogue
+
+──────────────
+
+👤 Profil*/
+
+const routeSimple = {
+  '/catalogue':'Catalogue',
+  '/mes-tickets':'Mes Tickets',
+  '/mes-affectations':'Mes Affectations',
+};
+
+const routeTechnicien = {
+  '/tickets-zone':'Tickets Zone',
+  '/historique':'Historique'
+};
+
+const routeAdmin = {
+  '/dashboard':'Dashboard',
+  '/affectations':'Affectations',
+  '/materiels':'Matériels',
+  '/utilisateurs':'Utilisateurs',
+  '/zones':'Zones',
+  '/stocks':'Stocks'
+
+};
+String _titleFromPath(String path) {
+  return routeSimple[path] ?? (routeTechnicien[path] ?? (routeAdmin[path]?? 'Materelia'));
+}
+
+List<RouteBase> _buildRoutes() {
+  return [
+    GoRoute(path: '/home',            builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/panier',          builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/mes-tickets',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/mes-affectations',builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/profil',          builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/tickets-zone',  builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/historique',    builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/dashboard',     builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/materiels',     builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
+      GoRoute(path: '/catalogue',     builder: (c, s) => const Text("ovao")),
+    ];
+}
