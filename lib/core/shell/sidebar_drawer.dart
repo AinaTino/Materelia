@@ -59,7 +59,7 @@ class SidebarDrawer extends StatelessWidget {
               title: Text(s.value),
               onTap: () {
               context.go(s.key);
-                Navigator.pop(context);
+              Navigator.pop(context);
               },
             ),
           },
@@ -79,7 +79,6 @@ class SidebarDrawer extends StatelessWidget {
               ),),
             for (final s in routeTechnicien.entries) ...{
               ListTile(
-                //leading: Icon(Icons.lis),
                 title: Text(s.value),
                 onTap: () {
                 context.go(s.key);
@@ -123,7 +122,7 @@ class SidebarDrawer extends StatelessWidget {
                     color: AppColors.onSecondaryContainer
                   ),),
               onTap: () {
-                context.go('/profile');
+                context.go('/mon-profile');
                 Navigator.pop(context);
                 },
             )),
