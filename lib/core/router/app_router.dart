@@ -110,30 +110,14 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/panier',          builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/mes-tickets',     builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/mes-affectations',builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/profil',          builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/tickets-zone',  builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/historique',    builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/dashboard',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/historique',    builder: (c, s) => const Text("22222")),
+    GoRoute(path: '/dashboard',     builder: (c, s) => const Text("dash")),
     GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/materiels',     builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/materiels',     builder: (c, s) => const Text("333333")),
     GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/zones',         builder: (c, s) => const Text("ovao")),
     GoRoute(path: "/stocks",        builder: (c, s) => const Text("ovao")), 
     GoRoute(path: "/mon-profile",        builder: (c, s) => const Text("ovao")), 
     ];
 }
-
-const routeList = [
-  '/catalogue',
-  '/mes-tickets',
-  '/mes-affectations',
-  '/tickets-zone',
-  '/historique',
-  '/dashboard',
-  '/affectations',
-  '/materiels',
-  '/utilisateurs',
-  '/zones',
-  '/stocks',
-  '/mon-profile'
-];
