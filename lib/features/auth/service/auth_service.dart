@@ -26,11 +26,11 @@ class AuthService {
     if (password != passwordConfirmation) {
       throw PasswordErrorException("Les mots de passe ne correspondent pas.");
     }
+    verifyName(nom);
+    verifyFirstName(prenom);
     verifyMail(email);
     verifyPassword(password);
     verifyPassword(passwordConfirmation);
-    verifyName(nom);
-    verifyFirstName(prenom);
     return SupabaseService.client.auth.signUp(
       email: email,
       password: password,

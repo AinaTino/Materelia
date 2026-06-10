@@ -54,13 +54,13 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     final state = ref.read(authControllerProvider);
     if (state.hasError) {
       final error = state.error;
-      if (error is EmailErrorException) {
+      if (error is AuthFieldException) {
         setState(() {
-          _emailErrorText = error.message;
-        });
-      } else if (error is PasswordErrorException) {
-        setState(() {
-          _passwordErrorText = error.message;
+          switch (error) {
+            case EmailErrorException():    _emailErrorText = error.message;
+            case PasswordErrorException(): _passwordErrorText = error.message;
+            default: break;
+          }
         });
       }
     }
