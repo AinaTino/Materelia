@@ -27,7 +27,7 @@ List<String?> _buildRouteMap(String role) {
       '/stocks',
     ],
 
-    '/mon-profile',
+    '/mon-profil',
   ];
 }
 

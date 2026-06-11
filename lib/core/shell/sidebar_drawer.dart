@@ -121,7 +121,7 @@ class SidebarDrawer extends StatelessWidget {
                     color: AppColors.onSecondaryContainer
                   ),),
               onTap: () {
-                context.go('/mon-profile');
+                context.go('/mon-profil');
                 Navigator.pop(context);
                 },
             )),
