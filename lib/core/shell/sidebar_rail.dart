@@ -31,9 +31,10 @@ List<String?> _buildRouteMap(String role) {
   ];
 }
 
-NavigationRailDestination buildItem(String label, IconData icon,{Color color = const Color(0xFF000000)}) {
+NavigationRailDestination buildItem(String label, IconData icon,IconData selectedIcon,{Color color = const Color(0xFF000000)}) {
   return NavigationRailDestination(
     icon: Icon(icon),
+    selectedIcon: Icon(selectedIcon),
     label: Text(label,style:TextStyle(color:color)),
   );
 }
@@ -111,17 +112,17 @@ class _SidebarRailState extends ConsumerState<SidebarRail> {
                   icon: Icon(Icons.remove),
                   label: Text("Mon espace",style: TextStyle(color: AppColors.primary),),
                 ),
-              buildItem('Catalogue', Icons.inventory_2_outlined),
-              buildItem('Mes Tickets', Icons.confirmation_number_outlined),
-              buildItem('Mes Affectations', Icons.assignment_ind_outlined),
+              buildItem('Catalogue', Icons.inventory_2_outlined,Icons.inventory_2),
+              buildItem('Mes Tickets', Icons.confirmation_number_outlined, Icons.confirmation_number),
+              buildItem('Mes Affectations', Icons.assignment_ind_outlined, Icons.assignment_ind),
 
               if (role == AppConstants.roleTechnicien || role == AppConstants.roleAdmin)...{
                 NavigationRailDestination(
                   icon: Icon(Icons.remove),
                   label: Text("Technicien",style: TextStyle(color: AppColors.primary)),
                 ),
-                buildItem('Tickets Zone', Icons.support_agent_outlined),
-                buildItem('Historique', Icons.history),
+                buildItem('Tickets Zone', Icons.support_agent_outlined, Icons.support_agent),
+                buildItem('Historique', Icons.history_outlined,Icons.history),
               },
 
               if (role == AppConstants.roleAdmin)...{
@@ -129,14 +130,14 @@ class _SidebarRailState extends ConsumerState<SidebarRail> {
                   icon: Icon(Icons.remove),
                   label: Text("Administration",style: TextStyle(color: AppColors.primary)),
                 ),
-                buildItem('Dashboard', Icons.dashboard_outlined),
-                buildItem('Affectations', Icons.assignment_outlined),
-                buildItem('Matériels', Icons.devices_outlined),
-                buildItem('Utilisateurs', Icons.group_outlined),
-                buildItem('Zones', Icons.map_outlined),
-                buildItem('Stocks', Icons.warehouse_outlined),
+                buildItem('Dashboard', Icons.dashboard_outlined, Icons.dashboard),
+                buildItem('Affectations', Icons.assignment_outlined, Icons.assignment),
+                buildItem('Matériels', Icons.devices_outlined, Icons.devices),
+                buildItem('Utilisateurs', Icons.group_outlined, Icons.group),
+                buildItem('Zones', Icons.map_outlined, Icons.map),
+                buildItem('Stocks', Icons.warehouse_outlined, Icons.warehouse),
               },
-              buildItem('Mon profil', Icons.person_outline,color: AppColors.primary),
+              buildItem('Mon profil', Icons.person_outlined, Icons.person,color: AppColors.primary),
             ],
           ),
         ),
