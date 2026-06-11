@@ -101,7 +101,7 @@ const otherRoute = {
 
 };
 String _titleFromPath(String path) {
-  return routeSimple[path] ?? (routeTechnicien[path] ?? (routeAdmin[path]?? 'Materelia'));
+  return path=='/mon-profil'? "Mon Profil":(routeSimple[path] ?? (routeTechnicien[path] ?? (routeAdmin[path]?? 'Materelia')));
 }
 
 List<RouteBase> _buildRoutes() {
@@ -118,6 +118,6 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/zones',         builder: (c, s) => const Text("ovao")),
     GoRoute(path: "/stocks",        builder: (c, s) => const Text("ovao")), 
-    GoRoute(path: "/mon-profile",        builder: (c, s) => const Text("ovao")), 
+    GoRoute(path: "/mon-profil",        builder: (c, s) => const Text("ovao")), 
     ];
 }
