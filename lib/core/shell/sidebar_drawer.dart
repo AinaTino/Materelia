@@ -106,7 +106,6 @@ class SidebarDrawer extends StatelessWidget {
                 title: Text(s.value),
                 onTap: () {
                 context.go(s.key);
-                  Navigator.pop(context);
                 },
               ),
             },
