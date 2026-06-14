@@ -4,6 +4,7 @@ import "package:materelia/core/shell/app_shell.dart";
 import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
+import "package:materelia/features/demandes_affectations/UI/demandes_affectations_page.dart";
 import "package:materelia/shared/services/auth_notifier.dart";
 import "package:materelia/shared/services/supabase_service.dart";
 import "package:materelia/shared/widgets/loading.dart";
@@ -91,6 +92,7 @@ const routeTechnicien = {
 const routeAdmin = {
   '/dashboard':'Dashboard',
   '/affectations':'Affectations',
+  '/demandes-affectations':'Demandes d\'affectations',
   '/materiels':'Matériels',
   '/utilisateurs':'Utilisateurs',
   '/zones':'Zones',
@@ -114,6 +116,7 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/historique',    builder: (c, s) => const Text("22222")),
     GoRoute(path: '/dashboard',     builder: (c, s) => const Text("dash")),
     GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/demandes-affectations',   builder: (c, s) => const DemandesAffectationsPage()), 
     GoRoute(path: '/materiels',     builder: (c, s) => const Text("333333")),
     GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/zones',         builder: (c, s) => const Text("ovao")),
