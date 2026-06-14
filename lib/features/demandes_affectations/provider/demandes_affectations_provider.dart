@@ -9,26 +9,73 @@ DemandesAffectationsService demandesAffectationsService(Ref ref) {
   return DemandesAffectationsService();
 }
 
-@riverpod 
+// Un state séparé pour les actions mutantes
+@riverpod
 class DemandesAffectationsController extends _$DemandesAffectationsController {
   @override
-  Future<List<DemandeAffectation>> build() async{
+  Future<List<DemandeAffectation>> build() async {
     return ref.read(demandesAffectationsServiceProvider).listDemandes();
   }
 
-  Future<void> refresh() async {
-    state = const AsyncLoading();
+  Future<void> refresh() async{
+    state = AsyncLoading();
 
-    state = await AsyncValue.guard(
-      ref.read(demandesAffectationsServiceProvider).listDemandes,
+    state = await AsyncValue.guard(() async{
+      return ref.read(demandesAffectationsServiceProvider).listDemandes();
+    });
+  }
+
+// Future<DemandeAffectation> creerDemande({
+//   required String justification,
+//   required String serviceBeneficiaire,
+//   required String idCategorie,
+// }) async {
+//   final current = state.value ?? [];
+//   try {
+//     final nouvelle = await ref
+//         .read(demandesAffectationsServiceProvider)
+//         .creerDemande(
+//           justification: justification,
+//           serviceBeneficiaire: serviceBeneficiaire,
+//           idCategorie: idCategorie,
+//         );
+
+//     state = AsyncData([nouvelle, ...current]);
+//     return nouvelle;
+//   } catch (e) {
+//     rethrow;
+//   }
+// }
+
+  Future<void> validerDemande({
+    required String idMateriel,
+    required String idDemande,
+  }) async {
+  try {
+    await ref.read(demandesAffectationsServiceProvider).validerDemande(
+    idDemande: idDemande,
+    idMateriel: idMateriel,
     );
+    ref.invalidateSelf();
+    await future;
+  } catch (e) {
+    rethrow;
   }
+}
 
-  Future<void> creerDemande({
-    required String justification,
-    required String serviceBeneficiaire,
-    required String idCategorie,
-  }) async{
-    ref.read(demandesAffectationsServiceProvider).creerDemande(justification: justification, serviceBeneficiaire: serviceBeneficiaire, idCategorie: idCategorie);
+Future<void> refuserDemande({
+  required String idDemande,
+  required String motif,
+  }) async {
+  try {
+    await ref.read(demandesAffectationsServiceProvider).refuserDemande(
+    idDemande: idDemande,
+    motif:  motif,
+    );
+    ref.invalidateSelf();
+    await future;
+  } catch (e) {
+    rethrow;
   }
+}
 }

@@ -88,7 +88,7 @@ final class DemandesAffectationsControllerProvider
 }
 
 String _$demandesAffectationsControllerHash() =>
-    r'f21b53bb2d9b81ac89e97ed5566703d48d469f71';
+    r'acf74acae70d3e070b4eecab30a5e07df2774b7a';
 
 abstract class _$DemandesAffectationsController
     extends $AsyncNotifier<List<DemandeAffectation>> {
