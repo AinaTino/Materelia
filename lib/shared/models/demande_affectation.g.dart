@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'demandes_affectations.dart';
+part of 'demande_affectation.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_DemandesAffectation _$DemandesAffectationFromJson(Map<String, dynamic> json) =>
-    _DemandesAffectation(
+_DemandeAffectation _$DemandeAffectationFromJson(Map<String, dynamic> json) =>
+    _DemandeAffectation(
       id: json['id_demande'] as String,
       dateDemande: json['date_demande'] == null
           ? null
@@ -30,19 +30,18 @@ _DemandesAffectation _$DemandesAffectationFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['created_at'] as String),
     );
 
-Map<String, dynamic> _$DemandesAffectationToJson(
-  _DemandesAffectation instance,
-) => <String, dynamic>{
-  'id_demande': instance.id,
-  'date_demande': instance.dateDemande?.toIso8601String(),
-  'justification': instance.justification,
-  'etat': instance.etat,
-  'motif_refus': instance.motifRefus,
-  'service_beneficiaire': instance.serviceBeneficiaire,
-  'date_debut': instance.dateDebut?.toIso8601String(),
-  'date_fin_prevue': instance.dateFinPrevue?.toIso8601String(),
-  'id_demandeur': instance.idDemandeur,
-  'id_valideur': instance.idValideur,
-  'id_categorie': instance.idCategorie,
-  'created_at': instance.createdAt?.toIso8601String(),
-};
+Map<String, dynamic> _$DemandeAffectationToJson(_DemandeAffectation instance) =>
+    <String, dynamic>{
+      'id_demande': instance.id,
+      'date_demande': instance.dateDemande?.toIso8601String(),
+      'justification': instance.justification,
+      'etat': instance.etat,
+      'motif_refus': instance.motifRefus,
+      'service_beneficiaire': instance.serviceBeneficiaire,
+      'date_debut': instance.dateDebut?.toIso8601String(),
+      'date_fin_prevue': instance.dateFinPrevue?.toIso8601String(),
+      'id_demandeur': instance.idDemandeur,
+      'id_valideur': instance.idValideur,
+      'id_categorie': instance.idCategorie,
+      'created_at': instance.createdAt?.toIso8601String(),
+    };

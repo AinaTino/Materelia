@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'demandes_affectations.freezed.dart';
-part 'demandes_affectations.g.dart';
+part 'demande_affectation.freezed.dart';
+part 'demande_affectation.g.dart';
 
 @freezed
-abstract class DemandesAffectation with _$DemandesAffectation {
-  const factory DemandesAffectation({
+abstract class DemandeAffectation with _$DemandeAffectation {
+  const factory DemandeAffectation({
     @JsonKey(name: 'id_demande') required String id,
     
     @JsonKey(name: 'date_demande') DateTime? dateDemande,
@@ -29,8 +29,8 @@ abstract class DemandesAffectation with _$DemandesAffectation {
     @JsonKey(name: 'id_categorie') required String idCategorie,
 
     @JsonKey(name: 'created_at') DateTime? createdAt,
-  }) = _DemandesAffectation;
+  }) = _DemandeAffectation;
 
-  factory DemandesAffectation.fromJson(Map<String, dynamic> json) =>
-      _$DemandesAffectationFromJson(json);
+  factory DemandeAffectation.fromJson(Map<String, dynamic> json) =>
+      _$DemandeAffectationFromJson(json);
 }

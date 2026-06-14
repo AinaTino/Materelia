@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'demandes_affectations.dart';
+part of 'demande_affectation.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,22 +13,22 @@ part of 'demandes_affectations.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$DemandesAffectation {
+mixin _$DemandeAffectation {
 
 @JsonKey(name: 'id_demande') String get id;@JsonKey(name: 'date_demande') DateTime? get dateDemande;@JsonKey(name: 'justification') String get justification;@JsonKey(name: 'etat') String get etat;@JsonKey(name: 'motif_refus') String? get motifRefus;@JsonKey(name: 'service_beneficiaire') String get serviceBeneficiaire;@JsonKey(name: 'date_debut') DateTime? get dateDebut;@JsonKey(name: 'date_fin_prevue') DateTime? get dateFinPrevue;@JsonKey(name: 'id_demandeur') String get idDemandeur;@JsonKey(name: 'id_valideur') String? get idValideur;@JsonKey(name: 'id_categorie') String get idCategorie;@JsonKey(name: 'created_at') DateTime? get createdAt;
-/// Create a copy of DemandesAffectation
+/// Create a copy of DemandeAffectation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$DemandesAffectationCopyWith<DemandesAffectation> get copyWith => _$DemandesAffectationCopyWithImpl<DemandesAffectation>(this as DemandesAffectation, _$identity);
+$DemandeAffectationCopyWith<DemandeAffectation> get copyWith => _$DemandeAffectationCopyWithImpl<DemandeAffectation>(this as DemandeAffectation, _$identity);
 
-  /// Serializes this DemandesAffectation to a JSON map.
+  /// Serializes this DemandeAffectation to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DemandesAffectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDemande, dateDemande) || other.dateDemande == dateDemande)&&(identical(other.justification, justification) || other.justification == justification)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.serviceBeneficiaire, serviceBeneficiaire) || other.serviceBeneficiaire == serviceBeneficiaire)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DemandeAffectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDemande, dateDemande) || other.dateDemande == dateDemande)&&(identical(other.justification, justification) || other.justification == justification)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.serviceBeneficiaire, serviceBeneficiaire) || other.serviceBeneficiaire == serviceBeneficiaire)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,id,dateDemande,justification,etat,mo
 
 @override
 String toString() {
-  return 'DemandesAffectation(id: $id, dateDemande: $dateDemande, justification: $justification, etat: $etat, motifRefus: $motifRefus, serviceBeneficiaire: $serviceBeneficiaire, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, idDemandeur: $idDemandeur, idValideur: $idValideur, idCategorie: $idCategorie, createdAt: $createdAt)';
+  return 'DemandeAffectation(id: $id, dateDemande: $dateDemande, justification: $justification, etat: $etat, motifRefus: $motifRefus, serviceBeneficiaire: $serviceBeneficiaire, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, idDemandeur: $idDemandeur, idValideur: $idValideur, idCategorie: $idCategorie, createdAt: $createdAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $DemandesAffectationCopyWith<$Res>  {
-  factory $DemandesAffectationCopyWith(DemandesAffectation value, $Res Function(DemandesAffectation) _then) = _$DemandesAffectationCopyWithImpl;
+abstract mixin class $DemandeAffectationCopyWith<$Res>  {
+  factory $DemandeAffectationCopyWith(DemandeAffectation value, $Res Function(DemandeAffectation) _then) = _$DemandeAffectationCopyWithImpl;
 @useResult
 $Res call({
 @JsonKey(name: 'id_demande') String id,@JsonKey(name: 'date_demande') DateTime? dateDemande,@JsonKey(name: 'justification') String justification,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'motif_refus') String? motifRefus,@JsonKey(name: 'service_beneficiaire') String serviceBeneficiaire,@JsonKey(name: 'date_debut') DateTime? dateDebut,@JsonKey(name: 'date_fin_prevue') DateTime? dateFinPrevue,@JsonKey(name: 'id_demandeur') String idDemandeur,@JsonKey(name: 'id_valideur') String? idValideur,@JsonKey(name: 'id_categorie') String idCategorie,@JsonKey(name: 'created_at') DateTime? createdAt
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$DemandesAffectationCopyWithImpl<$Res>
-    implements $DemandesAffectationCopyWith<$Res> {
-  _$DemandesAffectationCopyWithImpl(this._self, this._then);
+class _$DemandeAffectationCopyWithImpl<$Res>
+    implements $DemandeAffectationCopyWith<$Res> {
+  _$DemandeAffectationCopyWithImpl(this._self, this._then);
 
-  final DemandesAffectation _self;
-  final $Res Function(DemandesAffectation) _then;
+  final DemandeAffectation _self;
+  final $Res Function(DemandeAffectation) _then;
 
-/// Create a copy of DemandesAffectation
+/// Create a copy of DemandeAffectation
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? dateDemande = freezed,Object? justification = null,Object? etat = null,Object? motifRefus = freezed,Object? serviceBeneficiaire = null,Object? dateDebut = freezed,Object? dateFinPrevue = freezed,Object? idDemandeur = null,Object? idValideur = freezed,Object? idCategorie = null,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
@@ -86,8 +86,8 @@ as DateTime?,
 }
 
 
-/// Adds pattern-matching-related methods to [DemandesAffectation].
-extension DemandesAffectationPatterns on DemandesAffectation {
+/// Adds pattern-matching-related methods to [DemandeAffectation].
+extension DemandeAffectationPatterns on DemandeAffectation {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -100,10 +100,10 @@ extension DemandesAffectationPatterns on DemandesAffectation {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DemandesAffectation value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DemandeAffectation value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _DemandesAffectation() when $default != null:
+case _DemandeAffectation() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -122,10 +122,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DemandesAffectation value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DemandeAffectation value)  $default,){
 final _that = this;
 switch (_that) {
-case _DemandesAffectation():
+case _DemandeAffectation():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -143,10 +143,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DemandesAffectation value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DemandeAffectation value)?  $default,){
 final _that = this;
 switch (_that) {
-case _DemandesAffectation() when $default != null:
+case _DemandeAffectation() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -166,7 +166,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_demande')  String id, @JsonKey(name: 'date_demande')  DateTime? dateDemande, @JsonKey(name: 'justification')  String justification, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'service_beneficiaire')  String serviceBeneficiaire, @JsonKey(name: 'date_debut')  DateTime? dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime? dateFinPrevue, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _DemandesAffectation() when $default != null:
+case _DemandeAffectation() when $default != null:
 return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.motifRefus,_that.serviceBeneficiaire,_that.dateDebut,_that.dateFinPrevue,_that.idDemandeur,_that.idValideur,_that.idCategorie,_that.createdAt);case _:
   return orElse();
 
@@ -187,7 +187,7 @@ return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_demande')  String id, @JsonKey(name: 'date_demande')  DateTime? dateDemande, @JsonKey(name: 'justification')  String justification, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'service_beneficiaire')  String serviceBeneficiaire, @JsonKey(name: 'date_debut')  DateTime? dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime? dateFinPrevue, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
-case _DemandesAffectation():
+case _DemandeAffectation():
 return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.motifRefus,_that.serviceBeneficiaire,_that.dateDebut,_that.dateFinPrevue,_that.idDemandeur,_that.idValideur,_that.idCategorie,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
@@ -207,7 +207,7 @@ return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_demande')  String id, @JsonKey(name: 'date_demande')  DateTime? dateDemande, @JsonKey(name: 'justification')  String justification, @JsonKey(name: 'etat')  String etat, @JsonKey(name: 'motif_refus')  String? motifRefus, @JsonKey(name: 'service_beneficiaire')  String serviceBeneficiaire, @JsonKey(name: 'date_debut')  DateTime? dateDebut, @JsonKey(name: 'date_fin_prevue')  DateTime? dateFinPrevue, @JsonKey(name: 'id_demandeur')  String idDemandeur, @JsonKey(name: 'id_valideur')  String? idValideur, @JsonKey(name: 'id_categorie')  String idCategorie, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
-case _DemandesAffectation() when $default != null:
+case _DemandeAffectation() when $default != null:
 return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.motifRefus,_that.serviceBeneficiaire,_that.dateDebut,_that.dateFinPrevue,_that.idDemandeur,_that.idValideur,_that.idCategorie,_that.createdAt);case _:
   return null;
 
@@ -219,9 +219,9 @@ return $default(_that.id,_that.dateDemande,_that.justification,_that.etat,_that.
 /// @nodoc
 @JsonSerializable()
 
-class _DemandesAffectation implements DemandesAffectation {
-  const _DemandesAffectation({@JsonKey(name: 'id_demande') required this.id, @JsonKey(name: 'date_demande') this.dateDemande, @JsonKey(name: 'justification') required this.justification, @JsonKey(name: 'etat') required this.etat, @JsonKey(name: 'motif_refus') this.motifRefus, @JsonKey(name: 'service_beneficiaire') required this.serviceBeneficiaire, @JsonKey(name: 'date_debut') this.dateDebut, @JsonKey(name: 'date_fin_prevue') this.dateFinPrevue, @JsonKey(name: 'id_demandeur') required this.idDemandeur, @JsonKey(name: 'id_valideur') this.idValideur, @JsonKey(name: 'id_categorie') required this.idCategorie, @JsonKey(name: 'created_at') this.createdAt});
-  factory _DemandesAffectation.fromJson(Map<String, dynamic> json) => _$DemandesAffectationFromJson(json);
+class _DemandeAffectation implements DemandeAffectation {
+  const _DemandeAffectation({@JsonKey(name: 'id_demande') required this.id, @JsonKey(name: 'date_demande') this.dateDemande, @JsonKey(name: 'justification') required this.justification, @JsonKey(name: 'etat') required this.etat, @JsonKey(name: 'motif_refus') this.motifRefus, @JsonKey(name: 'service_beneficiaire') required this.serviceBeneficiaire, @JsonKey(name: 'date_debut') this.dateDebut, @JsonKey(name: 'date_fin_prevue') this.dateFinPrevue, @JsonKey(name: 'id_demandeur') required this.idDemandeur, @JsonKey(name: 'id_valideur') this.idValideur, @JsonKey(name: 'id_categorie') required this.idCategorie, @JsonKey(name: 'created_at') this.createdAt});
+  factory _DemandeAffectation.fromJson(Map<String, dynamic> json) => _$DemandeAffectationFromJson(json);
 
 @override@JsonKey(name: 'id_demande') final  String id;
 @override@JsonKey(name: 'date_demande') final  DateTime? dateDemande;
@@ -236,20 +236,20 @@ class _DemandesAffectation implements DemandesAffectation {
 @override@JsonKey(name: 'id_categorie') final  String idCategorie;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
-/// Create a copy of DemandesAffectation
+/// Create a copy of DemandeAffectation
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$DemandesAffectationCopyWith<_DemandesAffectation> get copyWith => __$DemandesAffectationCopyWithImpl<_DemandesAffectation>(this, _$identity);
+_$DemandeAffectationCopyWith<_DemandeAffectation> get copyWith => __$DemandeAffectationCopyWithImpl<_DemandeAffectation>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$DemandesAffectationToJson(this, );
+  return _$DemandeAffectationToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DemandesAffectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDemande, dateDemande) || other.dateDemande == dateDemande)&&(identical(other.justification, justification) || other.justification == justification)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.serviceBeneficiaire, serviceBeneficiaire) || other.serviceBeneficiaire == serviceBeneficiaire)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DemandeAffectation&&(identical(other.id, id) || other.id == id)&&(identical(other.dateDemande, dateDemande) || other.dateDemande == dateDemande)&&(identical(other.justification, justification) || other.justification == justification)&&(identical(other.etat, etat) || other.etat == etat)&&(identical(other.motifRefus, motifRefus) || other.motifRefus == motifRefus)&&(identical(other.serviceBeneficiaire, serviceBeneficiaire) || other.serviceBeneficiaire == serviceBeneficiaire)&&(identical(other.dateDebut, dateDebut) || other.dateDebut == dateDebut)&&(identical(other.dateFinPrevue, dateFinPrevue) || other.dateFinPrevue == dateFinPrevue)&&(identical(other.idDemandeur, idDemandeur) || other.idDemandeur == idDemandeur)&&(identical(other.idValideur, idValideur) || other.idValideur == idValideur)&&(identical(other.idCategorie, idCategorie) || other.idCategorie == idCategorie)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -258,15 +258,15 @@ int get hashCode => Object.hash(runtimeType,id,dateDemande,justification,etat,mo
 
 @override
 String toString() {
-  return 'DemandesAffectation(id: $id, dateDemande: $dateDemande, justification: $justification, etat: $etat, motifRefus: $motifRefus, serviceBeneficiaire: $serviceBeneficiaire, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, idDemandeur: $idDemandeur, idValideur: $idValideur, idCategorie: $idCategorie, createdAt: $createdAt)';
+  return 'DemandeAffectation(id: $id, dateDemande: $dateDemande, justification: $justification, etat: $etat, motifRefus: $motifRefus, serviceBeneficiaire: $serviceBeneficiaire, dateDebut: $dateDebut, dateFinPrevue: $dateFinPrevue, idDemandeur: $idDemandeur, idValideur: $idValideur, idCategorie: $idCategorie, createdAt: $createdAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$DemandesAffectationCopyWith<$Res> implements $DemandesAffectationCopyWith<$Res> {
-  factory _$DemandesAffectationCopyWith(_DemandesAffectation value, $Res Function(_DemandesAffectation) _then) = __$DemandesAffectationCopyWithImpl;
+abstract mixin class _$DemandeAffectationCopyWith<$Res> implements $DemandeAffectationCopyWith<$Res> {
+  factory _$DemandeAffectationCopyWith(_DemandeAffectation value, $Res Function(_DemandeAffectation) _then) = __$DemandeAffectationCopyWithImpl;
 @override @useResult
 $Res call({
 @JsonKey(name: 'id_demande') String id,@JsonKey(name: 'date_demande') DateTime? dateDemande,@JsonKey(name: 'justification') String justification,@JsonKey(name: 'etat') String etat,@JsonKey(name: 'motif_refus') String? motifRefus,@JsonKey(name: 'service_beneficiaire') String serviceBeneficiaire,@JsonKey(name: 'date_debut') DateTime? dateDebut,@JsonKey(name: 'date_fin_prevue') DateTime? dateFinPrevue,@JsonKey(name: 'id_demandeur') String idDemandeur,@JsonKey(name: 'id_valideur') String? idValideur,@JsonKey(name: 'id_categorie') String idCategorie,@JsonKey(name: 'created_at') DateTime? createdAt
@@ -277,17 +277,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$DemandesAffectationCopyWithImpl<$Res>
-    implements _$DemandesAffectationCopyWith<$Res> {
-  __$DemandesAffectationCopyWithImpl(this._self, this._then);
+class __$DemandeAffectationCopyWithImpl<$Res>
+    implements _$DemandeAffectationCopyWith<$Res> {
+  __$DemandeAffectationCopyWithImpl(this._self, this._then);
 
-  final _DemandesAffectation _self;
-  final $Res Function(_DemandesAffectation) _then;
+  final _DemandeAffectation _self;
+  final $Res Function(_DemandeAffectation) _then;
 
-/// Create a copy of DemandesAffectation
+/// Create a copy of DemandeAffectation
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? dateDemande = freezed,Object? justification = null,Object? etat = null,Object? motifRefus = freezed,Object? serviceBeneficiaire = null,Object? dateDebut = freezed,Object? dateFinPrevue = freezed,Object? idDemandeur = null,Object? idValideur = freezed,Object? idCategorie = null,Object? createdAt = freezed,}) {
-  return _then(_DemandesAffectation(
+  return _then(_DemandeAffectation(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,dateDemande: freezed == dateDemande ? _self.dateDemande : dateDemande // ignore: cast_nullable_to_non_nullable
 as DateTime?,justification: null == justification ? _self.justification : justification // ignore: cast_nullable_to_non_nullable
