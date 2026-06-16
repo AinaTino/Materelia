@@ -16,12 +16,9 @@ _DemandeAffectation _$DemandeAffectationFromJson(Map<String, dynamic> json) =>
       etat: json['etat'] as String,
       motifRefus: json['motif_refus'] as String?,
       serviceBeneficiaire: json['service_beneficiaire'] as String,
-      dateDebut: json['date_debut'] == null
+      dateAction: json['date_action'] == null
           ? null
-          : DateTime.parse(json['date_debut'] as String),
-      dateFinPrevue: json['date_fin_prevue'] == null
-          ? null
-          : DateTime.parse(json['date_fin_prevue'] as String),
+          : DateTime.parse(json['date_action'] as String),
       idDemandeur: json['id_demandeur'] as String,
       idValideur: json['id_valideur'] as String?,
       idCategorie: json['id_categorie'] as String,
@@ -38,8 +35,7 @@ Map<String, dynamic> _$DemandeAffectationToJson(_DemandeAffectation instance) =>
       'etat': instance.etat,
       'motif_refus': instance.motifRefus,
       'service_beneficiaire': instance.serviceBeneficiaire,
-      'date_debut': instance.dateDebut?.toIso8601String(),
-      'date_fin_prevue': instance.dateFinPrevue?.toIso8601String(),
+      'date_action': instance.dateAction?.toIso8601String(),
       'id_demandeur': instance.idDemandeur,
       'id_valideur': instance.idValideur,
       'id_categorie': instance.idCategorie,

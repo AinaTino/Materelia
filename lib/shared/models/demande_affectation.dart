@@ -7,7 +7,7 @@ part 'demande_affectation.g.dart';
 abstract class DemandeAffectation with _$DemandeAffectation {
   const factory DemandeAffectation({
     @JsonKey(name: 'id_demande') required String id,
-    
+
     @JsonKey(name: 'date_demande') DateTime? dateDemande,
 
     @JsonKey(name: 'justification') required String justification,
@@ -18,9 +18,7 @@ abstract class DemandeAffectation with _$DemandeAffectation {
 
     @JsonKey(name: 'service_beneficiaire') required String serviceBeneficiaire,
 
-    @JsonKey(name: 'date_debut') DateTime? dateDebut,
-
-    @JsonKey(name: 'date_fin_prevue') DateTime? dateFinPrevue,
+    @JsonKey(name: 'date_action') DateTime? dateAction,
 
     @JsonKey(name: 'id_demandeur') required String idDemandeur,
 
