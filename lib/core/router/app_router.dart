@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:materelia/core/shell/app_shell.dart";
+import "package:materelia/features/affectations/UI/affectations_page.dart";
 import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
@@ -123,7 +124,7 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/tickets-zone', builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/historique', builder: (c, s) => const Text("22222")),
     GoRoute(path: '/dashboard', builder: (c, s) => const Text("dash")),
-    GoRoute(path: '/affectations', builder: (c, s) => const Text("ovao")),
+    GoRoute(path: '/affectations', builder: (c, s) => const AffectationsPage()),
     GoRoute(
       path: '/demandes-affectations',
       builder: (c, s) => const DemandesAffectationsPage(),
