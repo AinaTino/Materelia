@@ -470,6 +470,36 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
         if (demande.motifRefus != null)
           InfoRow('Motif refus', demande.motifRefus!),
 
+        const SizedBox(height: 12),
+        const Divider(),
+
+        // ── Catégorie ──
+        Text(
+          'Catégorie',
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 6),
+        ref
+            .watch(categorieDemandeByIdProvider(demande.idCategorie))
+            .when(
+              loading: () => const LinearProgressIndicator(),
+              error: (e, _) => Text(
+                'Erreur : $e',
+                style: const TextStyle(color: Colors.red),
+              ),
+              data: (cat) => cat == null
+                  ? const Text('Catégorie introuvable')
+                  : Column(
+                      children: [
+                        InfoRow('Nom', cat.nom),
+                        if (cat.description != null)
+                          InfoRow('Description', cat.description!),
+                      ],
+                    ),
+            ),
+
         if (enAttente) ...[
           const SizedBox(height: 24),
           const Divider(),
