@@ -262,10 +262,17 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
   @override
   Widget build(BuildContext context) {
     final demande = ref.watch(demandeByIdProvider(widget.id));
-
     if (demande == null) return const AppLoading();
 
     final enAttente = demande.etat == 'EN_ATTENTE';
+
+    final asyncCategorie = ref.watch(
+      categorieDemandeByIdProvider(demande.idCategorie),
+    );
+    final asyncDemandeur = ref.watch(
+      demandeurByIdProvider(demande.idDemandeur),
+    );
+    final asyncValideur = ref.watch(valideurByIdProvider(demande.idValideur));
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -278,19 +285,89 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
         if (demande.motifRefus != null)
           InfoRow('Motif refus', demande.motifRefus!),
 
+        const SizedBox(height: 12),
+        const Divider(),
+
+        // ── Catégorie ──
+        Text(
+          'Catégorie',
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 6),
+        asyncCategorie.when(
+          loading: () => const LinearProgressIndicator(),
+          error: (e, _) => Text(
+            'Erreur catégorie : $e',
+            style: const TextStyle(color: Colors.red),
+          ),
+          data: (cat) => Column(
+            children: [
+              InfoRow('Nom', cat.nom),
+              if (cat.description != null)
+                InfoRow('Description', cat.description!),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 12),
+        const Divider(),
+
+        // ── Demandeur ──
+        Text(
+          'Demandeur',
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 6),
+        asyncDemandeur.when(
+          loading: () => const LinearProgressIndicator(),
+          error: (e, _) => Text(
+            'Erreur demandeur : $e',
+            style: const TextStyle(color: Colors.red),
+          ),
+          data: (u) => Column(
+            children: [
+              InfoRow('Nom', '${u.prenom} ${u.nom}'),
+              InfoRow('Rôle', u.role),
+            ],
+          ),
+        ),
+
+        // ── Valideur ──
+        asyncValideur.when(
+          loading: () => const SizedBox.shrink(),
+          error: (e, _) => const SizedBox.shrink(),
+          data: (v) => v == null
+              ? const SizedBox.shrink()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 12),
+                    const Divider(),
+                    Text(
+                      'Valideur',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    InfoRow('Nom', '${v.prenom} ${v.nom}'),
+                    InfoRow('Rôle', v.role),
+                  ],
+                ),
+        ),
+
         if (enAttente) ...[
           const SizedBox(height: 24),
           const Divider(),
           _ChoisirMaterielSection(
             categorieId: demande.idCategorie,
             selectedId: _selectedMaterielId,
-            onSelect: (id) {
-              setState(() {
-                _selectedMaterielId = id;
-              });
-            },
+            onSelect: (id) => setState(() => _selectedMaterielId = id),
           ),
-
           const SizedBox(height: 12),
           _ActionsEnAttente(
             showRefusForm: _showRefusForm,
@@ -301,9 +378,7 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
               _showRefusForm = false;
               _motifCtrl.clear();
             }),
-            onConfirmerRefus: () {
-              _refuser(demande.id);
-            },
+            onConfirmerRefus: () => _refuser(demande.id),
           ),
         ],
       ],
