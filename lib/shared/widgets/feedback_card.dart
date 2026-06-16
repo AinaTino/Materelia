@@ -5,6 +5,7 @@ enum FeedbackType { success, error, warning, info }
 
 class FeedbackCard extends StatelessWidget {
   final FeedbackType type;
+  final IconData? icon;
 
   final String message;
   final String? title;
@@ -22,6 +23,7 @@ class FeedbackCard extends StatelessWidget {
     this.action,
     this.padding = const EdgeInsets.all(16),
     this.dense = false,
+    this.icon,
   });
 
   Color get _background {
@@ -84,7 +86,7 @@ class FeedbackCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(_icon, color: _foreground, size: dense ? 20 : 24),
+          Icon(icon ?? _icon, color: _foreground, size: dense ? 20 : 24),
 
           const SizedBox(width: 12),
 

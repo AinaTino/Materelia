@@ -7,16 +7,11 @@ import 'package:materelia/shared/tools/date_convert.dart';
 import 'package:materelia/shared/widgets/badge_etat.dart';
 import 'package:materelia/shared/widgets/detail_panel.dart';
 import 'package:materelia/shared/widgets/error_view.dart';
+import 'package:materelia/shared/widgets/feedback_card.dart';
 import 'package:materelia/shared/widgets/filtre_chips.dart';
 import 'package:materelia/shared/widgets/info_row.dart';
 import 'package:materelia/shared/widgets/loading.dart';
 import 'package:materelia/shared/widgets/toolbar.dart';
-
-const Map<String, List> etat = {
-  'EN_ATTENTE': [BadgeEtatType.warning, 'En attente'],
-  'VALIDE': [BadgeEtatType.success, 'Validée'],
-  'REFUSE': [BadgeEtatType.error, "Refusée"],
-};
 
 class EtatBadge {
   final BadgeEtatType type;
@@ -188,7 +183,14 @@ class _ListeDemandes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (liste.isEmpty) {
-      return const Center(child: Text('Aucune demande'));
+      return const Center(
+        child: FeedbackCard(
+          icon: Icons.inbox_outlined,
+          type: FeedbackType.warning,
+          title: "Aucune demande",
+          message: "Les demandes apparaîtront ici dès leur création.",
+        ),
+      );
     }
 
     return ListView.builder(
