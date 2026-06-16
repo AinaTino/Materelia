@@ -17,7 +17,9 @@ _Affectation _$AffectationFromJson(Map<String, dynamic> json) => _Affectation(
   idMateriel: json['id_materiel'] as String,
   idBeneficiaire: json['id_beneficiaire'] as String,
   idDemande: json['id_demande'] as String,
-  dateFin: DateTime.parse(json['date_fin'] as String),
+  createdAt: json['created_at'] == null
+      ? null
+      : DateTime.parse(json['created_at'] as String),
 );
 
 Map<String, dynamic> _$AffectationToJson(_Affectation instance) =>
@@ -30,5 +32,5 @@ Map<String, dynamic> _$AffectationToJson(_Affectation instance) =>
       'id_materiel': instance.idMateriel,
       'id_beneficiaire': instance.idBeneficiaire,
       'id_demande': instance.idDemande,
-      'date_fin': instance.dateFin.toIso8601String(),
+      'created_at': instance.createdAt?.toIso8601String(),
     };

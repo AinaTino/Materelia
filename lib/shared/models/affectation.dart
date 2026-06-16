@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'affectation.freezed.dart';
@@ -15,9 +14,11 @@ abstract class Affectation with _$Affectation {
     @JsonKey(name: 'id_materiel') required String idMateriel,
     @JsonKey(name: 'id_beneficiaire') required String idBeneficiaire,
     @JsonKey(name: 'id_demande') required String idDemande,
-    @JsonKey(name: 'date_fin') required DateTime dateFin
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    // ↓ supprime ou rends nullable selon si tu en as besoin
+    // @JsonKey(name: 'date_fin') DateTime? dateFin,
   }) = _Affectation;
-	
+
   factory Affectation.fromJson(Map<String, dynamic> json) =>
-			_$AffectationFromJson(json);
+      _$AffectationFromJson(json);
 }
