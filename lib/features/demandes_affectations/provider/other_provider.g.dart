@@ -167,3 +167,228 @@ final class DemandeByIdFamily extends $Family
   @override
   String toString() => r'demandeByIdProvider';
 }
+
+@ProviderFor(categorieDemandeById)
+final categorieDemandeByIdProvider = CategorieDemandeByIdFamily._();
+
+final class CategorieDemandeByIdProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Categorie>,
+          Categorie,
+          FutureOr<Categorie>
+        >
+    with $FutureModifier<Categorie>, $FutureProvider<Categorie> {
+  CategorieDemandeByIdProvider._({
+    required CategorieDemandeByIdFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'categorieDemandeByIdProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$categorieDemandeByIdHash();
+
+  @override
+  String toString() {
+    return r'categorieDemandeByIdProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Categorie> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Categorie> create(Ref ref) {
+    final argument = this.argument as String;
+    return categorieDemandeById(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CategorieDemandeByIdProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$categorieDemandeByIdHash() =>
+    r'741f802051e5ea5455dd99d0f9c3c50f12915ae4';
+
+final class CategorieDemandeByIdFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Categorie>, String> {
+  CategorieDemandeByIdFamily._()
+    : super(
+        retry: null,
+        name: r'categorieDemandeByIdProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CategorieDemandeByIdProvider call(String idCategorie) =>
+      CategorieDemandeByIdProvider._(argument: idCategorie, from: this);
+
+  @override
+  String toString() => r'categorieDemandeByIdProvider';
+}
+
+@ProviderFor(demandeurById)
+final demandeurByIdProvider = DemandeurByIdFamily._();
+
+final class DemandeurByIdProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Utilisateur>,
+          Utilisateur,
+          FutureOr<Utilisateur>
+        >
+    with $FutureModifier<Utilisateur>, $FutureProvider<Utilisateur> {
+  DemandeurByIdProvider._({
+    required DemandeurByIdFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'demandeurByIdProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$demandeurByIdHash();
+
+  @override
+  String toString() {
+    return r'demandeurByIdProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Utilisateur> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Utilisateur> create(Ref ref) {
+    final argument = this.argument as String;
+    return demandeurById(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DemandeurByIdProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$demandeurByIdHash() => r'6ae5b75a50d0c13b00a6dc87a997efe151b6cb76';
+
+final class DemandeurByIdFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Utilisateur>, String> {
+  DemandeurByIdFamily._()
+    : super(
+        retry: null,
+        name: r'demandeurByIdProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  DemandeurByIdProvider call(String idDemandeur) =>
+      DemandeurByIdProvider._(argument: idDemandeur, from: this);
+
+  @override
+  String toString() => r'demandeurByIdProvider';
+}
+
+@ProviderFor(valideurById)
+final valideurByIdProvider = ValideurByIdFamily._();
+
+final class ValideurByIdProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Utilisateur?>,
+          Utilisateur?,
+          FutureOr<Utilisateur?>
+        >
+    with $FutureModifier<Utilisateur?>, $FutureProvider<Utilisateur?> {
+  ValideurByIdProvider._({
+    required ValideurByIdFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'valideurByIdProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$valideurByIdHash();
+
+  @override
+  String toString() {
+    return r'valideurByIdProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Utilisateur?> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Utilisateur?> create(Ref ref) {
+    final argument = this.argument as String?;
+    return valideurById(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ValideurByIdProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$valideurByIdHash() => r'979e0abec8535e7c67c9f9f3135b323a9f043160';
+
+final class ValideurByIdFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Utilisateur?>, String?> {
+  ValideurByIdFamily._()
+    : super(
+        retry: null,
+        name: r'valideurByIdProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ValideurByIdProvider call(String? idValideur) =>
+      ValideurByIdProvider._(argument: idValideur, from: this);
+
+  @override
+  String toString() => r'valideurByIdProvider';
+}
