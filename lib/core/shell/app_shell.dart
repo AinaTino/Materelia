@@ -15,34 +15,33 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 800;
     final profile = ref.watch(profileControllerProvider);
-    String role ="Chargement";
-    
+    String role = "Chargement";
+
     profile.when(
-      data: (user)=> role=user.role,
-      error: (error, stackTrace) => role="Erreur",
-      loading: () => role="Chargement",
-      );
-    if (isMobile){
+      data: (user) => role = user.role,
+      error: (error, stackTrace) => role = "Erreur",
+      loading: () => role = "Chargement",
+    );
+    if (isMobile) {
       return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: TopBar(title: title),
-      ),
-      drawer: SidebarDrawer(role: role) ,
-      body: Row(
-        children: [
-          const VerticalDivider(width: 1),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-              child: child,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: TopBar(title: title),
+        ),
+        drawer: SidebarDrawer(role: role),
+        body: Row(
+          children: [
+            const VerticalDivider(width: 1),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                child: child,
               ),
             ),
           ],
         ),
       );
-    }
-        else {
+    } else {
       return Scaffold(
         body: Row(
           children: [
@@ -64,6 +63,5 @@ class AppShell extends ConsumerWidget {
         ),
       );
     }
-    
   }
 }

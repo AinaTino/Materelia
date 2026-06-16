@@ -1,3 +1,4 @@
+import 'package:materelia/features/demandes_affectations/provider/other_provider.dart';
 import 'package:materelia/features/demandes_affectations/service/demandes_affectations_service.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,65 +18,65 @@ class DemandesAffectationsController extends _$DemandesAffectationsController {
     return ref.read(demandesAffectationsServiceProvider).listDemandes();
   }
 
-  Future<void> refresh() async{
+  Future<void> refresh() async {
     state = AsyncLoading();
 
-    state = await AsyncValue.guard(() async{
+    state = await AsyncValue.guard(() async {
       return ref.read(demandesAffectationsServiceProvider).listDemandes();
     });
   }
 
-// Future<DemandeAffectation> creerDemande({
-//   required String justification,
-//   required String serviceBeneficiaire,
-//   required String idCategorie,
-// }) async {
-//   final current = state.value ?? [];
-//   try {
-//     final nouvelle = await ref
-//         .read(demandesAffectationsServiceProvider)
-//         .creerDemande(
-//           justification: justification,
-//           serviceBeneficiaire: serviceBeneficiaire,
-//           idCategorie: idCategorie,
-//         );
+  // Future<DemandeAffectation> creerDemande({
+  //   required String justification,
+  //   required String serviceBeneficiaire,
+  //   required String idCategorie,
+  // }) async {
+  //   final current = state.value ?? [];
+  //   try {
+  //     final nouvelle = await ref
+  //         .read(demandesAffectationsServiceProvider)
+  //         .creerDemande(
+  //           justification: justification,
+  //           serviceBeneficiaire: serviceBeneficiaire,
+  //           idCategorie: idCategorie,
+  //         );
 
-//     state = AsyncData([nouvelle, ...current]);
-//     return nouvelle;
-//   } catch (e) {
-//     rethrow;
-//   }
-// }
+  //     state = AsyncData([nouvelle, ...current]);
+  //     return nouvelle;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> validerDemande({
     required String idMateriel,
     required String idDemande,
   }) async {
-  try {
-    await ref.read(demandesAffectationsServiceProvider).validerDemande(
-    idDemande: idDemande,
-    idMateriel: idMateriel,
-    );
-    ref.invalidateSelf();
-    await future;
-  } catch (e) {
-    rethrow;
+    try {
+      await ref
+          .read(demandesAffectationsServiceProvider)
+          .validerDemande(idDemande: idDemande, idMateriel: idMateriel);
+      ref.invalidate(materielsDisponiblesProvider);
+      ref.invalidateSelf();
+      await future;
+    } catch (e) {
+      rethrow;
+    }
   }
-}
 
-Future<void> refuserDemande({
-  required String idDemande,
-  required String motif,
+  Future<void> refuserDemande({
+    required String idDemande,
+    required String motif,
   }) async {
-  try {
-    await ref.read(demandesAffectationsServiceProvider).refuserDemande(
-    idDemande: idDemande,
-    motif:  motif,
-    );
-    ref.invalidateSelf();
-    await future;
-  } catch (e) {
-    rethrow;
+    try {
+      await ref
+          .read(demandesAffectationsServiceProvider)
+          .refuserDemande(idDemande: idDemande, motif: motif);
+      ref.invalidate(materielsDisponiblesProvider);
+      ref.invalidateSelf();
+      await future;
+    } catch (e) {
+      rethrow;
+    }
   }
-}
 }

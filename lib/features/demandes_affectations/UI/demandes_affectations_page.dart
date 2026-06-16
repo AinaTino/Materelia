@@ -1,7 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/features/demandes_affectations/provider/demandes_affectations_provider.dart';
+import 'package:materelia/features/demandes_affectations/provider/other_provider.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
+import 'package:materelia/shared/tools/date_convert.dart';
+import 'package:materelia/shared/widgets/badge_etat.dart';
+import 'package:materelia/shared/widgets/detail_panel.dart';
+import 'package:materelia/shared/widgets/error_view.dart';
+import 'package:materelia/shared/widgets/filtre_chips.dart';
+import 'package:materelia/shared/widgets/info_row.dart';
+import 'package:materelia/shared/widgets/loading.dart';
+import 'package:materelia/shared/widgets/toolbar.dart';
+
+const Map<String, List> etat = {
+  'EN_ATTENTE': [BadgeEtatType.warning, 'En attente'],
+  'VALIDE': [BadgeEtatType.success, 'Validée'],
+  'REFUSE': [BadgeEtatType.error, "Refusée"],
+};
+
+class EtatBadge {
+  final BadgeEtatType type;
+  final String label;
+
+  const EtatBadge(this.type, this.label);
+}
+
+const etats = {
+  "EN_ATTENTE": EtatBadge(BadgeEtatType.warning, "En attente"),
+  'VALIDE': EtatBadge(BadgeEtatType.success, 'Validée'),
+  'REFUSE': EtatBadge(BadgeEtatType.error, "Refusée"),
+};
 
 class DemandesAffectationsPage extends ConsumerStatefulWidget {
   const DemandesAffectationsPage({super.key});
@@ -21,7 +49,8 @@ class _DemandesAffectationsPageState
   List<DemandeAffectation> _filtrer(List<DemandeAffectation> all) {
     return all.where((d) {
       final matchEtat = _filtreEtat == null || d.etat == _filtreEtat;
-      final matchSearch = _search.isEmpty ||
+      final matchSearch =
+          _search.isEmpty ||
           d.justification.toLowerCase().contains(_search.toLowerCase()) ||
           d.serviceBeneficiaire.toLowerCase().contains(_search.toLowerCase());
       return matchEtat && matchSearch;
@@ -29,14 +58,14 @@ class _DemandesAffectationsPageState
   }
 
   void _closeDetail() => setState(() {
-        _showDetail = false;
-        _selectedId = null;
-      });
+    _showDetail = false;
+    _selectedId = null;
+  });
 
   void _selectItem(String id) => setState(() {
-        _selectedId = id;
-        _showDetail = true;
-      });
+    _selectedId = id;
+    _showDetail = true;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +76,18 @@ class _DemandesAffectationsPageState
     return Column(
       children: [
         // ── Toolbar ──
-        _Toolbar(
+        Toolbar(
           showDetail: _showDetail,
           onSearch: (v) => setState(() => _search = v),
           onToggleDetail: () => setState(() => _showDetail = !_showDetail),
           onRefresh: () => ref
               .read(demandesAffectationsControllerProvider.notifier)
               .refresh(),
+          creer: null,
         ),
         const Divider(height: 1),
 
-        // ── Filtres ──
-        _FiltreChips(
+        FiltreChips(
           filtreActif: _filtreEtat,
           etats: const {
             'EN_ATTENTE': 'En attente',
@@ -69,7 +98,6 @@ class _DemandesAffectationsPageState
         ),
         const Divider(height: 1),
 
-        // ── Linear progress ──
         SizedBox(
           height: 2,
           child: isLoading
@@ -80,9 +108,8 @@ class _DemandesAffectationsPageState
         // ── Corps ──
         Expanded(
           child: async.when(
-            loading: () =>
-                const Center(child: CircularProgressIndicator()),
-            error: (e, _) => _ErrorView(
+            loading: () => const AppLoading(),
+            error: (e, _) => ErrorView(
               message: e.toString(),
               onRetry: () => ref
                   .read(demandesAffectationsControllerProvider.notifier)
@@ -104,10 +131,15 @@ class _DemandesAffectationsPageState
                     SizedBox(width: 320, child: master),
                     const VerticalDivider(width: 1),
                     Expanded(
-                      child: _DetailPanel(
-                        selectedId: _selectedId,
+                      child: DetailPanel(
                         onClose: _closeDetail,
-                        onActionDone: _closeDetail,
+                        type: "demande",
+                        child: _selectedId == null
+                            ? Center(child: Text('Sélectionnez une demande'))
+                            : _DemandeDetailContent(
+                                id: _selectedId!,
+                                onActionDone: _closeDetail,
+                              ),
                       ),
                     ),
                   ],
@@ -118,10 +150,15 @@ class _DemandesAffectationsPageState
                 children: [
                   master,
                   Positioned.fill(
-                    child: _DetailPanel(
-                      selectedId: _selectedId,
+                    child: DetailPanel(
                       onClose: _closeDetail,
-                      onActionDone: _closeDetail,
+                      type: "demande",
+                      child: _selectedId == null
+                          ? Center(child: Text('Sélectionnez une demande'))
+                          : _DemandeDetailContent(
+                              id: _selectedId!,
+                              onActionDone: _closeDetail,
+                            ),
                     ),
                   ),
                 ],
@@ -135,107 +172,8 @@ class _DemandesAffectationsPageState
 }
 
 // ════════════════════════════════════════════════════════════════
-// TOOLBAR
-// ════════════════════════════════════════════════════════════════
-
-class _Toolbar extends StatelessWidget {
-  final bool showDetail;
-  final ValueChanged<String> onSearch;
-  final VoidCallback onToggleDetail;
-  final VoidCallback onRefresh;
-
-  const _Toolbar({
-    required this.showDetail,
-    required this.onSearch,
-    required this.onToggleDetail,
-    required this.onRefresh,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Rechercher...',
-                prefixIcon: const Icon(Icons.search, size: 18),
-                isDense: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onChanged: onSearch,
-            ),
-          ),
-          const SizedBox(width: 8),
-          IconButton.outlined(
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Rafraîchir',
-            onPressed: onRefresh,
-          ),
-          const SizedBox(width: 8),
-          IconButton.outlined(
-            icon: Icon(showDetail ? Icons.view_list : Icons.table_rows),
-            tooltip: showDetail ? 'Masquer panneau' : 'Afficher panneau',
-            onPressed: onToggleDetail,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
-// CHIPS FILTRE — réutilisable pour n'importe quelle feature
-// ════════════════════════════════════════════════════════════════
-
-class _FiltreChips extends StatelessWidget {
-  final String? filtreActif;
-  final Map<String, String> etats; // { 'EN_ATTENTE': 'En attente', ... }
-  final ValueChanged<String?> onFiltreChange; // null = tous
-
-  const _FiltreChips({
-    required this.filtreActif,
-    required this.etats,
-    required this.onFiltreChange,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        children: [
-          FilterChip(
-            label: const Text('Toutes'),
-            selected: filtreActif == null,
-            onSelected: (_) => onFiltreChange(null),
-          ),
-          const SizedBox(width: 6),
-          ...etats.entries.map((e) => Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: FilterChip(
-                  label: Text(e.value),
-                  selected: filtreActif == e.key,
-                  onSelected: (_) => onFiltreChange(
-                    filtreActif == e.key ? null : e.key,
-                  ),
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
 // LISTE
 // ════════════════════════════════════════════════════════════════
-
 class _ListeDemandes extends StatelessWidget {
   final List<DemandeAffectation> liste;
   final String? selectedId;
@@ -258,6 +196,7 @@ class _ListeDemandes extends StatelessWidget {
       itemBuilder: (_, i) {
         final demande = liste[i];
         final isSelected = demande.id == selectedId;
+        final badge = etats[demande.etat]!;
 
         return ListTile(
           leading: Icon(
@@ -269,16 +208,15 @@ class _ListeDemandes extends StatelessWidget {
           ),
           title: Text(demande.serviceBeneficiaire),
           subtitle: Text(
-            demande.justification,
+            "${demande.justification}  /  Date de la demande : ${dateConvert(demande.createdAt!)}",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: _BadgeEtat(etat: demande.etat),
+          trailing: BadgeEtat(etat: badge.type, label: badge.label),
           selected: isSelected,
-          selectedTileColor: Theme.of(context)
-              .colorScheme
-              .primaryContainer
-              .withOpacity(0.3),
+          selectedTileColor: Theme.of(
+            context,
+          ).colorScheme.primaryContainer.withValues(alpha: 0.3),
           onTap: () => onSelect(demande.id),
         );
       },
@@ -287,81 +225,23 @@ class _ListeDemandes extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════
-// PANNEAU DROIT
-// ════════════════════════════════════════════════════════════════
-
-class _DetailPanel extends StatelessWidget {
-  final String? selectedId;
-  final VoidCallback onClose;
-  final VoidCallback onActionDone;
-
-  const _DetailPanel({
-    required this.selectedId,
-    required this.onClose,
-    required this.onActionDone,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: Column(
-        children: [
-          // Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: onClose,
-                ),
-                const Text(
-                  'Détail demande',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 1),
-
-          // Contenu
-          Expanded(
-            child: selectedId == null
-                ? const Center(child: Text('Sélectionnez une demande'))
-                : _DemandeDetailContent(
-                    id: selectedId!,
-                    onActionDone: onActionDone,
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
 // CONTENU DÉTAIL
 // ════════════════════════════════════════════════════════════════
-
 class _DemandeDetailContent extends ConsumerStatefulWidget {
   final String id;
   final VoidCallback onActionDone;
 
-  const _DemandeDetailContent({
-    required this.id,
-    required this.onActionDone,
-  });
+  const _DemandeDetailContent({required this.id, required this.onActionDone});
 
   @override
   ConsumerState<_DemandeDetailContent> createState() =>
       _DemandeDetailContentState();
 }
 
-class _DemandeDetailContentState
-    extends ConsumerState<_DemandeDetailContent> {
+class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
   final _motifCtrl = TextEditingController();
   bool _showRefusForm = false;
+  String? _selectedMaterielId;
 
   @override
   void dispose() {
@@ -371,34 +251,40 @@ class _DemandeDetailContentState
 
   @override
   Widget build(BuildContext context) {
-    final liste =
-        ref.watch(demandesAffectationsControllerProvider).value;
-    final demande = liste?.firstWhere((d) => d.id == widget.id);
+    final demande = ref.watch(demandeByIdProvider(widget.id));
 
-    if (demande == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    if (demande == null) return const AppLoading();
 
     final enAttente = demande.etat == 'EN_ATTENTE';
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _InfoRow('Service', demande.serviceBeneficiaire),
-        _InfoRow('Justification', demande.justification),
-        _InfoRow('État', demande.etat),
-        if (demande.dateDebut != null)
-          _InfoRow('Date début', _fmt(demande.dateDebut!)),
-        if (demande.dateFinPrevue != null)
-          _InfoRow('Date fin prévue', _fmt(demande.dateFinPrevue!)),
+        InfoRow('Service', demande.serviceBeneficiaire),
+        InfoRow('Justification', demande.justification),
+        InfoRow('État', demande.etat),
+        if (demande.dateAction != null)
+          InfoRow('Date Validation/Refus', dateConvert(demande.dateAction!)),
         if (demande.motifRefus != null)
-          _InfoRow('Motif refus', demande.motifRefus!),
+          InfoRow('Motif refus', demande.motifRefus!),
 
         if (enAttente) ...[
           const SizedBox(height: 24),
           const Divider(),
+          _ChoisirMaterielSection(
+            categorieId: demande.idCategorie,
+            selectedId: _selectedMaterielId,
+            onSelect: (id) {
+              setState(() {
+                _selectedMaterielId = id;
+              });
+            },
+          ),
+
           const SizedBox(height: 12),
           _ActionsEnAttente(
+            // ✅ Valider disabled si pas de matériel choisi
+            // canValider: _materielChoisi != null,
             showRefusForm: _showRefusForm,
             motifCtrl: _motifCtrl,
             onValider: () => _valider(demande.id),
@@ -415,9 +301,12 @@ class _DemandeDetailContentState
   }
 
   Future<void> _valider(String idDemande) async {
+    if (_selectedMaterielId == null) return;
+
     await ref
         .read(demandesAffectationsControllerProvider.notifier)
-        .validerDemande(idDemande: idDemande, idMateriel: 'TODO');
+        .validerDemande(idDemande: idDemande, idMateriel: _selectedMaterielId!);
+
     widget.onActionDone();
   }
 
@@ -425,22 +314,14 @@ class _DemandeDetailContentState
     if (_motifCtrl.text.trim().isEmpty) return;
     await ref
         .read(demandesAffectationsControllerProvider.notifier)
-        .refuserDemande(
-          idDemande: idDemande,
-          motif: _motifCtrl.text.trim(),
-        );
+        .refuserDemande(idDemande: idDemande, motif: _motifCtrl.text.trim());
     widget.onActionDone();
   }
-
-  String _fmt(DateTime d) =>
-      '${d.day.toString().padLeft(2, '0')}/'
-      '${d.month.toString().padLeft(2, '0')}/${d.year}';
 }
 
 // ════════════════════════════════════════════════════════════════
 // ACTIONS EN ATTENTE
 // ════════════════════════════════════════════════════════════════
-
 class _ActionsEnAttente extends StatelessWidget {
   final bool showRefusForm;
   final TextEditingController motifCtrl;
@@ -498,8 +379,7 @@ class _ActionsEnAttente extends StatelessWidget {
               Expanded(
                 child: FilledButton(
                   onPressed: onConfirmerRefus,
-                  style:
-                      FilledButton.styleFrom(backgroundColor: Colors.red),
+                  style: FilledButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text('Confirmer refus'),
                 ),
               ),
@@ -512,99 +392,106 @@ class _ActionsEnAttente extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════
-// UTILITAIRES — à déplacer dans shared/widgets/
+// CHOISIR MATÉRIEL
 // ════════════════════════════════════════════════════════════════
+class _ChoisirMaterielSection extends ConsumerWidget {
+  final String categorieId;
+  final String? selectedId;
+  final ValueChanged<String> onSelect;
 
-class _ErrorView extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorView({required this.message, required this.onRetry});
+  const _ChoisirMaterielSection({
+    required this.categorieId,
+    required this.selectedId,
+    required this.onSelect,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.error_outline, size: 48, color: Colors.red),
-          const SizedBox(height: 12),
-          Text(message, textAlign: TextAlign.center),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Réessayer'),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncMateriels = ref.watch(materielsDisponiblesProvider(categorieId));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Matériel à affecter',
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 8),
+
+        asyncMateriels.when(
+          loading: () => const SizedBox(
+            height: 120,
+            child: Center(child: CircularProgressIndicator()),
           ),
-        ],
-      ),
-    );
-  }
-}
 
-class _InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _InfoRow(this.label, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 110,
+          error: (error, _) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              label,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.black54,
-              ),
+              'Erreur : $error',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
-          Expanded(child: Text(value)),
-        ],
-      ),
-    );
-  }
-}
 
-class _BadgeEtat extends StatelessWidget {
-  final String etat;
-  const _BadgeEtat({required this.etat});
+          data: (materiels) {
+            if (materiels.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Aucun matériel disponible dans cette catégorie.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              );
+            }
 
-  static const _colors = {
-    'EN_ATTENTE': (text: Color(0xFFE65100), bg: Color(0xFFFFF3E0)),
-    'VALIDE': (text: Color(0xFF2E7D32), bg: Color(0xFFE8F5E9)),
-    'REFUSE': (text: Color(0xFFC62828), bg: Color(0xFFFFEBEE)),
-  };
+            return RadioGroup<String>(
+              groupValue: selectedId,
+              onChanged: (value) {
+                if (value != null) {
+                  onSelect(value);
+                }
+              },
+              child: SizedBox(
+                height: 240,
+                child: ListView.separated(
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: materiels.length,
+                  separatorBuilder: (context, index) =>
+                      const Divider(height: 1),
+                  itemBuilder: (context, index) {
+                    final materiel = materiels[index];
+                    final isSelected = materiel.id == selectedId;
 
-  static const _labels = {
-    'EN_ATTENTE': 'En attente',
-    'VALIDE': 'Validée',
-    'REFUSE': 'Refusée',
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    final style =
-        _colors[etat] ?? (text: Colors.grey, bg: Color(0xFFF5F5F5));
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: style.bg,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        _labels[etat] ?? etat,
-        style: TextStyle(
-          color: style.text,
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
+                    return RadioListTile<String>(
+                      value: materiel.id,
+                      selected: isSelected,
+                      selectedTileColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      title: Text(
+                        materiel.nom,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Text(
+                        'SN: ${materiel.reference} · '
+                        'Description: ${materiel.description ?? "-"}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      secondary: isSelected
+                          ? Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                          : null,
+                    );
+                  },
+                ),
+              ),
+            );
+          },
         ),
-      ),
+      ],
     );
   }
 }
