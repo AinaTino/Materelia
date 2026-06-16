@@ -26,28 +26,6 @@ class DemandesAffectationsController extends _$DemandesAffectationsController {
     });
   }
 
-  // Future<DemandeAffectation> creerDemande({
-  //   required String justification,
-  //   required String serviceBeneficiaire,
-  //   required String idCategorie,
-  // }) async {
-  //   final current = state.value ?? [];
-  //   try {
-  //     final nouvelle = await ref
-  //         .read(demandesAffectationsServiceProvider)
-  //         .creerDemande(
-  //           justification: justification,
-  //           serviceBeneficiaire: serviceBeneficiaire,
-  //           idCategorie: idCategorie,
-  //         );
-
-  //     state = AsyncData([nouvelle, ...current]);
-  //     return nouvelle;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-
   Future<void> validerDemande({
     required String idMateriel,
     required String idDemande,
