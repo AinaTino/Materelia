@@ -1,6 +1,8 @@
 import 'package:materelia/core/constants/app_constants.dart';
+import 'package:materelia/shared/models/categorie.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
 import 'package:materelia/shared/models/materiel.dart';
+import 'package:materelia/shared/models/utilisateur.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
 
 class DemandesAffectationsService {
@@ -70,5 +72,23 @@ class DemandesAffectationsService {
         .eq("id_categorie", idCategorie)
         .eq("etat", AppConstants.etatEnStock);
     return (data as List).map((e) => Materiel.fromJson(e)).toList();
+  }
+
+  Future<Categorie> getCategorieById(String id) async {
+    final data = await _db
+        .from('categories')
+        .select()
+        .eq('id_categorie', id)
+        .single();
+    return Categorie.fromJson(data);
+  }
+
+  Future<Utilisateur> getUtilisateurById(String id) async {
+    final data = await _db
+        .from('utilisateurs')
+        .select()
+        .eq('id_utilisateur', id)
+        .single();
+    return Utilisateur.fromJson(data);
   }
 }
