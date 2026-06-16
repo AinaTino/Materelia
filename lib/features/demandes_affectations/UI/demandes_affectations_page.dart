@@ -4,6 +4,7 @@ import 'package:materelia/features/demandes_affectations/provider/demandes_affec
 import 'package:materelia/features/demandes_affectations/provider/other_provider.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
 import 'package:materelia/shared/tools/date_convert.dart';
+import 'package:materelia/shared/widgets/app_snack_bar.dart';
 import 'package:materelia/shared/widgets/badge_etat.dart';
 import 'package:materelia/shared/widgets/detail_panel.dart';
 import 'package:materelia/shared/widgets/error_view.dart';
@@ -130,7 +131,14 @@ class _DemandesAffectationsPageState
                         onClose: _closeDetail,
                         type: "demande",
                         child: _selectedId == null
-                            ? Center(child: Text('Sélectionnez une demande'))
+                            ? Center(
+                                child: FeedbackCard(
+                                  type: FeedbackType.info,
+                                  message:
+                                      "Sélectionnez une demande dans la liste pour afficher ses informations.",
+                                  dense: true,
+                                ),
+                              )
                             : _DemandeDetailContent(
                                 id: _selectedId!,
                                 onActionDone: _closeDetail,
@@ -285,8 +293,6 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
 
           const SizedBox(height: 12),
           _ActionsEnAttente(
-            // ✅ Valider disabled si pas de matériel choisi
-            // canValider: _materielChoisi != null,
             showRefusForm: _showRefusForm,
             motifCtrl: _motifCtrl,
             onValider: () => _valider(demande.id),
@@ -295,7 +301,9 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
               _showRefusForm = false;
               _motifCtrl.clear();
             }),
-            onConfirmerRefus: () => _refuser(demande.id),
+            onConfirmerRefus: () {
+              _refuser(demande.id);
+            },
           ),
         ],
       ],
@@ -303,21 +311,76 @@ class _DemandeDetailContentState extends ConsumerState<_DemandeDetailContent> {
   }
 
   Future<void> _valider(String idDemande) async {
-    if (_selectedMaterielId == null) return;
+    try {
+      if (_selectedMaterielId == null) {
+        if (!mounted) return;
 
-    await ref
-        .read(demandesAffectationsControllerProvider.notifier)
-        .validerDemande(idDemande: idDemande, idMateriel: _selectedMaterielId!);
+        AppSnackBar.show(
+          context,
+          message: "Veuillez selectionnez un materiel à affecter.",
+          type: FeedbackType.error,
+        );
+        return;
+      }
 
-    widget.onActionDone();
+      await ref
+          .read(demandesAffectationsControllerProvider.notifier)
+          .validerDemande(
+            idDemande: idDemande,
+            idMateriel: _selectedMaterielId!,
+          );
+
+      if (!mounted) return;
+
+      widget.onActionDone();
+      AppSnackBar.show(
+        context,
+        message: "Demande validée: Matériel affecté",
+        type: FeedbackType.success,
+      );
+    } catch (_) {
+      if (!mounted) return;
+
+      AppSnackBar.show(
+        context,
+        message: "Erreur de la validation de la demande.",
+        type: FeedbackType.error,
+      );
+    }
   }
 
   Future<void> _refuser(String idDemande) async {
-    if (_motifCtrl.text.trim().isEmpty) return;
-    await ref
-        .read(demandesAffectationsControllerProvider.notifier)
-        .refuserDemande(idDemande: idDemande, motif: _motifCtrl.text.trim());
-    widget.onActionDone();
+    try {
+      if (_motifCtrl.text.trim().isEmpty) {
+        setState(() {
+          _showRefusForm = true;
+        });
+
+        // trigger erreur
+        return;
+      }
+
+      await ref
+          .read(demandesAffectationsControllerProvider.notifier)
+          .refuserDemande(idDemande: idDemande, motif: _motifCtrl.text.trim());
+
+      if (!mounted) return;
+
+      widget.onActionDone();
+      AppSnackBar.show(
+        context,
+        message: "Demande refusée",
+        type: FeedbackType.success,
+      );
+    } catch (_) {
+      if (!mounted) return;
+
+      AppSnackBar.show(
+        context,
+        message: "Erreur lors du refus de la demande.",
+        type: FeedbackType.error,
+      );
+    }
   }
 }
 
@@ -362,11 +425,14 @@ class _ActionsEnAttente extends StatelessWidget {
         else ...[
           TextField(
             controller: motifCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Motif du refus *',
-              border: OutlineInputBorder(),
-            ),
             maxLines: 3,
+            decoration: InputDecoration(
+              labelText: 'Motif du refus *',
+              border: const OutlineInputBorder(),
+              errorText: motifCtrl.text.trim().isEmpty
+                  ? "Le motif est obligatoire"
+                  : null,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -430,9 +496,9 @@ class _ChoisirMaterielSection extends ConsumerWidget {
 
           error: (error, _) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              'Erreur : $error',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            child: FeedbackCard(
+              type: FeedbackType.error,
+              message: 'Erreur : $error',
             ),
           ),
 
@@ -440,9 +506,9 @@ class _ChoisirMaterielSection extends ConsumerWidget {
             if (materiels.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Aucun matériel disponible dans cette catégorie.',
-                  style: TextStyle(color: Colors.grey),
+                child: FeedbackCard(
+                  type: FeedbackType.warning,
+                  message: 'Aucun matériel disponible dans cette catégorie.',
                 ),
               );
             }
