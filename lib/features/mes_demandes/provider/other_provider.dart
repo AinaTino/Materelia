@@ -15,3 +15,13 @@ DemandeAffectation? demandeById(Ref ref, String id) {
   final liste = ref.watch(mesDemandesControllerProvider).value;
   return liste?.firstWhere((e) => e.id == id);
 }
+
+@riverpod
+Future<Categorie?> categorieDemandeById(Ref ref, String idCategorie) async {
+  final categories = await ref.watch(categoriesDisponiblesProvider.future);
+  try {
+    return categories.firstWhere((c) => c.id == idCategorie);
+  } catch (_) {
+    return null;
+  }
+}

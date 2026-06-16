@@ -131,3 +131,78 @@ final class DemandeByIdFamily extends $Family
   @override
   String toString() => r'demandeByIdProvider';
 }
+
+@ProviderFor(categorieDemandeById)
+final categorieDemandeByIdProvider = CategorieDemandeByIdFamily._();
+
+final class CategorieDemandeByIdProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Categorie?>,
+          Categorie?,
+          FutureOr<Categorie?>
+        >
+    with $FutureModifier<Categorie?>, $FutureProvider<Categorie?> {
+  CategorieDemandeByIdProvider._({
+    required CategorieDemandeByIdFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'categorieDemandeByIdProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$categorieDemandeByIdHash();
+
+  @override
+  String toString() {
+    return r'categorieDemandeByIdProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Categorie?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Categorie?> create(Ref ref) {
+    final argument = this.argument as String;
+    return categorieDemandeById(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CategorieDemandeByIdProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$categorieDemandeByIdHash() =>
+    r'f41009edb53a4f538fedd1093e86fe17b9286f29';
+
+final class CategorieDemandeByIdFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Categorie?>, String> {
+  CategorieDemandeByIdFamily._()
+    : super(
+        retry: null,
+        name: r'categorieDemandeByIdProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CategorieDemandeByIdProvider call(String idCategorie) =>
+      CategorieDemandeByIdProvider._(argument: idCategorie, from: this);
+
+  @override
+  String toString() => r'categorieDemandeByIdProvider';
+}
