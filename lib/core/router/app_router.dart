@@ -5,6 +5,7 @@ import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
 import "package:materelia/features/demandes_affectations/UI/demandes_affectations_page.dart";
+import "package:materelia/features/mes_affectations/UI/mes_affectations_page.dart";
 import "package:materelia/features/mes_demandes/UI/mes_demandes_page.dart";
 import "package:materelia/shared/services/auth_notifier.dart";
 import "package:materelia/shared/services/supabase_service.dart";
@@ -114,7 +115,10 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/catalogue', builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/panier', builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/mes-tickets', builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/mes-affectations', builder: (c, s) => const Text("ovao")),
+    GoRoute(
+      path: '/mes-affectations',
+      builder: (c, s) => const MesAffectationsPage(),
+    ),
     GoRoute(path: '/mes-demandes', builder: (c, s) => const MesDemandesPage()),
     GoRoute(path: '/tickets-zone', builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/historique', builder: (c, s) => const Text("22222")),
