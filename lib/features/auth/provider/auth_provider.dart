@@ -33,6 +33,7 @@ class AuthController extends _$AuthController {
     required String passwordConfirmation,
     required String nom,
     required String prenom,
+    required String role,
   }) async {
     state = const AsyncLoading();
 
@@ -43,6 +44,7 @@ class AuthController extends _$AuthController {
         passwordConfirmation: passwordConfirmation,
         nom: nom,
         prenom: prenom,
+        role: role,
       );
     });
   }

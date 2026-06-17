@@ -22,6 +22,7 @@ class AuthService {
     required String passwordConfirmation,
     required String nom,
     required String prenom,
+    required String role,
   }) {
     if (password != passwordConfirmation) {
       throw PasswordErrorException("Les mots de passe ne correspondent pas.");
@@ -38,6 +39,7 @@ class AuthService {
       data: {
         'nom': nom,
         'prenom': prenom,
+        'role': role,
       },
     );
   }

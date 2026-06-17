@@ -20,7 +20,8 @@ void verifyPassword(String password) {
 }
 
 void verifyName(String name) {
-  final nameRegex = RegExp(r"^[a-zA-Z']+$");
+  // Accept letters (including common accented letters), spaces, hyphens and apostrophes
+  final nameRegex = RegExp(r"^[A-Za-zÀ-ÖØ-öø-ÿ' -]+");
   if (name.isEmpty) {
     throw NameErrorException('Le nom ne peut pas être vide');
   }
@@ -33,7 +34,8 @@ void verifyName(String name) {
 }
 
 void verifyFirstName(String firstName) {
-  final nameRegex = RegExp(r"^[a-zA-Z']+$");
+  // Accept letters (including common accented letters), spaces, hyphens and apostrophes
+  final nameRegex = RegExp(r"^[A-Za-zÀ-ÖØ-öø-ÿ' -]+");
   if (firstName.isEmpty) {
     throw FirstNameErrorException('Le prénom ne peut pas être vide');
   }

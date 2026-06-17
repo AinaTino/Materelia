@@ -4,6 +4,15 @@ import "package:materelia/core/shell/app_shell.dart";
 import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
+import "package:materelia/features/panier/UI/panier_page.dart";
+import "package:materelia/features/panier/UI/panier_recap_page.dart";
+import "package:materelia/features/ticket/UI/ticket_page.dart";
+import "package:materelia/features/ticket/UI/tickets_zone_page.dart";
+import "package:materelia/features/ticket/UI/historique_page.dart";
+import "package:materelia/features/materiel/UI/materiel_page.dart";
+import "package:materelia/features/zone/UI/zone_page.dart";
+import "package:materelia/features/stock/UI/stock_page.dart";
+import "package:materelia/features/categorie/UI/categorie_page.dart";
 import "package:materelia/shared/services/auth_notifier.dart";
 import "package:materelia/shared/services/supabase_service.dart";
 import "package:materelia/shared/widgets/loading.dart";
@@ -79,6 +88,7 @@ final rootRouter = GoRouter(
 
 const routeSimple = {
   '/catalogue':'Catalogue',
+  '/panier':'Panier',
   '/mes-tickets':'Mes Tickets',
   '/mes-affectations':'Mes Affectations',
 };
@@ -93,6 +103,7 @@ const routeAdmin = {
   '/affectations':'Affectations',
   '/materiels':'Matériels',
   '/utilisateurs':'Utilisateurs',
+  '/categories':'Catégories',
   '/zones':'Zones',
   '/stocks':'Stocks'
 };
@@ -106,18 +117,19 @@ String _titleFromPath(String path) {
 
 List<RouteBase> _buildRoutes() {
   return [
-    GoRoute(path: '/catalogue',       builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/panier',          builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/mes-tickets',     builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/mes-affectations',builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/tickets-zone',  builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/historique',    builder: (c, s) => const Text("22222")),
-    GoRoute(path: '/dashboard',     builder: (c, s) => const Text("dash")),
-    GoRoute(path: '/affectations',  builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/materiels',     builder: (c, s) => const Text("333333")),
-    GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("ovao")),
-    GoRoute(path: '/zones',         builder: (c, s) => const Text("ovao")),
-    GoRoute(path: "/stocks",        builder: (c, s) => const Text("ovao")), 
-    GoRoute(path: "/mon-profil",        builder: (c, s) => const Text("ovao")), 
+    GoRoute(path: '/catalogue',       builder: (c, s) => const PanierPage()),
+    GoRoute(path: '/panier',          builder: (c, s) => const PanierRecapPage()),
+    GoRoute(path: '/mes-tickets',     builder: (c, s) => const TicketPage()),
+    GoRoute(path: '/mes-affectations',builder: (c, s) => const Text("Mes Affectations")),
+    GoRoute(path: '/tickets-zone',  builder: (c, s) => const TicketsZonePage()),
+    GoRoute(path: '/historique',    builder: (c, s) => const HistoriquePage()),
+    GoRoute(path: '/dashboard',     builder: (c, s) => const Text("Dashboard")),
+    GoRoute(path: '/affectations',  builder: (c, s) => const Text("Affectations")),
+    GoRoute(path: '/materiels',     builder: (c, s) => const MaterielPage()),
+    GoRoute(path: '/utilisateurs',  builder: (c, s) => const Text("Utilisateurs")),
+    GoRoute(path: '/categories',    builder: (c, s) => const CategoriePage()),
+    GoRoute(path: '/zones',         builder: (c, s) => const ZonePage()),
+    GoRoute(path: "/stocks",        builder: (c, s) => const StockPage()), 
+    GoRoute(path: "/mon-profil",    builder: (c, s) => const Text("Mon Profil")), 
     ];
 }
