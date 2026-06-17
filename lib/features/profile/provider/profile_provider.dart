@@ -1,5 +1,7 @@
 import 'package:materelia/features/profile/service/profile_service.dart';
+import 'package:materelia/shared/models/gerer.dart';
 import 'package:materelia/shared/models/utilisateur.dart';
+import 'package:materelia/shared/models/zone.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_provider.g.dart';
@@ -18,34 +20,28 @@ class ProfileController extends _$ProfileController {
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
-      return ref.read(profileServiceProvider).getCurrentUserProfile();
-    });
+    state = await AsyncValue.guard(
+      () => ref.read(profileServiceProvider).getCurrentUserProfile(),
+    );
   }
 
-  /*Future<void> updateProfile({
+  Future<void> updateProfil({
     required String nom,
     required String prenom,
   }) async {
-    final current = state.value;
-    if (current == null) return;
-
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
-      return ref.read(profileServiceProvider).updateProfile(
-        nom: nom,
-        prenom: prenom,
-      );
-    });
+    final updated = await ref
+        .read(profileServiceProvider)
+        .updateProfil(nom: nom, prenom: prenom);
+    state = AsyncData(updated);
   }
+}
 
-  Future<void> deleteProfile() async {
-    await ref.read(profileServiceProvider).deleteProfile();
+@riverpod
+Future<Gerer?> zoneGeree(Ref ref) {
+  return ref.read(profileServiceProvider).getZoneGeree();
+}
 
-    // éventuellement :
-    state = const AsyncData(null); // si Utilisateur?
-    // ou invalider le provider / rediriger vers Login
-  }*/
+@riverpod
+Future<Zone> zoneById(Ref ref, String idZone) {
+  return ref.read(profileServiceProvider).getZoneById(idZone);
 }
