@@ -14,6 +14,9 @@ class FeedbackCard extends StatelessWidget {
 
   final EdgeInsetsGeometry padding;
   final bool dense;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final Color? messageColor;
 
   const FeedbackCard({
     super.key,
@@ -24,6 +27,9 @@ class FeedbackCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
     this.dense = false,
     this.icon,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.messageColor,
   });
 
   Color get _background {
@@ -79,14 +85,20 @@ class FeedbackCard extends StatelessWidget {
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: _background,
+        color: backgroundColor ?? _background,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _foreground.withValues(alpha: .20)),
+        border: Border.all(
+          color: (foregroundColor ?? _foreground).withValues(alpha: .20),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon ?? _icon, color: _foreground, size: dense ? 20 : 24),
+          Icon(
+            icon ?? _icon,
+            color: foregroundColor ?? _foreground,
+            size: dense ? 20 : 24,
+          ),
 
           const SizedBox(width: 12),
 
@@ -98,7 +110,7 @@ class FeedbackCard extends StatelessWidget {
                   Text(
                     title!,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: _foreground,
+                      color: foregroundColor ?? _foreground,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -108,7 +120,7 @@ class FeedbackCard extends StatelessWidget {
                 Text(
                   message,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
+                    color: messageColor ?? AppColors.textPrimary,
                   ),
                 ),
 
