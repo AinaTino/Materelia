@@ -129,16 +129,16 @@ class SidebarDrawer extends StatelessWidget {
           Material(
             color: AppColors.secondaryContainer,
             child: ListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.info_outline),
               title: Text(
-                "Mon profil",
+                "À propos",
                 style: GoogleFonts.robotoFlex(
                   fontSize: 15,
                   color: AppColors.onSecondaryContainer,
                 ),
               ),
               onTap: () {
-                context.go('/mon-profil');
+                context.go('/a-propos');
                 Navigator.pop(context);
               },
             ),

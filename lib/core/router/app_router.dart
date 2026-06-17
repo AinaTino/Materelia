@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:materelia/core/shell/app_shell.dart";
 import "package:materelia/features/affectations/UI/affectations_page.dart";
+import "package:materelia/features/apropos/apropos_page.dart";
 import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
@@ -99,7 +100,7 @@ const routeSimple = {
   '/mes-tickets': 'Mes Tickets',
   '/mes-affectations': 'Mes Affectations',
   '/mes-demandes': 'Mes demandes d\'affectation',
-  '/panier':'Panier',
+  '/panier': 'Panier',
 };
 
 const routeTechnicien = {
@@ -118,38 +119,41 @@ const routeAdmin = {
   '/categories': 'Catégories',
 };
 
-const otherRoute = {};
+const otherRoute = {
+  '/mon-profil': 'Mon Profil',
+  '/a-propos': 'À propos',
+};
 String _titleFromPath(String path) {
-  return path == '/mon-profil'
-      ? "Mon Profil"
-      : (routeSimple[path] ??
-            (routeTechnicien[path] ?? (routeAdmin[path] ?? 'Materelia')));
+  return routeSimple[path] ??
+      (routeTechnicien[path] ??
+          (routeAdmin[path] ?? (otherRoute[path] ?? 'Materelia')));
 }
 
 List<RouteBase> _buildRoutes() {
   return [
-    GoRoute(path: '/catalogue',       builder: (c, s) => const PanierPage()),
-    GoRoute(path: '/panier',          builder: (c, s) => const PanierRecapPage()),
-    GoRoute(path: '/mes-tickets',     builder: (c, s) => const TicketPage()),
+    GoRoute(path: '/catalogue', builder: (c, s) => const PanierPage()),
+    GoRoute(path: '/panier', builder: (c, s) => const PanierRecapPage()),
+    GoRoute(path: '/mes-tickets', builder: (c, s) => const TicketPage()),
     GoRoute(
       path: '/mes-affectations',
       builder: (c, s) => const MesAffectationsPage(),
     ),
     GoRoute(path: '/mes-demandes', builder: (c, s) => const MesDemandesPage()),
-    GoRoute(path: '/tickets-zone',  builder: (c, s) => const TicketsZonePage()),
-    GoRoute(path: '/historique',    builder: (c, s) => const HistoriquePage()),
+    GoRoute(path: '/tickets-zone', builder: (c, s) => const TicketsZonePage()),
+    GoRoute(path: '/historique', builder: (c, s) => const HistoriquePage()),
     GoRoute(path: '/dashboard', builder: (c, s) => const DashboardPage()),
     GoRoute(path: '/affectations', builder: (c, s) => const AffectationsPage()),
     GoRoute(
       path: '/demandes-affectations',
       builder: (c, s) => const DemandesAffectationsPage(),
     ),
-    GoRoute(path: '/materiels',     builder: (c, s) => const MaterielPage()),
-    GoRoute(path: '/categories',    builder: (c, s) => const CategoriePage()),
+    GoRoute(path: '/materiels', builder: (c, s) => const MaterielPage()),
+    GoRoute(path: '/categories', builder: (c, s) => const CategoriePage()),
     GoRoute(path: '/utilisateurs', builder: (c, s) => const UtilisateursPage()),
-    GoRoute(path: '/zones',         builder: (c, s) => const ZonePage()),
-    GoRoute(path: "/stocks",        builder: (c, s) => const StockPage()), 
+    GoRoute(path: '/zones', builder: (c, s) => const ZonePage()),
+    GoRoute(path: "/stocks", builder: (c, s) => const StockPage()),
     GoRoute(path: "/mon-profil", builder: (c, s) => const ProfilPage()),
+    GoRoute(path: "/a-propos", builder: (c, s) => const AproposPage()),
     GoRoute(
       path: "/notifications",
       builder: (c, s) => const NotificationsPage(),

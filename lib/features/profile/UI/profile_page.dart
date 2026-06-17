@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
 import 'package:materelia/shared/models/utilisateur.dart';
 import 'package:materelia/shared/tools/date_convert.dart';
@@ -26,12 +27,25 @@ class ProfilPage extends ConsumerWidget {
       error: (e, _) => Center(
         child: FeedbackCard(type: FeedbackType.error, message: e.toString()),
       ),
-      data: (utilisateur) => Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: _ProfilContent(utilisateur: utilisateur),
+      data: (utilisateur) => DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primaryContainer.withValues(alpha: 0.55),
+              AppColors.secondaryContainer.withValues(alpha: 0.28),
+              AppColors.surface,
+            ],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 980),
+              child: _ProfilContent(utilisateur: utilisateur),
+            ),
           ),
         ),
       ),
@@ -39,9 +53,6 @@ class ProfilPage extends ConsumerWidget {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// CONTENU PROFIL
-// ════════════════════════════════════════════════════════════════
 class _ProfilContent extends ConsumerStatefulWidget {
   final Utilisateur utilisateur;
 
@@ -79,90 +90,101 @@ class _ProfilContentState extends ConsumerState<_ProfilContent> {
         _roleLabels[u.role] ?? (BadgeEtatType.secondary, u.role);
     final isTechnicien = u.role == 'technicien';
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final isDesktop = MediaQuery.sizeOf(context).width >= 900;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // ── Avatar + nom + badge ──────────────────────────────
-        Center(
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 44,
-                backgroundColor: colorScheme.primaryContainer,
-                child: Text(
-                  u.prenom[0].toUpperCase(),
-                  style: textTheme.displaySmall?.copyWith(
-                    color: colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+    return Card(
+      elevation: 0,
+      color: colorScheme.surface,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: BorderSide(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: 8,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, AppColors.secondary],
               ),
-              const SizedBox(height: 16),
-              Text(
-                '${u.prenom} ${u.nom}',
-                style: textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              BadgeEtat(etat: badgeType, label: badgeLabel),
-              if (u.createdAt != null) ...[
-                const SizedBox(height: 6),
-                Text(
-                  'Membre depuis ${dateConvert(u.createdAt!)}',
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ],
+            ),
           ),
-        ),
-
-        const SizedBox(height: 32),
-
-        // ── Card infos / édition ──────────────────────────────
-        Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: colorScheme.outlineVariant),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: _editMode
-                ? _EditForm(
-                    formKey: _formKey,
-                    nomCtrl: _nomCtrl,
-                    prenomCtrl: _prenomCtrl,
-                    submitting: _submitting,
-                    onSave: _save,
-                    onCancel: () => setState(() {
-                      _editMode = false;
-                      _nomCtrl.text = widget.utilisateur.nom;
-                      _prenomCtrl.text = widget.utilisateur.prenom;
-                    }),
+          Padding(
+            padding: EdgeInsets.all(isDesktop ? 32 : 20),
+            child: isDesktop
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 300,
+                        child: _ProfileHeader(
+                          utilisateur: u,
+                          badgeType: badgeType,
+                          badgeLabel: badgeLabel,
+                          editMode: _editMode,
+                          onEdit: () => setState(() => _editMode = true),
+                        ),
+                      ),
+                      const SizedBox(width: 28),
+                      SizedBox(
+                        height: isTechnicien ? 430 : 300,
+                        child: VerticalDivider(
+                          color: colorScheme.outlineVariant,
+                        ),
+                      ),
+                      const SizedBox(width: 28),
+                      Expanded(
+                        child: _ProfileDetails(
+                          editMode: _editMode,
+                          formKey: _formKey,
+                          nomCtrl: _nomCtrl,
+                          prenomCtrl: _prenomCtrl,
+                          submitting: _submitting,
+                          onSave: _save,
+                          onCancel: _cancelEdit,
+                          utilisateur: u,
+                          isTechnicien: isTechnicien,
+                        ),
+                      ),
+                    ],
                   )
-                : _InfosView(utilisateur: u),
-          ),
-        ),
-
-        if (!_editMode) ...[
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: () => setState(() => _editMode = true),
-            icon: const Icon(Icons.edit_outlined),
-            label: const Text('Modifier le profil'),
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _ProfileHeader(
+                        utilisateur: u,
+                        badgeType: badgeType,
+                        badgeLabel: badgeLabel,
+                        editMode: _editMode,
+                        onEdit: () => setState(() => _editMode = true),
+                      ),
+                      const SizedBox(height: 24),
+                      _ProfileDetails(
+                        editMode: _editMode,
+                        formKey: _formKey,
+                        nomCtrl: _nomCtrl,
+                        prenomCtrl: _prenomCtrl,
+                        submitting: _submitting,
+                        onSave: _save,
+                        onCancel: _cancelEdit,
+                        utilisateur: u,
+                        isTechnicien: isTechnicien,
+                      ),
+                    ],
+                  ),
           ),
         ],
-
-        // ── Card zone (technicien) ────────────────────────────
-        if (isTechnicien) ...[const SizedBox(height: 20), _ZoneCard()],
-      ],
+      ),
     );
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _editMode = false;
+      _nomCtrl.text = widget.utilisateur.nom;
+      _prenomCtrl.text = widget.utilisateur.prenom;
+    });
   }
 
   Future<void> _save() async {
@@ -195,9 +217,210 @@ class _ProfilContentState extends ConsumerState<_ProfilContent> {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// VUE INFOS (lecture)
-// ════════════════════════════════════════════════════════════════
+class _ProfileHeader extends StatelessWidget {
+  final Utilisateur utilisateur;
+  final BadgeEtatType badgeType;
+  final String badgeLabel;
+  final bool editMode;
+  final VoidCallback onEdit;
+
+  const _ProfileHeader({
+    required this.utilisateur,
+    required this.badgeType,
+    required this.badgeLabel,
+    required this.editMode,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final initial = utilisateur.prenom.trim().isNotEmpty
+        ? utilisateur.prenom.trim()[0].toUpperCase()
+        : '?';
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.primaryContainer.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.12),
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  blurRadius: 24,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 48,
+              backgroundColor: colorScheme.primary,
+              child: Text(
+                initial,
+                style: textTheme.displaySmall?.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            '${utilisateur.prenom} ${utilisateur.nom}',
+            style: textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          BadgeEtat(etat: badgeType, label: badgeLabel),
+          if (utilisateur.createdAt != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Membre depuis ${dateConvert(utilisateur.createdAt!)}',
+              style: textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+          if (!editMode) ...[
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: onEdit,
+                icon: const Icon(Icons.edit_outlined),
+                label: const Text('Modifier le profil'),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileDetails extends StatelessWidget {
+  final bool editMode;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController nomCtrl;
+  final TextEditingController prenomCtrl;
+  final bool submitting;
+  final VoidCallback onSave;
+  final VoidCallback onCancel;
+  final Utilisateur utilisateur;
+  final bool isTechnicien;
+
+  const _ProfileDetails({
+    required this.editMode,
+    required this.formKey,
+    required this.nomCtrl,
+    required this.prenomCtrl,
+    required this.submitting,
+    required this.onSave,
+    required this.onCancel,
+    required this.utilisateur,
+    required this.isTechnicien,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _ProfilePanel(
+          icon: editMode ? Icons.edit_note_outlined : Icons.account_box_outlined,
+          title: editMode ? 'Modifier mes informations' : 'Informations',
+          child: editMode
+              ? _EditForm(
+                  formKey: formKey,
+                  nomCtrl: nomCtrl,
+                  prenomCtrl: prenomCtrl,
+                  submitting: submitting,
+                  onSave: onSave,
+                  onCancel: onCancel,
+                )
+              : _InfosView(utilisateur: utilisateur),
+        ),
+        if (isTechnicien) ...[
+          const SizedBox(height: 18),
+          const _ZoneCard(),
+        ],
+      ],
+    );
+  }
+}
+
+class _ProfilePanel extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Widget child;
+
+  const _ProfilePanel({
+    required this.icon,
+    required this.title,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, size: 18, color: colorScheme.primary),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
 class _InfosView extends StatelessWidget {
   final Utilisateur utilisateur;
 
@@ -229,9 +452,6 @@ class _InfosView extends StatelessWidget {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// FORMULAIRE ÉDITION
-// ════════════════════════════════════════════════════════════════
 class _EditForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nomCtrl;
@@ -310,92 +530,59 @@ class _EditForm extends StatelessWidget {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// CARD ZONE TECHNICIEN
-// ════════════════════════════════════════════════════════════════
 class _ZoneCard extends ConsumerWidget {
   const _ZoneCard();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: colorScheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.warehouse_outlined, color: colorScheme.primary),
-                const SizedBox(width: 8),
-                Text(
-                  'Zone gérée',
-                  style: textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+    return _ProfilePanel(
+      icon: Icons.warehouse_outlined,
+      title: 'Zone gérée',
+      child: ref
+          .watch(zoneGereeProvider)
+          .when(
+            loading: () => const LinearProgressIndicator(),
+            error: (e, _) => Text(
+              'Erreur : $e',
+              style: const TextStyle(color: Colors.red),
             ),
-            const SizedBox(height: 16),
-            ref
-                .watch(zoneGereeProvider)
-                .when(
-                  loading: () => const LinearProgressIndicator(),
-                  error: (e, _) => Text(
-                    'Erreur : $e',
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                  data: (gerer) => gerer == null
-                      ? const FeedbackCard(
-                          type: FeedbackType.warning,
-                          message: 'Aucune zone ne vous est assignée.',
-                          dense: true,
-                        )
-                      : ref
-                            .watch(zoneByIdProvider(gerer.idZone))
-                            .when(
-                              loading: () => const LinearProgressIndicator(),
-                              error: (e, _) => Text(
-                                'Erreur : $e',
-                                style: const TextStyle(color: Colors.red),
-                              ),
-                              data: (zone) => Column(
-                                children: [
-                                  _ProfilRow(
-                                    icon: Icons.location_on_outlined,
-                                    label: 'Nom',
-                                    value: zone.nom,
-                                  ),
-                                  if (zone.description != null) ...[
-                                    const Divider(height: 24),
-                                    _ProfilRow(
-                                      icon: Icons.info_outline,
-                                      label: 'Description',
-                                      value: zone.description!,
-                                    ),
-                                  ],
-                                ],
-                              ),
+            data: (gerer) => gerer == null
+                ? const FeedbackCard(
+                    type: FeedbackType.warning,
+                    message: 'Aucune zone ne vous est assignée.',
+                    dense: true,
+                  )
+                : ref
+                      .watch(zoneByIdProvider(gerer.idZone))
+                      .when(
+                        loading: () => const LinearProgressIndicator(),
+                        error: (e, _) => Text(
+                          'Erreur : $e',
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                        data: (zone) => Column(
+                          children: [
+                            _ProfilRow(
+                              icon: Icons.location_on_outlined,
+                              label: 'Nom',
+                              value: zone.nom,
                             ),
-                ),
-          ],
-        ),
-      ),
+                            if (zone.description != null) ...[
+                              const Divider(height: 24),
+                              _ProfilRow(
+                                icon: Icons.info_outline,
+                                label: 'Description',
+                                value: zone.description!,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+          ),
     );
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// WIDGET LIGNE PROFIL
-// ════════════════════════════════════════════════════════════════
 class _ProfilRow extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -414,7 +601,14 @@ class _ProfilRow extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 20, color: colorScheme.primary),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: colorScheme.secondaryContainer.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, size: 18, color: colorScheme.primary),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -426,11 +620,11 @@ class _ProfilRow extends StatelessWidget {
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 value,
                 style: textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
