@@ -115,9 +115,7 @@ const routeAdmin = {
   '/utilisateurs': 'Utilisateurs',
   '/zones': 'Zones',
   '/stocks': 'Stocks',
-  '/categories':'Catégories',
-  '/zones':'Zones',
-  '/stocks':'Stocks'
+  '/categories': 'Catégories',
 };
 
 const otherRoute = {};

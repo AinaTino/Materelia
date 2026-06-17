@@ -72,7 +72,7 @@ class MaterielCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        BadgeEtat(etat: etat),
+                        BadgeEtat.string(etat: etat),
                       ],
                     ),
                     const SizedBox(height: 4),

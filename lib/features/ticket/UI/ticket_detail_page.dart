@@ -79,7 +79,7 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                BadgeEtat(etat: etat),
+                                BadgeEtat.string(etat: etat),
                               ],
                             ),
                             const Divider(height: 24),

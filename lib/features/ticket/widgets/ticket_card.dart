@@ -70,7 +70,7 @@ class TicketCard extends StatelessWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        BadgeEtat(etat: etat),
+                        BadgeEtat.string(etat: etat),
                       ],
                     ),
                     const SizedBox(height: 4),

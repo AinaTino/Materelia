@@ -109,7 +109,7 @@ class MaterielDetailPage extends ConsumerWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                BadgeEtat(etat: etat),
+                                BadgeEtat.string(etat: etat),
                               ],
                             ),
                             const SizedBox(height: 8),
