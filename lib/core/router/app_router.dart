@@ -10,6 +10,7 @@ import "package:materelia/features/demandes_affectations/UI/demandes_affectation
 import "package:materelia/features/demandes_affectations/utilisateurs/UI/utilisateurs_page.dart";
 import "package:materelia/features/mes_affectations/UI/mes_affectations_page.dart";
 import "package:materelia/features/mes_demandes/UI/mes_demandes_page.dart";
+import "package:materelia/features/notifications/UI/notifications_page.dart";
 import "package:materelia/features/profile/UI/profile_page.dart";
 import "package:materelia/shared/services/auth_notifier.dart";
 import "package:materelia/shared/services/supabase_service.dart";
@@ -137,5 +138,9 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/zones', builder: (c, s) => const Text("ovao")),
     GoRoute(path: "/stocks", builder: (c, s) => const Text("ovao")),
     GoRoute(path: "/mon-profil", builder: (c, s) => const ProfilPage()),
+    GoRoute(
+      path: "/notifications",
+      builder: (c, s) => const NotificationsPage(),
+    ),
   ];
 }
