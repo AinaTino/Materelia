@@ -1,0 +1,43 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'demande_affectation.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_DemandeAffectation _$DemandeAffectationFromJson(Map<String, dynamic> json) =>
+    _DemandeAffectation(
+      id: json['id_demande'] as String,
+      dateDemande: json['date_demande'] == null
+          ? null
+          : DateTime.parse(json['date_demande'] as String),
+      justification: json['justification'] as String,
+      etat: json['etat'] as String,
+      motifRefus: json['motif_refus'] as String?,
+      serviceBeneficiaire: json['service_beneficiaire'] as String,
+      dateAction: json['date_action'] == null
+          ? null
+          : DateTime.parse(json['date_action'] as String),
+      idDemandeur: json['id_demandeur'] as String,
+      idValideur: json['id_valideur'] as String?,
+      idCategorie: json['id_categorie'] as String,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+    );
+
+Map<String, dynamic> _$DemandeAffectationToJson(_DemandeAffectation instance) =>
+    <String, dynamic>{
+      'id_demande': instance.id,
+      'date_demande': instance.dateDemande?.toIso8601String(),
+      'justification': instance.justification,
+      'etat': instance.etat,
+      'motif_refus': instance.motifRefus,
+      'service_beneficiaire': instance.serviceBeneficiaire,
+      'date_action': instance.dateAction?.toIso8601String(),
+      'id_demandeur': instance.idDemandeur,
+      'id_valideur': instance.idValideur,
+      'id_categorie': instance.idCategorie,
+      'created_at': instance.createdAt?.toIso8601String(),
+    };
