@@ -1,0 +1,204 @@
+Folder PATH listing for volume New Volume
+Volume serial number is 00000064 1471:D618
+D:.
+|   .env
+|   .flutter-plugins-dependencies
+|   .gitignore
+|   .metadata
+|   analysis_options.yaml
+|   devtools_options.yaml
+|   gestion_materiels_conception.md
+|   LICENSE
+|   pubspec.lock
+|   pubspec.yaml
+|   README.md
+|   structure.txt
+|
++---lib
+|   |   main.dart
+|   |   
+|   +---assets
+|   |   \---images
+|   |           home.png
+|   |           logo-nobg.png
+|   |           logo-withbg.png
+|   |           
+|   +---core
+|   |   +---constants
+|   |   |       app_constants.dart
+|   |   |       
+|   |   +---router
+|   |   |       app_router.dart
+|   |   |       
+|   |   +---shell
+|   |   |       app_shell.dart
+|   |   |       sidebar_drawer.dart
+|   |   |       sidebar_rail.dart
+|   |   |       topbar.dart
+|   |   |       
+|   |   \---theme
+|   |           app_colors.dart
+|   |           app_theme.dart
+|   |           
+|   +---features
+|   |   +---auth
+|   |   |   +---provider
+|   |   |   |       auth_provider.dart
+|   |   |   |       auth_provider.g.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       auth_exception.dart
+|   |   |   |       auth_service.dart
+|   |   |   |       auth_validation.dart
+|   |   |   |       
+|   |   |   \---UI
+|   |   |           auth_page.dart
+|   |   |           signin_page.dart
+|   |   |           signup_page.dart
+|   |   |           
+|   |   +---categorie
+|   |   |   +---provider
+|   |   |   |       categorie_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       categorie_service.dart
+|   |   |   |       
+|   |   |   \---UI
+|   |   |           categorie_form_page.dart
+|   |   |           categorie_page.dart
+|   |   |           
+|   |   +---materiel
+|   |   |   +---provider
+|   |   |   |       materiel_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       materiel_service.dart
+|   |   |   |       
+|   |   |   +---UI
+|   |   |   |       materiel_detail_page.dart
+|   |   |   |       materiel_form_page.dart
+|   |   |   |       materiel_page.dart
+|   |   |   |       
+|   |   |   \---widgets
+|   |   |           materiel_card.dart
+|   |   |           
+|   |   +---notification
+|   |   |   +---provider
+|   |   |   |       notification_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       notification_service.dart
+|   |   |   |       
+|   |   |   \---UI
+|   |   |           notification_page.dart
+|   |   |           
+|   |   +---panier
+|   |   |   +---provider
+|   |   |   |       panier_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       panier_service.dart
+|   |   |   |       
+|   |   |   +---UI
+|   |   |   |       panier_page.dart
+|   |   |   |       panier_recap_page.dart
+|   |   |   |       
+|   |   |   \---widgets
+|   |   |           categorie_card.dart
+|   |   |           
+|   |   +---profile
+|   |   |   +---provider
+|   |   |   |       profile_provider.dart
+|   |   |   |       profile_provider.g.dart
+|   |   |   |       
+|   |   |   \---service
+|   |   |           profile_service.dart
+|   |   |           
+|   |   +---stock
+|   |   |   +---provider
+|   |   |   |       stock_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       stock_service.dart
+|   |   |   |       
+|   |   |   \---UI
+|   |   |           stock_form_page.dart
+|   |   |           stock_page.dart
+|   |   |           
+|   |   +---ticket
+|   |   |   +---provider
+|   |   |   |       ticket_provider.dart
+|   |   |   |       
+|   |   |   +---service
+|   |   |   |       ticket_service.dart
+|   |   |   |       
+|   |   |   +---UI
+|   |   |   |       historique_page.dart
+|   |   |   |       tickets_zone_page.dart
+|   |   |   |       ticket_detail_page.dart
+|   |   |   |       ticket_page.dart
+|   |   |   |       
+|   |   |   \---widgets
+|   |   |           ticket_card.dart
+|   |   |           
+|   |   \---zone
+|   |       +---provider
+|   |       |       zone_provider.dart
+|   |       |       
+|   |       +---service
+|   |       |       zone_service.dart
+|   |       |       
+|   |       \---UI
+|   |               zone_form_page.dart
+|   |               zone_page.dart
+|   |               
+|   \---shared
+|       +---models
+|       |       affectation.dart
+|       |       affectation.freezed.dart
+|       |       affectation.g.dart
+|       |       categorie.dart
+|       |       categorie.freezed.dart
+|       |       categorie.g.dart
+|       |       demandes_affectations.dart
+|       |       demandes_affectations.freezed.dart
+|       |       demandes_affectations.g.dart
+|       |       gerer.dart
+|       |       gerer.freezed.dart
+|       |       gerer.g.dart
+|       |       ligneticket.dart
+|       |       ligneticket.freezed.dart
+|       |       ligneticket.g.dart
+|       |       materiel.dart
+|       |       materiel.freezed.dart
+|       |       materiel.g.dart
+|       |       notification.dart
+|       |       notification.freezed.dart
+|       |       notification.g.dart
+|       |       stock.dart
+|       |       stock.freezed.dart
+|       |       stock.g.dart
+|       |       ticket.dart
+|       |       ticket.freezed.dart
+|       |       ticket.g.dart
+|       |       utilisateur.dart
+|       |       utilisateur.freezed.dart
+|       |       utilisateur.g.dart
+|       |       zone.dart
+|       |       zone.freezed.dart
+|       |       zone.g.dart
+|       |       
+|       +---services
+|       |       auth_notifier.dart
+|       |       supabase_service.dart
+|       |       user_notifier.dart
+|       |       
+|       \---widgets
+|               animation_verticale.dart
+|               badge_etat.dart
+|               empty_state.dart
+|               loading.dart
+|               
++---test
+|       widget_test.dart
+|       

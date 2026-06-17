@@ -7,7 +7,7 @@ import 'package:materelia/core/theme/app_colors.dart';
 
 class SidebarDrawer extends StatelessWidget {
   final String role;
-  const SidebarDrawer({super.key,required this.role});
+  const SidebarDrawer({super.key, required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,10 @@ class SidebarDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 28,
                   backgroundColor: Colors.white,
-                  backgroundImage: const AssetImage('lib/assets/images/logo-withbg.png'),
+                  backgroundImage: AssetImage('lib/assets/images/logo-withbg.png'),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -41,90 +41,108 @@ class SidebarDrawer extends StatelessWidget {
               ],
             ),
           ),
-          
-          Container(
-            padding: const EdgeInsets.only(left:15,top: 16,bottom:10),
+          // ✅ Utiliser Container avec Material au lieu de ColoredBox
+          Material(
             color: AppColors.secondaryContainer,
-            child: Row(
-              children: [
-                Icon(Icons.dashboard,color: AppColors.onSecondaryContainer,),
-                Text("   Mon espace", style: GoogleFonts.robotoFlex(
-                  fontSize: 15,
-                  color: AppColors.onSecondaryContainer
-                ),)
-              ],
-            ),),
-          for (final s in routeSimple.entries) ...{
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, top: 16, bottom: 10),
+              child: Row(
+                children: [
+                  Icon(Icons.dashboard, color: AppColors.onSecondaryContainer),
+                  Text(
+                    "   Mon espace",
+                    style: GoogleFonts.robotoFlex(
+                      fontSize: 15,
+                      color: AppColors.onSecondaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          for (final s in routeSimple.entries) ...[
             ListTile(
               title: Text(s.value),
               onTap: () {
-              context.go(s.key);
-              Navigator.pop(context);
+                context.go(s.key);
+                Navigator.pop(context);
               },
             ),
-          },
-
-          if (role == AppConstants.roleTechnicien || role == AppConstants.roleAdmin)...{
-            Container(
-              padding: const EdgeInsets.only(left:5,top: 16,bottom:10),
+          ],
+          if (role == AppConstants.roleTechnicien || role == AppConstants.roleAdmin) ...[
+            Material(
               color: AppColors.secondaryContainer,
-              child: Row(
-                children: [
-                  Icon(Icons.build,color: AppColors.onSecondaryContainer,),
-                  Text("  Technicien", style: GoogleFonts.robotoFlex(
-                    fontSize: 15,
-                    color: AppColors.onSecondaryContainer
-                  ),)
-                ],
-              ),),
-            for (final s in routeTechnicien.entries) ...{
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, top: 16, bottom: 10),
+                child: Row(
+                  children: [
+                    Icon(Icons.build, color: AppColors.onSecondaryContainer),
+                    Text(
+                      "  Technicien",
+                      style: GoogleFonts.robotoFlex(
+                        fontSize: 15,
+                        color: AppColors.onSecondaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            for (final s in routeTechnicien.entries) ...[
               ListTile(
                 title: Text(s.value),
                 onTap: () {
-                context.go(s.key);
+                  context.go(s.key);
                   Navigator.pop(context);
                 },
               ),
-            },
-          },
-
-          if (role == AppConstants.roleAdmin)...{
-            Container(
-              padding: const EdgeInsets.only(left:5,top: 16,bottom:10),
+            ],
+          ],
+          if (role == AppConstants.roleAdmin) ...[
+            Material(
               color: AppColors.secondaryContainer,
-              child: Row(
-                children: [
-                  Icon(Icons.admin_panel_settings,color: AppColors.onSecondaryContainer,),
-                  Text("  Administration", style: GoogleFonts.robotoFlex(
-                    fontSize: 15,
-                    color: AppColors.onSecondaryContainer
-                  ),)
-                ],
-              ),),
-            for (final s in routeAdmin.entries) ...{
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, top: 16, bottom: 10),
+                child: Row(
+                  children: [
+                    Icon(Icons.admin_panel_settings, color: AppColors.onSecondaryContainer),
+                    Text(
+                      "  Administration",
+                      style: GoogleFonts.robotoFlex(
+                        fontSize: 15,
+                        color: AppColors.onSecondaryContainer,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            for (final s in routeAdmin.entries) ...[
               ListTile(
                 title: Text(s.value),
                 onTap: () {
-                context.go(s.key);
+                  context.go(s.key);
                 },
               ),
-            },
-          },
-          Container(
-  
+            ],
+          ],
+          Material(
             color: AppColors.secondaryContainer,
-            child: 
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Mon profil", style: GoogleFonts.robotoFlex(
-                    fontSize: 15,
-                    color: AppColors.onSecondaryContainer
-                  ),),
+            child: ListTile(
+              leading: const Icon(Icons.person),
+              title: Text(
+                "Mon profil",
+                style: GoogleFonts.robotoFlex(
+                  fontSize: 15,
+                  color: AppColors.onSecondaryContainer,
+                ),
+              ),
               onTap: () {
                 context.go('/mon-profil');
                 Navigator.pop(context);
-                },
-            )),
+              },
+            ),
+          ),
         ],
       ),
     );
