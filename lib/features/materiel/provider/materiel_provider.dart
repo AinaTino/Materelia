@@ -5,13 +5,28 @@ import '../service/materiel_service.dart';
 
 final materielServiceProvider = Provider((ref) => MaterielService());
 
-/// Liste des matériels filtrés
-final materielsProvider = FutureProvider.autoDispose.family<List<Map<String, dynamic>>, Map<String, dynamic>?>(
-  (ref, filters) async {
-    final svc = ref.read(materielServiceProvider);
-    return svc.fetchMateriels(filters: filters);
-  },
-);
+// ✅ Utiliser un NotifierProvider pour les filtres (compatible avec toutes les versions)
+class MaterielFiltersNotifier extends Notifier<Map<String, dynamic>?> {
+  @override
+  Map<String, dynamic>? build() {
+    return null;
+  }
+
+  void setFilters(Map<String, dynamic>? filters) {
+    state = filters;
+  }
+}
+
+final materielFiltersProvider = NotifierProvider<MaterielFiltersNotifier, Map<String, dynamic>?>(() {
+  return MaterielFiltersNotifier();
+});
+
+// ✅ Utiliser un provider qui lit les filtres
+final materielsProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  final filters = ref.watch(materielFiltersProvider);
+  final svc = ref.read(materielServiceProvider);
+  return svc.fetchMateriels(filters: filters);
+});
 
 /// Détail d'un matériel
 final materielDetailProvider = FutureProvider.autoDispose.family<Map<String, dynamic>?, String>((ref, id) async {

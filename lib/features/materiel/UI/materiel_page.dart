@@ -4,7 +4,6 @@ import 'package:materelia/core/constants/app_constants.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
 import 'package:materelia/shared/widgets/empty_state.dart';
 import 'package:materelia/shared/widgets/error_view.dart';
-import 'package:materelia/shared/widgets/filtre_chips.dart';
 import 'package:materelia/shared/widgets/loading.dart';
 import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/materiel_provider.dart';
@@ -27,6 +26,7 @@ class _MaterielPageState extends ConsumerState<MaterielPage> {
   String? _filtreCategorie;
 
   final Map<String, String> _etats = {
+    '': 'Tous', // ✅ Ajout de l'option "Tous"
     'EN_STOCK': 'En stock',
     'EMPRUNTE': 'Emprunté',
     'AFFECTE': 'Affecté',
@@ -40,19 +40,26 @@ class _MaterielPageState extends ConsumerState<MaterielPage> {
     if (widget.initialCategorieId != null) {
       _filtreCategorie = widget.initialCategorieId;
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateFilters();
+    });
+  }
+
+  void _updateFilters() {
+    final filters = <String, dynamic>{};
+    if (_filtreCategorie != null && _filtreCategorie!.isNotEmpty) {
+      filters['id_categorie'] = _filtreCategorie;
+    }
+    if (_filtreEtat != null && _filtreEtat!.isNotEmpty) {
+      filters['etat'] = _filtreEtat;
+    }
+    ref.read(materielFiltersProvider.notifier).setFilters(filters.isEmpty ? null : filters);
   }
 
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileControllerProvider);
-    final isLoading = profileAsync.isLoading;
-
-    // Build filters
-    final Map<String, dynamic> filters = {};
-    if (_filtreCategorie != null) filters['id_categorie'] = _filtreCategorie;
-    if (_filtreEtat != null) filters['etat'] = _filtreEtat;
-
-    final materielsAsync = ref.watch(materielsProvider(filters.isEmpty ? null : filters));
+    final materielsAsync = ref.watch(materielsProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
@@ -71,9 +78,13 @@ class _MaterielPageState extends ConsumerState<MaterielPage> {
             children: [
               Toolbar(
                 showDetail: false,
-                onSearch: (v) => setState(() => _search = v),
+                onSearch: (v) => setState(() {
+                  _search = v;
+                }),
                 onToggleDetail: () {},
-                onRefresh: () => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                onRefresh: () {
+                  ref.invalidate(materielsProvider);
+                },
                 creer: isAdmin
                     ? () {
                         Navigator.of(context).push(
@@ -87,67 +98,271 @@ class _MaterielPageState extends ConsumerState<MaterielPage> {
               const Divider(height: 1),
 
               // Filtres
-              categoriesAsync.when(
-                data: (cats) {
-                  final categoriesMap = {
-                    '': 'Toutes catégories',
-                    for (final cat in cats)
-                      cat['id_categorie']?.toString() ?? '': cat['nom']?.toString() ?? '',
-                  };
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                color: Colors.grey.shade50,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Si l'écran est large, afficher tout en ligne
+                    if (constraints.maxWidth > 600) {
+                      return Row(
+                        children: [
+                          // Filtre État
+                          Expanded(
+                            flex: 3,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  const Text('État: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87)),
+                                  ..._etats.entries.map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: FilterChip(
+                                        label: Text(e.value, style: const TextStyle(fontSize: 11)),
+                                        selected: _filtreEtat == e.key,
+                                        onSelected: (_) {
+                                          setState(() {
+                                            _filtreEtat = _filtreEtat == e.key ? null : e.key;
+                                          });
+                                          _updateFilters();
+                                        },
+                                        visualDensity: VisualDensity.compact,
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                        selectedColor: Colors.blue.shade100,
+                                        backgroundColor: Colors.white,
+                                        labelStyle: TextStyle(
+                                          color: _filtreEtat == e.key ? Colors.blue.shade700 : Colors.black87,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          // Filtre Catégorie
+                          Expanded(
+                            flex: 2,
+                            child: categoriesAsync.when(
+                              data: (cats) {
+                                final categoriesList = <String, String>{
+                                  '': 'Toutes catégories',
+                                };
+                                for (final cat in cats) {
+                                  final id = cat['id_categorie']?.toString() ?? '';
+                                  final nom = cat['nom']?.toString() ?? '';
+                                  if (id.isNotEmpty) {
+                                    categoriesList[id] = nom;
+                                  }
+                                }
 
-                  return Column(
-                    children: [
-                      FiltreChips(
-                        filtreActif: _filtreEtat,
-                        etats: _etats,
-                        onFiltreChange: (etat) => setState(() => _filtreEtat = etat),
-                      ),
-                      const Divider(height: 1),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        child: Row(
-                          children: [
-                            const Text('Catégorie: '),
-                            ...categoriesMap.entries.map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.only(right: 6),
-                                child: FilterChip(
-                                  label: Text(e.value),
-                                  selected: _filtreCategorie == e.key,
-                                  onSelected: (_) => setState(
-                                    () => _filtreCategorie = _filtreCategorie == e.key ? null : e.key,
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: Colors.grey.shade300),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        value: _filtreCategorie,
+                                        isDense: true,
+                                        hint: const Text(
+                                          'Catégorie',
+                                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                                        ),
+                                        items: categoriesList.entries.map((entry) {
+                                          return DropdownMenuItem<String>(
+                                            value: entry.key,
+                                            child: Text(
+                                              entry.value,
+                                              style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _filtreCategorie = value;
+                                          });
+                                          _updateFilters();
+                                        },
+                                        style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                        dropdownColor: Colors.white,
+                                        icon: const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black54),
+                                        selectedItemBuilder: (context) {
+                                          return categoriesList.entries.map((entry) {
+                                            return Text(
+                                              entry.value,
+                                              style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          }).toList();
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              loading: () => const SizedBox(
+                                height: 36,
+                                child: Center(
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
                                   ),
                                 ),
                               ),
+                              error: (e, _) => Text(
+                                'Erreur: $e',
+                                style: const TextStyle(fontSize: 12, color: Colors.red),
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (e, _) => const SizedBox.shrink(),
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Écran mobile : empiler verticalement
+                      return Column(
+                        children: [
+                          // Filtre État (horizontal scroll)
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                const Text('État: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87)),
+                                ..._etats.entries.map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.only(right: 4),
+                                    child: FilterChip(
+                                      label: Text(e.value, style: const TextStyle(fontSize: 11)),
+                                      selected: _filtreEtat == e.key,
+                                      onSelected: (_) {
+                                        setState(() {
+                                          _filtreEtat = _filtreEtat == e.key ? null : e.key;
+                                        });
+                                        _updateFilters();
+                                      },
+                                      visualDensity: VisualDensity.compact,
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                      selectedColor: Colors.blue.shade100,
+                                      backgroundColor: Colors.white,
+                                      labelStyle: TextStyle(
+                                        color: _filtreEtat == e.key ? Colors.blue.shade700 : Colors.black87,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          // Filtre Catégorie
+                          categoriesAsync.when(
+                            data: (cats) {
+                              final categoriesList = <String, String>{
+                                '': 'Toutes catégories',
+                              };
+                              for (final cat in cats) {
+                                final id = cat['id_categorie']?.toString() ?? '';
+                                final nom = cat['nom']?.toString() ?? '';
+                                if (id.isNotEmpty) {
+                                  categoriesList[id] = nom;
+                                }
+                              }
+
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.grey.shade300),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _filtreCategorie,
+                                      isDense: true,
+                                      hint: const Text(
+                                        'Catégorie',
+                                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                                      ),
+                                      items: categoriesList.entries.map((entry) {
+                                        return DropdownMenuItem<String>(
+                                          value: entry.key,
+                                          child: Text(
+                                            entry.value,
+                                            style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _filtreCategorie = value;
+                                        });
+                                        _updateFilters();
+                                      },
+                                      style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                      dropdownColor: Colors.white,
+                                      icon: const Icon(Icons.arrow_drop_down, size: 20, color: Colors.black54),
+                                      selectedItemBuilder: (context) {
+                                        return categoriesList.entries.map((entry) {
+                                          return Text(
+                                            entry.value,
+                                            style: const TextStyle(fontSize: 12, color: Colors.black87),
+                                            overflow: TextOverflow.ellipsis,
+                                          );
+                                        }).toList();
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            loading: () => const SizedBox(
+                              height: 36,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              ),
+                            ),
+                            error: (e, _) => Text(
+                              'Erreur: $e',
+                              style: const TextStyle(fontSize: 12, color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
               const Divider(height: 1),
 
-              SizedBox(
-                height: 2,
-                child: isLoading
-                    ? const LinearProgressIndicator()
-                    : const SizedBox.shrink(),
-              ),
+              // Indicateur de chargement
+              if (materielsAsync.isLoading)
+                const LinearProgressIndicator(),
 
               Expanded(
                 child: materielsAsync.when(
-                  loading: () => const AppLoading(),
+                  loading: () => const Center(child: AppLoading()),
                   error: (e, _) => ErrorView(
                     message: e.toString(),
-                    onRetry: () => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                    onRetry: () {
+                      ref.invalidate(materielsProvider);
+                    },
                   ),
                   data: (mats) {
-                    // Filtrer par recherche
                     var filtered = mats;
                     if (_search.isNotEmpty) {
                       final search = _search.toLowerCase();
@@ -169,7 +384,10 @@ class _MaterielPageState extends ConsumerState<MaterielPage> {
                     }
 
                     return RefreshIndicator(
-                      onRefresh: () async => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                      onRefresh: () async {
+                        ref.invalidate(materielsProvider);
+                        await Future.delayed(const Duration(milliseconds: 100));
+                      },
                       child: ListView.builder(
                         padding: const EdgeInsets.all(12),
                         itemCount: filtered.length,

@@ -206,82 +206,79 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        controller: _codeController,
-                                        keyboardType: TextInputType.number,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Code de remise (6 chiffres)',
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                        validator: (val) {
-                                          if (val == null || val.length != 6) {
-                                            return 'Code à 6 chiffres requis';
-                                          }
-                                          return null;
-                                        },
+                                TextFormField(
+                                  controller: _codeController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Code de remise (6 chiffres)',
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                  validator: (val) {
+                                    if (val == null || val.length != 6) {
+                                      return 'Code à 6 chiffres requis';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 24,
                                       ),
+                                      backgroundColor: AppColors.success,
                                     ),
-                                    const SizedBox(width: 12),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
-                                          horizontal: 24,
-                                        ),
-                                        backgroundColor: AppColors.success,
-                                      ),
-                                      onPressed: actionState.isLoading
-                                          ? null
-                                          : () async {
-                                              if (_formKey.currentState?.validate() ?? false) {
-                                                try {
-                                                  await ref
-                                                      .read(ticketActionProvider.notifier)
-                                                      .confirmerRemise(
-                                                        id,
-                                                        _codeController.text.trim(),
-                                                        user.id,
-                                                        userId: user.id,
-                                                      );
-                                                  if (context.mounted) {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      const SnackBar(
-                                                        content: Text('Remise confirmée'),
-                                                        backgroundColor: Colors.green,
-                                                      ),
+                                    onPressed: actionState.isLoading
+                                        ? null
+                                        : () async {
+                                            if (_formKey.currentState?.validate() ?? false) {
+                                              try {
+                                                await ref
+                                                    .read(ticketActionProvider.notifier)
+                                                    .confirmerRemise(
+                                                      id,
+                                                      _codeController.text.trim(),
+                                                      user.id,
+                                                      userId: user.id,
                                                     );
-                                                    _codeController.clear();
-                                                  }
-                                                } catch (e) {
-                                                  if (context.mounted) {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('Erreur : $e'),
-                                                        backgroundColor: Colors.red,
-                                                      ),
-                                                    );
-                                                  }
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('Remise confirmée'),
+                                                      backgroundColor: Colors.green,
+                                                    ),
+                                                  );
+                                                  _codeController.clear();
+                                                }
+                                              } catch (e) {
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text('Erreur : $e'),
+                                                      backgroundColor: Colors.red,
+                                                    ),
+                                                  );
                                                 }
                                               }
-                                            },
-                                      child: actionState.isLoading
-                                          ? const SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'Confirmer la remise',
-                                              style: TextStyle(color: Colors.white),
+                                            }
+                                          },
+                                    child: actionState.isLoading
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
                                             ),
-                                    ),
-                                  ],
+                                          )
+                                        : const Text(
+                                            'Confirmer la remise',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                  ),
                                 ),
                               ],
                             ),
