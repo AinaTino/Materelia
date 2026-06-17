@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/core/constants/app_constants.dart';
 import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
+import 'package:materelia/shared/widgets/app_snack_bar.dart';
+import 'package:materelia/shared/widgets/feedback_card.dart';
+import 'package:materelia/shared/widgets/loading.dart';
+import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/ticket_provider.dart';
 
 class TicketsZonePage extends ConsumerStatefulWidget {
@@ -35,18 +39,14 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
         final isTechOrAdmin = user.role == AppConstants.roleTechnicien ||
             user.role == AppConstants.roleAdmin;
         if (!isTechOrAdmin) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.lock_outline, size: 64, color: Colors.grey),
-                SizedBox(height: 16),
-                Text(
-                  'Accès réservé',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text('Cette page est réservée aux techniciens et administrateurs.'),
-              ],
+          return Scaffold(
+            body: Center(
+              child: FeedbackCard(
+                icon: Icons.lock_outline,
+                type: FeedbackType.warning,
+                title: 'Accès réservé',
+                message: 'Cette page est réservée aux techniciens et administrateurs.',
+              ),
             ),
           );
         }
@@ -156,23 +156,19 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
                                                 userId: user.id,
                                               );
                                           if (context.mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text('Remise confirmée avec succès'),
-                                                backgroundColor: AppColors.success,
-                                                behavior: SnackBarBehavior.floating,
-                                              ),
+                                            AppSnackBar.show(
+                                              context,
+                                              message: 'Remise confirmée avec succès',
+                                              type: FeedbackType.success,
                                             );
                                             _remiseCodeController.clear();
                                           }
                                         } catch (e) {
                                           if (context.mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Erreur: $e'),
-                                                backgroundColor: AppColors.error,
-                                                behavior: SnackBarBehavior.floating,
-                                              ),
+                                            AppSnackBar.show(
+                                              context,
+                                              message: 'Erreur: $e',
+                                              type: FeedbackType.error,
                                             );
                                           }
                                         }
@@ -299,23 +295,19 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
                                                 userId: user.id,
                                               );
                                           if (context.mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text('Retour confirmé avec succès'),
-                                                backgroundColor: AppColors.success,
-                                                behavior: SnackBarBehavior.floating,
-                                              ),
+                                            AppSnackBar.show(
+                                              context,
+                                              message: 'Retour confirmé avec succès',
+                                              type: FeedbackType.success,
                                             );
                                             _retourCodeController.clear();
                                           }
                                         } catch (e) {
                                           if (context.mounted) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Erreur: $e'),
-                                                backgroundColor: AppColors.error,
-                                                behavior: SnackBarBehavior.floating,
-                                              ),
+                                            AppSnackBar.show(
+                                              context,
+                                              message: 'Erreur: $e',
+                                              type: FeedbackType.error,
                                             );
                                           }
                                         }
@@ -350,24 +342,11 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
           ),
         );
       },
-      loading: () => const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Chargement...'),
-          ],
-        ),
-      ),
+      loading: () => const Center(child: AppLoading()),
       error: (e, _) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
-            const SizedBox(height: 16),
-            Text('Erreur profile: $e'),
-          ],
+        child: FeedbackCard(
+          type: FeedbackType.error,
+          message: 'Erreur profile: $e',
         ),
       ),
     );

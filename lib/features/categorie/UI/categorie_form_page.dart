@@ -31,6 +31,7 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
   File? _selectedImage;
   String? _currentImageUrl;
   bool _isUploading = false;
+  bool _imageRemoved = false; // ✅ Nouveau flag pour suivre la suppression
 
   @override
   void initState() {
@@ -54,22 +55,17 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
   Future<String?> _uploadImage(File image) async {
     try {
       final supabase = SupabaseService.client;
-
-      // ✅ Extraire correctement le nom du fichier (supporte Windows et Unix)
       final path = image.path;
       final fileName = path.split('/').last.split('\\').last;
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final storagePath = 'categories/${timestamp}_$fileName';
 
       print('📤 Upload de l\'image : $storagePath');
-      print('📁 Chemin original : $path');
 
       await supabase.storage.from('categorie_images').upload(
             storagePath,
             image,
           );
-
-      print('✅ Upload réussi');
 
       final url = supabase.storage.from('categorie_images').getPublicUrl(storagePath);
       print('📎 URL publique : $url');
@@ -94,6 +90,7 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
       setState(() {
         _selectedImage = File(pickedFile.path);
         _currentImageUrl = null;
+        _imageRemoved = false; // ✅ Une nouvelle image est sélectionnée
       });
     }
   }
@@ -102,6 +99,7 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
     setState(() {
       _selectedImage = null;
       _currentImageUrl = null;
+      _imageRemoved = true; // ✅ Marquer que l'image a été supprimée
     });
   }
 
@@ -137,7 +135,6 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
-                    // Aperçu de l'image
                     Container(
                       height: 180,
                       width: double.infinity,
@@ -176,13 +173,10 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                                     Image.network(
                                       _currentImageUrl!,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        print('❌ Erreur chargement image : $error');
-                                        return const Icon(
-                                          Icons.broken_image,
-                                          size: 64,
-                                        );
-                                      },
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.broken_image,
+                                        size: 64,
+                                      ),
                                     ),
                                     Positioned(
                                       top: 8,
@@ -306,19 +300,22 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                             final navigator = Navigator.of(context);
 
                             try {
-                              // ✅ Déterminer l'URL de l'image
                               String? imageUrl;
 
+                              // ✅ Cas 1 : Une nouvelle image a été sélectionnée
                               if (_selectedImage != null) {
-                                // Nouvelle image sélectionnée
                                 setState(() => _isUploading = true);
                                 imageUrl = await _uploadImage(_selectedImage!);
                                 setState(() => _isUploading = false);
-                              } else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
-                                // Conserver l'image existante
+                              }
+                              // ✅ Cas 2 : L'image a été supprimée (imageRemoved = true)
+                              else if (_imageRemoved) {
+                                imageUrl = null; // Forcer la suppression
+                              }
+                              // ✅ Cas 3 : Aucun changement, garder l'image existante
+                              else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
                                 imageUrl = _currentImageUrl;
                               }
-                              // Sinon imageUrl reste null
 
                               final data = <String, dynamic>{
                                 'nom': _nomController.text.trim(),
@@ -326,8 +323,13 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                               };
 
                               // ✅ Ajouter l'URL seulement si elle n'est pas null
-                              if (imageUrl != null && imageUrl.isNotEmpty) {
+                              // Si imageUrl est null, on ne met pas le champ dans data
+                              // pour éviter de l'envoyer (mais on veut le mettre à null si supprimé)
+                              if (imageUrl != null) {
                                 data['image_url'] = imageUrl;
+                              } else if (_imageRemoved) {
+                                // ✅ Forcer la mise à null si l'image a été supprimée
+                                data['image_url'] = null;
                               }
 
                               print('📦 Données envoyées : $data');
@@ -337,12 +339,18 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                                     .read(categorieCrudProvider.notifier)
                                     .updateCategorie(widget.id!, data);
                                 messenger.showSnackBar(
-                                  const SnackBar(content: Text('Catégorie mise à jour')),
+                                  const SnackBar(
+                                    content: Text('Catégorie mise à jour'),
+                                    backgroundColor: Colors.green,
+                                  ),
                                 );
                               } else {
                                 await ref.read(categorieCrudProvider.notifier).create(data);
                                 messenger.showSnackBar(
-                                  const SnackBar(content: Text('Catégorie créée')),
+                                  const SnackBar(
+                                    content: Text('Catégorie créée'),
+                                    backgroundColor: Colors.green,
+                                  ),
                                 );
                               }
                               navigator.pop();
@@ -350,7 +358,10 @@ class _CategorieFormPageState extends ConsumerState<CategorieFormPage> {
                               setState(() => _isUploading = false);
                               print('❌ Erreur : $e');
                               messenger.showSnackBar(
-                                SnackBar(content: Text('Erreur : $e')),
+                                SnackBar(
+                                  content: Text('Erreur : $e'),
+                                  backgroundColor: Colors.red,
+                                ),
                               );
                             }
                           }

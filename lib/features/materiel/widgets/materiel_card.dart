@@ -37,7 +37,6 @@ class MaterielCard extends StatelessWidget {
           padding: const EdgeInsets.all(14.0),
           child: Row(
             children: [
-              // Icône
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -51,8 +50,6 @@ class MaterielCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-
-              // Informations
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

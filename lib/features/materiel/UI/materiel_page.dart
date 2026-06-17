@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/core/constants/app_constants.dart';
-import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
+import 'package:materelia/shared/widgets/empty_state.dart';
+import 'package:materelia/shared/widgets/error_view.dart';
+import 'package:materelia/shared/widgets/filtre_chips.dart';
+import 'package:materelia/shared/widgets/loading.dart';
+import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/materiel_provider.dart';
 import '../widgets/materiel_card.dart';
 import 'materiel_detail_page.dart';
 import 'materiel_form_page.dart';
-import '../../../shared/widgets/empty_state.dart';
 
 class MaterielPage extends ConsumerStatefulWidget {
   final String? initialCategorieId;
@@ -19,181 +22,186 @@ class MaterielPage extends ConsumerStatefulWidget {
 }
 
 class _MaterielPageState extends ConsumerState<MaterielPage> {
-  String? _selectedCategorieId;
-  String? _selectedEtat;
-  String? _selectedStockId;
+  String _search = '';
+  String? _filtreEtat;
+  String? _filtreCategorie;
+
+  final Map<String, String> _etats = {
+    'EN_STOCK': 'En stock',
+    'EMPRUNTE': 'Emprunté',
+    'AFFECTE': 'Affecté',
+    'EN_PANNE': 'En panne',
+    'REFORME': 'Réformé',
+  };
 
   @override
   void initState() {
     super.initState();
-    _selectedCategorieId = widget.initialCategorieId;
+    if (widget.initialCategorieId != null) {
+      _filtreCategorie = widget.initialCategorieId;
+    }
   }
-
-  final List<String> _etats = [
-    'EN_STOCK',
-    'EMPRUNTE',
-    'AFFECTE',
-    'EN_PANNE',
-    'REFORME',
-  ];
 
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileControllerProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
-    final stocksAsync = ref.watch(stocksProvider);
+    final isLoading = profileAsync.isLoading;
 
+    // Build filters
     final Map<String, dynamic> filters = {};
-    if (_selectedCategorieId != null) filters['id_categorie'] = _selectedCategorieId;
-    if (_selectedEtat != null) filters['etat'] = _selectedEtat;
-    if (_selectedStockId != null) filters['id_stock'] = _selectedStockId;
+    if (_filtreCategorie != null) filters['id_categorie'] = _filtreCategorie;
+    if (_filtreEtat != null) filters['etat'] = _filtreEtat;
 
     final materielsAsync = ref.watch(materielsProvider(filters.isEmpty ? null : filters));
+    final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Matériels'),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          // Filtres
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: AppColors.surfaceContainerLow,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  categoriesAsync.when(
-                    data: (cats) => DropdownButton<String>(
-                      hint: const Text('Catégorie'),
-                      value: _selectedCategorieId,
-                      onChanged: (val) => setState(() => _selectedCategorieId = val),
-                      items: [
-                        const DropdownMenuItem<String>(value: null, child: Text('Toutes catégories')),
-                        ...cats.map((c) => DropdownMenuItem<String>(
-                              value: c['id_categorie']?.toString(),
-                              child: Text(c['nom']?.toString() ?? ''),
-                            ))
-                      ],
-                    ),
-                    loading: () => const SizedBox(width: 80, height: 20, child: LinearProgressIndicator()),
-                    error: (e, _) => const Text('Erreur catégories'),
-                  ),
-                  const SizedBox(width: 16),
-                  DropdownButton<String>(
-                    hint: const Text('État'),
-                    value: _selectedEtat,
-                    onChanged: (val) => setState(() => _selectedEtat = val),
-                    items: [
-                      const DropdownMenuItem<String>(value: null, child: Text('Tous états')),
-                      ..._etats.map((e) => DropdownMenuItem<String>(
-                            value: e,
-                            child: Text(e),
-                          ))
-                    ],
-                  ),
-                  const SizedBox(width: 16),
-                  stocksAsync.when(
-                    data: (stocks) => DropdownButton<String>(
-                      hint: const Text('Stock'),
-                      value: _selectedStockId,
-                      onChanged: (val) => setState(() => _selectedStockId = val),
-                      items: [
-                        const DropdownMenuItem<String>(value: null, child: Text('Tous stocks')),
-                        ...stocks.map((s) => DropdownMenuItem<String>(
-                              value: s['id_stock']?.toString(),
-                              child: Text(s['nom']?.toString() ?? ''),
-                            ))
-                      ],
-                    ),
-                    loading: () => const SizedBox(width: 80, height: 20, child: LinearProgressIndicator()),
-                    error: (e, _) => const Text('Erreur stocks'),
-                  ),
-                ],
-              ),
-            ),
+      body: profileAsync.when(
+        loading: () => const Center(child: AppLoading()),
+        error: (e, _) => Center(
+          child: ErrorView(
+            message: e.toString(),
+            onRetry: () => ref.invalidate(profileControllerProvider),
           ),
-          Expanded(
-            child: materielsAsync.when(
-              data: (mats) {
-                if (mats.isEmpty) {
-                  return const EmptyState(
-                    message: 'Aucun matériel trouvé',
-                    subMessage: 'Essayez de modifier les filtres.',
-                    icon: Icons.devices_outlined,
+        ),
+        data: (user) {
+          final isAdmin = user.role == AppConstants.roleAdmin;
+
+          return Column(
+            children: [
+              Toolbar(
+                showDetail: false,
+                onSearch: (v) => setState(() => _search = v),
+                onToggleDetail: () {},
+                onRefresh: () => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                creer: isAdmin
+                    ? () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const MaterielFormPage(),
+                          ),
+                        );
+                      }
+                    : null,
+              ),
+              const Divider(height: 1),
+
+              // Filtres
+              categoriesAsync.when(
+                data: (cats) {
+                  final categoriesMap = {
+                    '': 'Toutes catégories',
+                    for (final cat in cats)
+                      cat['id_categorie']?.toString() ?? '': cat['nom']?.toString() ?? '',
+                  };
+
+                  return Column(
+                    children: [
+                      FiltreChips(
+                        filtreActif: _filtreEtat,
+                        etats: _etats,
+                        onFiltreChange: (etat) => setState(() => _filtreEtat = etat),
+                      ),
+                      const Divider(height: 1),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        child: Row(
+                          children: [
+                            const Text('Catégorie: '),
+                            ...categoriesMap.entries.map(
+                              (e) => Padding(
+                                padding: const EdgeInsets.only(right: 6),
+                                child: FilterChip(
+                                  label: Text(e.value),
+                                  selected: _filtreCategorie == e.key,
+                                  onSelected: (_) => setState(
+                                    () => _filtreCategorie = _filtreCategorie == e.key ? null : e.key,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   );
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: mats.length,
-                  itemBuilder: (c, i) {
-                    final m = mats[i];
-                    final id = m['id_materiel']?.toString() ?? '';
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: MaterielCard(
-                        id: id,
-                        nom: m['nom']?.toString() ?? '',
-                        reference: m['reference']?.toString() ?? '',
-                        etat: m['etat']?.toString() ?? '',
-                        description: m['description']?.toString(),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => MaterielDetailPage(id: id),
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (e, _) => const SizedBox.shrink(),
+              ),
+              const Divider(height: 1),
+
+              SizedBox(
+                height: 2,
+                child: isLoading
+                    ? const LinearProgressIndicator()
+                    : const SizedBox.shrink(),
+              ),
+
+              Expanded(
+                child: materielsAsync.when(
+                  loading: () => const AppLoading(),
+                  error: (e, _) => ErrorView(
+                    message: e.toString(),
+                    onRetry: () => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                  ),
+                  data: (mats) {
+                    // Filtrer par recherche
+                    var filtered = mats;
+                    if (_search.isNotEmpty) {
+                      final search = _search.toLowerCase();
+                      filtered = filtered.where((m) {
+                        final nom = m['nom']?.toString().toLowerCase() ?? '';
+                        final ref = m['reference']?.toString().toLowerCase() ?? '';
+                        return nom.contains(search) || ref.contains(search);
+                      }).toList();
+                    }
+
+                    if (filtered.isEmpty) {
+                      return Center(
+                        child: EmptyState(
+                          message: 'Aucun matériel trouvé',
+                          subMessage: 'Essayez de modifier les filtres.',
+                          icon: Icons.devices_outlined,
+                        ),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      onRefresh: () async => ref.invalidate(materielsProvider(filters.isEmpty ? null : filters)),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final m = filtered[index];
+                          final id = m['id_materiel']?.toString() ?? '';
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: MaterielCard(
+                              id: id,
+                              nom: m['nom']?.toString() ?? '',
+                              reference: m['reference']?.toString() ?? '',
+                              etat: m['etat']?.toString() ?? '',
+                              description: m['description']?.toString(),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MaterielDetailPage(id: id),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },
                       ),
                     );
                   },
-                );
-              },
-              loading: () => const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('Chargement des matériels...'),
-                  ],
                 ),
               ),
-              error: (e, _) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
-                    const SizedBox(height: 16),
-                    Text('Erreur : $e'),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: profileAsync.when(
-        data: (user) {
-          if (user.role == AppConstants.roleAdmin) {
-            return FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const MaterielFormPage(),
-                  ),
-                );
-              },
-              backgroundColor: AppColors.primary,
-              child: const Icon(Icons.add, color: Colors.white),
-            );
-          }
-          return null;
+            ],
+          );
         },
-        loading: () => null,
-        error: (e, _) => null,
       ),
     );
   }

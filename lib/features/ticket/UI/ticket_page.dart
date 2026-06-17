@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/core/constants/app_constants.dart';
-import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
 import 'package:materelia/shared/widgets/empty_state.dart';
+import 'package:materelia/shared/widgets/error_view.dart';
+import 'package:materelia/shared/widgets/filtre_chips.dart';
+import 'package:materelia/shared/widgets/loading.dart';
+import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/ticket_provider.dart';
 import '../widgets/ticket_card.dart';
 import 'ticket_detail_page.dart';
@@ -16,28 +19,32 @@ class TicketPage extends ConsumerStatefulWidget {
 }
 
 class _TicketPageState extends ConsumerState<TicketPage> {
-  String _selectedFilter = 'TOUS';
+  String _search = '';
+  String? _filtreEtat;
 
-  final List<String> _states = [
-    'TOUS',
-    'EN_ATTENTE',
-    'VALIDE',
-    'EN_COURS',
-    'RENDU',
-    'EXPIRE',
-    'REFUSE',
-  ];
+  final Map<String, String> _etats = {
+    'EN_ATTENTE': 'En attente',
+    'VALIDE': 'Validé',
+    'EN_COURS': 'En cours',
+    'RENDU': 'Rendu',
+    'EXPIRE': 'Expiré',
+    'REFUSE': 'Refusé',
+  };
 
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileControllerProvider);
+    final isLoading = profileAsync.isLoading;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mes Tickets'),
-        elevation: 0,
-      ),
       body: profileAsync.when(
+        loading: () => const Center(child: AppLoading()),
+        error: (e, _) => Center(
+          child: ErrorView(
+            message: e.toString(),
+            onRetry: () => ref.invalidate(profileControllerProvider),
+          ),
+        ),
         data: (user) {
           final isTechOrAdmin = user.role == AppConstants.roleTechnicien ||
               user.role == AppConstants.roleAdmin;
@@ -48,59 +55,70 @@ class _TicketPageState extends ConsumerState<TicketPage> {
 
           return Column(
             children: [
-              // Filtres
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: _states.map((state) {
-                    final isSelected = _selectedFilter == state;
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: FilterChip(
-                        label: Text(
-                          state == 'TOUS' ? 'Tous' : state,
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : AppColors.textPrimary,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                            fontSize: 12,
-                          ),
-                        ),
-                        selected: isSelected,
-                        selectedColor: AppColors.primary,
-                        backgroundColor: AppColors.surfaceContainer,
-                        checkmarkColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: isSelected ? AppColors.primary : Colors.grey.shade300,
-                          ),
-                        ),
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() {
-                              _selectedFilter = state;
-                            });
-                          }
-                        },
-                      ),
-                    );
-                  }).toList(),
-                ),
+              Toolbar(
+                showDetail: false,
+                onSearch: (v) => setState(() => _search = v),
+                onToggleDetail: () {},
+                onRefresh: () {
+                  if (isTechOrAdmin) {
+                    ref.invalidate(ticketsTechnicienProvider(user.id));
+                  } else {
+                    ref.invalidate(ticketsUserProvider(user.id));
+                  }
+                },
+                creer: null,
               ),
+              const Divider(height: 1),
+
+              FiltreChips(
+                filtreActif: _filtreEtat,
+                etats: _etats,
+                onFiltreChange: (etat) => setState(() => _filtreEtat = etat),
+              ),
+              const Divider(height: 1),
+
+              SizedBox(
+                height: 2,
+                child: isLoading
+                    ? const LinearProgressIndicator()
+                    : const SizedBox.shrink(),
+              ),
+
               Expanded(
                 child: ticketsAsync.when(
+                  loading: () => const AppLoading(),
+                  error: (e, _) => ErrorView(
+                    message: e.toString(),
+                    onRetry: () {
+                      if (isTechOrAdmin) {
+                        ref.invalidate(ticketsTechnicienProvider(user.id));
+                      } else {
+                        ref.invalidate(ticketsUserProvider(user.id));
+                      }
+                    },
+                  ),
                   data: (ticketsList) {
-                    final filtered = ticketsList.where((t) {
-                      if (_selectedFilter == 'TOUS') return true;
-                      return t['etat'] == _selectedFilter;
-                    }).toList();
+                    // Filtrer par état
+                    var filtered = ticketsList;
+                    if (_filtreEtat != null) {
+                      filtered = filtered.where((t) => t['etat'] == _filtreEtat).toList();
+                    }
+                    // Filtrer par recherche (lieu)
+                    if (_search.isNotEmpty) {
+                      final search = _search.toLowerCase();
+                      filtered = filtered.where((t) {
+                        final lieu = t['lieu_utilisation']?.toString().toLowerCase() ?? '';
+                        return lieu.contains(search);
+                      }).toList();
+                    }
 
                     if (filtered.isEmpty) {
-                      return const EmptyState(
-                        message: 'Aucun ticket trouvé',
-                        subMessage: 'Aucun ticket ne correspond à ce filtre.',
-                        icon: Icons.confirmation_number_outlined,
+                      return Center(
+                        child: EmptyState(
+                          message: 'Aucun ticket trouvé',
+                          subMessage: 'Aucun ticket ne correspond à vos critères.',
+                          icon: Icons.confirmation_number_outlined,
+                        ),
                       );
                     }
 
@@ -134,55 +152,11 @@ class _TicketPageState extends ConsumerState<TicketPage> {
                       },
                     );
                   },
-                  loading: () => const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 16),
-                        Text('Chargement des tickets...'),
-                      ],
-                    ),
-                  ),
-                  error: (e, _) => Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Erreur : $e',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ],
           );
         },
-        loading: () => const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Chargement du profil...'),
-            ],
-          ),
-        ),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
-              const SizedBox(height: 16),
-              Text('Erreur profil : $e'),
-            ],
-          ),
-        ),
       ),
     );
   }
