@@ -562,16 +562,21 @@ class _ChangerRoleForm extends ConsumerWidget {
         const SizedBox(height: 8),
 
         // Radio rôles
-        ...roles.entries.map(
-          (e) => RadioListTile<String>(
-            value: e.key,
-            groupValue: selectedRole,
-            title: Text(e.value.label),
-            onChanged: onRoleChanged,
-            dense: true,
+        RadioGroup<String>(
+          groupValue: selectedRole,
+          onChanged: onRoleChanged,
+          child: Column(
+            children: roles.entries
+                .map(
+                  (e) => RadioListTile<String>(
+                    value: e.key,
+                    title: Text(e.value.label),
+                    dense: true,
+                  ),
+                )
+                .toList(),
           ),
         ),
-
         // Zone si technicien sélectionné
         if (selectedRole == "TECHNICIEN") ...[
           const SizedBox(height: 12),
@@ -596,25 +601,28 @@ class _ChangerRoleForm extends ConsumerWidget {
                         message: 'Aucune zone disponible.',
                         dense: true,
                       )
-                    : SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: zones.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (_, i) {
-                            final zone = zones[i];
-                            return RadioListTile<String>(
-                              value: zone.id,
-                              groupValue: selectedZoneId,
-                              title: Text(zone.nom),
-                              subtitle: zone.description != null
-                                  ? Text(zone.description!)
-                                  : null,
-                              onChanged: onZoneChanged,
-                              dense: true,
-                            );
-                          },
+                    : RadioGroup<String>(
+                        groupValue: selectedZoneId,
+                        onChanged: onZoneChanged,
+                        child: SizedBox(
+                          height: 200,
+                          child: ListView.separated(
+                            physics: const ClampingScrollPhysics(),
+                            itemCount: zones.length,
+                            separatorBuilder: (_, _) =>
+                                const Divider(height: 1),
+                            itemBuilder: (_, i) {
+                              final zone = zones[i];
+                              return RadioListTile<String>(
+                                value: zone.id,
+                                title: Text(zone.nom),
+                                subtitle: zone.description != null
+                                    ? Text(zone.description!)
+                                    : null,
+                                dense: true,
+                              );
+                            },
+                          ),
                         ),
                       ),
               ),
