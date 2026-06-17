@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:materelia/core/constants/app_constants.dart';
 import 'package:materelia/features/auth/service/auth_exception.dart';
 import 'package:materelia/features/auth/provider/auth_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,6 +28,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   String? _generalErrorText;
   String? _nomErrorText;
   String? _prenomErrorText;
+  String _selectedRole = AppConstants.roleSimple;
 
   @override
   void initState() {
@@ -62,6 +64,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       email: _emailController.text.trim(),
       password: _passwordController.text,
       passwordConfirmation: _confirmPasswordController.text,
+      role: _selectedRole,
     );
 
     final state = ref.read(authControllerProvider);
@@ -130,9 +133,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           margin: const EdgeInsets.all(24.0),
           child: Padding(
             padding: const EdgeInsets.all(32.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                 Image.asset(
                   'lib/assets/images/logo-nobg.png',
                   width: 96,
@@ -183,6 +187,25 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     errorText: _prenomErrorText,
                   ),
                   keyboardType: TextInputType.text,
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedRole,
+                  decoration: const InputDecoration(
+                    labelText: 'Rôle',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: AppConstants.roleSimple, child: Text('Utilisateur Simple')),
+                    DropdownMenuItem(value: AppConstants.roleTechnicien, child: Text('Technicien')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedRole = value;
+                      });
+                    }
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -268,6 +291,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   ],
                 ),
               ],
+              ),
             ),
           ),
         ),
