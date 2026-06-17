@@ -5,6 +5,7 @@ import "package:materelia/features/affectations/UI/affectations_page.dart";
 import "package:materelia/features/auth/UI/auth_page.dart";
 import "package:materelia/features/auth/UI/signin_page.dart";
 import "package:materelia/features/auth/UI/signup_page.dart";
+import "package:materelia/features/dashboard/UI/dashboard_page.dart";
 import "package:materelia/features/demandes_affectations/UI/demandes_affectations_page.dart";
 import "package:materelia/features/demandes_affectations/utilisateurs/UI/utilisateurs_page.dart";
 import "package:materelia/features/mes_affectations/UI/mes_affectations_page.dart";
@@ -125,7 +126,7 @@ List<RouteBase> _buildRoutes() {
     GoRoute(path: '/mes-demandes', builder: (c, s) => const MesDemandesPage()),
     GoRoute(path: '/tickets-zone', builder: (c, s) => const Text("ovao")),
     GoRoute(path: '/historique', builder: (c, s) => const Text("22222")),
-    GoRoute(path: '/dashboard', builder: (c, s) => const Text("dash")),
+    GoRoute(path: '/dashboard', builder: (c, s) => const DashboardPage()),
     GoRoute(path: '/affectations', builder: (c, s) => const AffectationsPage()),
     GoRoute(
       path: '/demandes-affectations',
