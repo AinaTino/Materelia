@@ -31,7 +31,7 @@ List<String?> _buildRouteMap(String role) {
       '/stocks',
     ],
 
-    '/mon-profil',
+    '/a-propos',
   ];
 }
 
@@ -192,9 +192,9 @@ class _SidebarRailState extends ConsumerState<SidebarRail> {
                 buildItem('Stocks', Icons.warehouse_outlined, Icons.warehouse),
               },
               buildItem(
-                'Mon profil',
-                Icons.person_outlined,
-                Icons.person,
+                'À propos',
+                Icons.info_outline,
+                Icons.info,
                 color: AppColors.primary,
               ),
             ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:materelia/core/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:materelia/features/notifications/provider/notifications_provider.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
 
@@ -10,7 +10,6 @@ class TopBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Dans build() :
     final count = ref.watch(notifNonLuCountProvider);
     return AppBar(
       centerTitle: true,
@@ -19,13 +18,13 @@ class TopBar extends ConsumerWidget {
       ),
 
       actions: [
-        // Remplace l'IconButton :
         Stack(
           clipBehavior: Clip.none,
           children: [
             IconButton(
               icon: const Icon(Icons.notifications),
-              onPressed: () => rootRouter.push('/notifications'),
+              tooltip: 'Notifications',
+              onPressed: () => context.push('/notifications'),
             ),
             if (count > 0)
               Positioned(
@@ -57,7 +56,13 @@ class TopBar extends ConsumerWidget {
           ],
         ),
         IconButton(
+          icon: const Icon(Icons.person_outline),
+          tooltip: 'Mon profil',
+          onPressed: () => context.push('/mon-profil'),
+        ),
+        IconButton(
           icon: const Icon(Icons.logout),
+          tooltip: 'Se déconnecter',
           onPressed: () async {
             await SupabaseService.client.auth.signOut();
           },
