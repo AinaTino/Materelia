@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:materelia/core/constants/app_constants.dart';
+import 'package:materelia/features/notifications/service/notifications_service.dart';
 import 'package:materelia/shared/models/affectation.dart';
 import 'package:materelia/shared/models/categorie.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
@@ -96,18 +97,25 @@ class AffectationsService {
     );
   }
 
-  /// Révocation définitive
   Future<void> revoquerAffectation(String id) async {
-    await _db
+    final d = await _db
         .from('affectations')
         .update({
           'etat': AppConstants.affectationRevoquee,
           'date_fin_effective': DateTime.now().toIso8601String(),
         })
-        .eq('id_affectation', id);
+        .eq('id_affectation', id)
+        .select()
+        .single();
+
+    await NotificationsService().envoyerNotif(
+      idUtilisateur: d['id_beneficiaire'] as String,
+      message: 'Votre affectation a été révoquée.',
+      type: 'AFFECTATION',
+      route: '/mes-affectations',
+    );
   }
 
-  /// Renouvellement : dateFinPrevue actuelle + dureeAffectationJours
   Future<void> renouvelerAffectation(
     String id,
     DateTime dateFinActuelle,
@@ -115,9 +123,19 @@ class AffectationsService {
     final nouvelleFin = dateFinActuelle.add(
       Duration(days: AppConstants.dureeAffectationJours),
     );
-    await _db
+
+    final d = await _db
         .from('affectations')
         .update({'date_fin_prevue': nouvelleFin.toIso8601String()})
-        .eq('id_affectation', id);
+        .eq('id_affectation', id)
+        .select()
+        .single();
+
+    await NotificationsService().envoyerNotif(
+      idUtilisateur: d['id_beneficiaire'] as String,
+      message: 'Votre affectation a été renouvelée.',
+      type: 'AFFECTATION',
+      route: '/mes-affectations',
+    );
   }
 }

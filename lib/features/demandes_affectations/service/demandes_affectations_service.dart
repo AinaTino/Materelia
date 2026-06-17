@@ -1,4 +1,5 @@
 import 'package:materelia/core/constants/app_constants.dart';
+import 'package:materelia/features/notifications/service/notifications_service.dart';
 import 'package:materelia/shared/models/categorie.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
 import 'package:materelia/shared/models/materiel.dart';
@@ -47,20 +48,40 @@ class DemandesAffectationsService {
       'date_fin_prevue': date.add(Duration(days: 91)).toIso8601String(),
       'etat': 'ACTIVE',
     });
+
+    // Notif au demandeur
+    await NotificationsService().envoyerNotif(
+      idUtilisateur: demande.idDemandeur,
+      message: 'Votre demande d\'affectation a été validée.',
+      type: 'DEMANDE',
+      route: '/mes-affectations',
+    );
   }
 
   Future<void> refuserDemande({
     required String idDemande,
     required String motif,
   }) async {
-    await _db
+    final d = await _db
         .from('demandes_affectation')
         .update({
           'etat': 'REFUSE',
           'motif_refus': motif,
           'id_valideur': SupabaseService.currentUser!.id,
         })
-        .eq('id_demande', idDemande);
+        .eq('id_demande', idDemande)
+        .select()
+        .single();
+
+    final demande = DemandeAffectation.fromJson(d);
+
+    // Notif au demandeur
+    await NotificationsService().envoyerNotif(
+      idUtilisateur: demande.idDemandeur,
+      message: 'Votre demande d\'affectation a été refusée. Motif : $motif',
+      type: 'DEMANDE',
+      route: '/mes-demandes',
+    );
   }
 
   Future<List<Materiel>> listeMaterielsDispo({

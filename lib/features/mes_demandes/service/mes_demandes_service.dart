@@ -1,4 +1,5 @@
 import 'package:materelia/core/constants/app_constants.dart';
+import 'package:materelia/features/notifications/service/notifications_service.dart';
 import 'package:materelia/shared/models/categorie.dart';
 import 'package:materelia/shared/models/demande_affectation.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
@@ -30,7 +31,24 @@ class MesDemandesService {
         })
         .select()
         .single();
-    return DemandeAffectation.fromJson(data);
+
+    final demande = DemandeAffectation.fromJson(data);
+
+    // Notif aux admins
+    final notifService = NotificationsService();
+    final adminIds = await notifService.getAdminIds();
+    final user = SupabaseService.currentUser!;
+
+    for (final adminId in adminIds) {
+      await notifService.envoyerNotif(
+        idUtilisateur: adminId,
+        message: 'Nouvelle demande d\'affectation soumise.',
+        type: 'DEMANDE',
+        route: '/demandes-affectations',
+      );
+    }
+
+    return demande;
   }
 
   Future<void> supprimerDemande({required String idDemande}) async {

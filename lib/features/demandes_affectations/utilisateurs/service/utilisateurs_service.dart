@@ -1,3 +1,4 @@
+import 'package:materelia/features/notifications/service/notifications_service.dart';
 import 'package:materelia/shared/models/gerer.dart';
 import 'package:materelia/shared/models/utilisateur.dart';
 import 'package:materelia/shared/models/zone.dart';
@@ -22,6 +23,19 @@ class UtilisateursService {
         .from('utilisateurs')
         .update({'role': nouveauRole})
         .eq('id_utilisateur', idUtilisateur);
+
+    final label = switch (nouveauRole) {
+      'ADMIN' => 'Administrateur',
+      'TECHNICIEN' => 'Technicien',
+      _ => 'Simple utilisateur',
+    };
+
+    await NotificationsService().envoyerNotif(
+      idUtilisateur: idUtilisateur,
+      message: 'Votre rôle a été mis à jour : $label.',
+      type: 'ALERTE',
+      route: null,
+    );
   }
 
   Future<void> supprimerUtilisateur({required String idUtilisateur}) async {
