@@ -45,6 +45,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   image_picker: ^1.2.2
   path: ^1.9.1
+  # flutter_local_notifications: ^22.0.1
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,9 @@ flutter_native_splash:
 
   android: true
 
+dependency_overrides:
+  audioplayers_windows: ^4.3.1
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -94,6 +98,11 @@ flutter:
     - lib/assets/images/logo-nobg.png
     - lib/assets/images/logo-withbg.png
     - lib/assets/images/home.png
+    - lib/assets/sounds/notify.wav
+    - lib/assets/sounds/erreur.wav
+    - lib/assets/sounds/info.wav
+    - lib/assets/sounds/remove.wav
+    - lib/assets/sounds/success.wav
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -16,6 +16,7 @@ _Notification _$NotificationFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['date_envoi'] as String),
       lu: json['lu'] as bool?,
       idUtilisateur: json['id_utilisateur'] as String,
+      route: json['route'] as String?,
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
@@ -29,5 +30,6 @@ Map<String, dynamic> _$NotificationToJson(_Notification instance) =>
       'date_envoi': instance.dateEnvoi?.toIso8601String(),
       'lu': instance.lu,
       'id_utilisateur': instance.idUtilisateur,
+      'route': instance.route,
       'created_at': instance.createdAt?.toIso8601String(),
     };

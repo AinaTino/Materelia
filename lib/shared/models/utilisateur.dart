@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'utilisateur.freezed.dart';
@@ -13,7 +12,7 @@ abstract class Utilisateur with _$Utilisateur {
     @JsonKey(name: 'role') required String role,
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _Utilisateur;
-	
+
   factory Utilisateur.fromJson(Map<String, dynamic> json) =>
-			_$UtilisateurFromJson(json);
+      _$UtilisateurFromJson(json);
 }

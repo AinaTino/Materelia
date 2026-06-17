@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Notification {
 
-@JsonKey(name: 'id_notification') String get id;@JsonKey(name: 'message') String get message;@JsonKey(name: 'type') String get type;@JsonKey(name: 'date_envoi') DateTime? get dateEnvoi;@JsonKey(name: 'lu') bool? get lu;@JsonKey(name: 'id_utilisateur') String get idUtilisateur;@JsonKey(name: 'created_at') DateTime? get createdAt;
+@JsonKey(name: 'id_notification') String get id;@JsonKey(name: 'message') String get message;@JsonKey(name: 'type') String get type;@JsonKey(name: 'date_envoi') DateTime? get dateEnvoi;@JsonKey(name: 'lu') bool? get lu;@JsonKey(name: 'id_utilisateur') String get idUtilisateur; String? get route;@JsonKey(name: 'created_at') DateTime? get createdAt;
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $NotificationCopyWith<Notification> get copyWith => _$NotificationCopyWithImpl<N
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.type, type) || other.type == type)&&(identical(other.dateEnvoi, dateEnvoi) || other.dateEnvoi == dateEnvoi)&&(identical(other.lu, lu) || other.lu == lu)&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.type, type) || other.type == type)&&(identical(other.dateEnvoi, dateEnvoi) || other.dateEnvoi == dateEnvoi)&&(identical(other.lu, lu) || other.lu == lu)&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.route, route) || other.route == route)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,message,type,dateEnvoi,lu,idUtilisateur,createdAt);
+int get hashCode => Object.hash(runtimeType,id,message,type,dateEnvoi,lu,idUtilisateur,route,createdAt);
 
 @override
 String toString() {
-  return 'Notification(id: $id, message: $message, type: $type, dateEnvoi: $dateEnvoi, lu: $lu, idUtilisateur: $idUtilisateur, createdAt: $createdAt)';
+  return 'Notification(id: $id, message: $message, type: $type, dateEnvoi: $dateEnvoi, lu: $lu, idUtilisateur: $idUtilisateur, route: $route, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $NotificationCopyWith<$Res>  {
   factory $NotificationCopyWith(Notification value, $Res Function(Notification) _then) = _$NotificationCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'id_notification') String id,@JsonKey(name: 'message') String message,@JsonKey(name: 'type') String type,@JsonKey(name: 'date_envoi') DateTime? dateEnvoi,@JsonKey(name: 'lu') bool? lu,@JsonKey(name: 'id_utilisateur') String idUtilisateur,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'id_notification') String id,@JsonKey(name: 'message') String message,@JsonKey(name: 'type') String type,@JsonKey(name: 'date_envoi') DateTime? dateEnvoi,@JsonKey(name: 'lu') bool? lu,@JsonKey(name: 'id_utilisateur') String idUtilisateur, String? route,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -65,7 +65,7 @@ class _$NotificationCopyWithImpl<$Res>
 
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? message = null,Object? type = null,Object? dateEnvoi = freezed,Object? lu = freezed,Object? idUtilisateur = null,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? message = null,Object? type = null,Object? dateEnvoi = freezed,Object? lu = freezed,Object? idUtilisateur = null,Object? route = freezed,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non
 as String,dateEnvoi: freezed == dateEnvoi ? _self.dateEnvoi : dateEnvoi // ignore: cast_nullable_to_non_nullable
 as DateTime?,lu: freezed == lu ? _self.lu : lu // ignore: cast_nullable_to_non_nullable
 as bool?,idUtilisateur: null == idUtilisateur ? _self.idUtilisateur : idUtilisateur // ignore: cast_nullable_to_non_nullable
-as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,route: freezed == route ? _self.route : route // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur,  String? route, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
-return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.createdAt);case _:
+return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.route,_that.createdAt);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur,  String? route, @JsonKey(name: 'created_at')  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Notification():
-return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.createdAt);case _:
+return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.route,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_notification')  String id, @JsonKey(name: 'message')  String message, @JsonKey(name: 'type')  String type, @JsonKey(name: 'date_envoi')  DateTime? dateEnvoi, @JsonKey(name: 'lu')  bool? lu, @JsonKey(name: 'id_utilisateur')  String idUtilisateur,  String? route, @JsonKey(name: 'created_at')  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Notification() when $default != null:
-return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.createdAt);case _:
+return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that.idUtilisateur,_that.route,_that.createdAt);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.id,_that.message,_that.type,_that.dateEnvoi,_that.lu,_that
 @JsonSerializable()
 
 class _Notification implements Notification {
-  const _Notification({@JsonKey(name: 'id_notification') required this.id, @JsonKey(name: 'message') required this.message, @JsonKey(name: 'type') required this.type, @JsonKey(name: 'date_envoi') this.dateEnvoi, @JsonKey(name: 'lu') this.lu, @JsonKey(name: 'id_utilisateur') required this.idUtilisateur, @JsonKey(name: 'created_at') this.createdAt});
+  const _Notification({@JsonKey(name: 'id_notification') required this.id, @JsonKey(name: 'message') required this.message, @JsonKey(name: 'type') required this.type, @JsonKey(name: 'date_envoi') this.dateEnvoi, @JsonKey(name: 'lu') this.lu, @JsonKey(name: 'id_utilisateur') required this.idUtilisateur, this.route, @JsonKey(name: 'created_at') this.createdAt});
   factory _Notification.fromJson(Map<String, dynamic> json) => _$NotificationFromJson(json);
 
 @override@JsonKey(name: 'id_notification') final  String id;
@@ -224,6 +225,7 @@ class _Notification implements Notification {
 @override@JsonKey(name: 'date_envoi') final  DateTime? dateEnvoi;
 @override@JsonKey(name: 'lu') final  bool? lu;
 @override@JsonKey(name: 'id_utilisateur') final  String idUtilisateur;
+@override final  String? route;
 @override@JsonKey(name: 'created_at') final  DateTime? createdAt;
 
 /// Create a copy of Notification
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.type, type) || other.type == type)&&(identical(other.dateEnvoi, dateEnvoi) || other.dateEnvoi == dateEnvoi)&&(identical(other.lu, lu) || other.lu == lu)&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Notification&&(identical(other.id, id) || other.id == id)&&(identical(other.message, message) || other.message == message)&&(identical(other.type, type) || other.type == type)&&(identical(other.dateEnvoi, dateEnvoi) || other.dateEnvoi == dateEnvoi)&&(identical(other.lu, lu) || other.lu == lu)&&(identical(other.idUtilisateur, idUtilisateur) || other.idUtilisateur == idUtilisateur)&&(identical(other.route, route) || other.route == route)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,message,type,dateEnvoi,lu,idUtilisateur,createdAt);
+int get hashCode => Object.hash(runtimeType,id,message,type,dateEnvoi,lu,idUtilisateur,route,createdAt);
 
 @override
 String toString() {
-  return 'Notification(id: $id, message: $message, type: $type, dateEnvoi: $dateEnvoi, lu: $lu, idUtilisateur: $idUtilisateur, createdAt: $createdAt)';
+  return 'Notification(id: $id, message: $message, type: $type, dateEnvoi: $dateEnvoi, lu: $lu, idUtilisateur: $idUtilisateur, route: $route, createdAt: $createdAt)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$NotificationCopyWith<$Res> implements $NotificationCopyWi
   factory _$NotificationCopyWith(_Notification value, $Res Function(_Notification) _then) = __$NotificationCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'id_notification') String id,@JsonKey(name: 'message') String message,@JsonKey(name: 'type') String type,@JsonKey(name: 'date_envoi') DateTime? dateEnvoi,@JsonKey(name: 'lu') bool? lu,@JsonKey(name: 'id_utilisateur') String idUtilisateur,@JsonKey(name: 'created_at') DateTime? createdAt
+@JsonKey(name: 'id_notification') String id,@JsonKey(name: 'message') String message,@JsonKey(name: 'type') String type,@JsonKey(name: 'date_envoi') DateTime? dateEnvoi,@JsonKey(name: 'lu') bool? lu,@JsonKey(name: 'id_utilisateur') String idUtilisateur, String? route,@JsonKey(name: 'created_at') DateTime? createdAt
 });
 
 
@@ -276,7 +278,7 @@ class __$NotificationCopyWithImpl<$Res>
 
 /// Create a copy of Notification
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? message = null,Object? type = null,Object? dateEnvoi = freezed,Object? lu = freezed,Object? idUtilisateur = null,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? message = null,Object? type = null,Object? dateEnvoi = freezed,Object? lu = freezed,Object? idUtilisateur = null,Object? route = freezed,Object? createdAt = freezed,}) {
   return _then(_Notification(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
@@ -284,7 +286,8 @@ as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non
 as String,dateEnvoi: freezed == dateEnvoi ? _self.dateEnvoi : dateEnvoi // ignore: cast_nullable_to_non_nullable
 as DateTime?,lu: freezed == lu ? _self.lu : lu // ignore: cast_nullable_to_non_nullable
 as bool?,idUtilisateur: null == idUtilisateur ? _self.idUtilisateur : idUtilisateur // ignore: cast_nullable_to_non_nullable
-as String,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,route: freezed == route ? _self.route : route // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
