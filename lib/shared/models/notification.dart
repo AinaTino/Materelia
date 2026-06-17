@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'notification.freezed.dart';
@@ -13,9 +12,10 @@ abstract class Notification with _$Notification {
     @JsonKey(name: 'date_envoi') DateTime? dateEnvoi,
     @JsonKey(name: 'lu') bool? lu,
     @JsonKey(name: 'id_utilisateur') required String idUtilisateur,
-    @JsonKey(name: 'created_at') DateTime? createdAt
+    String? route,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _Notification;
-	
+
   factory Notification.fromJson(Map<String, dynamic> json) =>
-			_$NotificationFromJson(json);
+      _$NotificationFromJson(json);
 }
