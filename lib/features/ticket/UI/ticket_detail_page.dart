@@ -15,18 +15,11 @@ class TicketDetailPage extends ConsumerStatefulWidget {
 }
 
 class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
-  final _codeController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _codeController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final ticketAsync = ref.watch(ticketDetailProvider(widget.ticketId));
+    final categoriesAsync = ref.watch(ticketCategoriesProvider(widget.ticketId));
+    final materielsRemisAsync = ref.watch(ticketMaterielsRemisProvider(widget.ticketId));
     final profileAsync = ref.watch(profileControllerProvider);
     final actionState = ref.watch(ticketActionProvider);
 
@@ -52,7 +45,7 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                   ? '${dateFin.day.toString().padLeft(2, '0')}/${dateFin.month.toString().padLeft(2, '0')}/${dateFin.year}'
                   : '';
 
-              final lignes = (ticket['lignes_ticket'] as List<dynamic>?) ?? [];
+              final estApresRemise = etat == 'EN_COURS' || etat == 'RENDU';
 
               return Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -98,7 +91,6 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                                 Text(dateFinStr, style: const TextStyle(fontWeight: FontWeight.w600)),
                               ],
                             ),
-                            // Affichage du code pour tout le monde
                             if (codeRemise.isNotEmpty &&
                                 etat != 'RENDU' &&
                                 etat != 'REFUSE' &&
@@ -132,32 +124,94 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Matériels demandés',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: lignes.length,
-                        itemBuilder: (context, idx) {
-                          final l = lignes[idx];
-                          final mat = l['materiels'] as Map<String, dynamic>?;
-                          final matName = mat?['nom'] ?? 'Matériel inconnu';
-                          final matRef = mat?['reference'] ?? '';
 
-                          return Card(
-                            elevation: 1,
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            child: ListTile(
-                              leading: const Icon(Icons.devices, color: AppColors.primary),
-                              title: Text(matName),
-                              subtitle: Text('Réf : $matRef'),
-                            ),
-                          );
-                        },
+                    // Section des matériels/catégories
+                    Text(
+                      estApresRemise
+                          ? 'Matériels remis'
+                          : 'Catégories demandées',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: estApresRemise ? AppColors.success : AppColors.textPrimary,
                       ),
                     ),
+                    const SizedBox(height: 8),
+
+                    Expanded(
+                      child: estApresRemise
+                          ? materielsRemisAsync.when(
+                              loading: () => const Center(child: CircularProgressIndicator()),
+                              error: (e, _) => Center(child: Text('Erreur: $e')),
+                              data: (lignes) {
+                                if (lignes.isEmpty) {
+                                  return const Center(
+                                    child: Text('Aucun matériel remis'),
+                                  );
+                                }
+                                return ListView.builder(
+                                  itemCount: lignes.length,
+                                  itemBuilder: (context, idx) {
+                                    final l = lignes[idx];
+                                    final mat = l['materiels'] as Map<String, dynamic>?;
+                                    final matName = mat?['nom'] ?? 'Matériel inconnu';
+                                    final matRef = mat?['reference'] ?? '';
+
+                                    return Card(
+                                      elevation: 1,
+                                      margin: const EdgeInsets.symmetric(vertical: 4),
+                                      child: ListTile(
+                                        leading: const Icon(Icons.devices, color: AppColors.primary),
+                                        title: Text(matName),
+                                        subtitle: Text('Réf : $matRef'),
+                                        trailing: const Icon(
+                                          Icons.check_circle,
+                                          color: AppColors.success,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            )
+                          : categoriesAsync.when(
+                              loading: () => const Center(child: CircularProgressIndicator()),
+                              error: (e, _) => Center(child: Text('Erreur: $e')),
+                              data: (categories) {
+                                if (categories.isEmpty) {
+                                  return const Center(
+                                    child: Text('Aucune catégorie demandée'),
+                                  );
+                                }
+                                return ListView.builder(
+                                  itemCount: categories.length,
+                                  itemBuilder: (context, idx) {
+                                    final cat = categories[idx];
+                                    final catData = cat['categories'] as Map<String, dynamic>?;
+                                    final catName = catData?['nom'] ?? 'Catégorie';
+                                    final quantite = cat['quantite'] ?? 1;
+
+                                    return Card(
+                                      elevation: 1,
+                                      margin: const EdgeInsets.symmetric(vertical: 4),
+                                      child: ListTile(
+                                        leading: const Icon(Icons.category, color: AppColors.primary),
+                                        title: Text(catName),
+                                        subtitle: Text('Quantité: $quantite - En attente'),
+                                        trailing: const Icon(
+                                          Icons.hourglass_empty,
+                                          color: AppColors.warning,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                    ),
+
                     if (actionState.hasError)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
@@ -167,181 +221,7 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                         ),
                       ),
 
-                    // ──────────────────────────────────────────────
-                    // ACTIONS POUR LE TECHNICIEN / ADMIN
-                    // ──────────────────────────────────────────────
-
-                    // ✅ Le technicien/admin peut confirmer la remise
-                    //    en saisissant le code (état EN_ATTENTE ou VALIDE)
-                    if (isTechOrAdmin &&
-                        (etat == 'EN_ATTENTE' || etat == 'VALIDE') &&
-                        codeRemise.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Card(
-                        elevation: 2,
-                        color: AppColors.surfaceContainerLow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Confirmer la remise du matériel',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Saisissez le code de remise fourni par l\'utilisateur.',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                TextFormField(
-                                  controller: _codeController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Code de remise (6 chiffres)',
-                                    border: OutlineInputBorder(),
-                                    isDense: true,
-                                  ),
-                                  validator: (val) {
-                                    if (val == null || val.length != 6) {
-                                      return 'Code à 6 chiffres requis';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 12),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                        horizontal: 24,
-                                      ),
-                                      backgroundColor: AppColors.success,
-                                    ),
-                                    onPressed: actionState.isLoading
-                                        ? null
-                                        : () async {
-                                            if (_formKey.currentState?.validate() ?? false) {
-                                              try {
-                                                await ref
-                                                    .read(ticketActionProvider.notifier)
-                                                    .confirmerRemise(
-                                                      id,
-                                                      _codeController.text.trim(),
-                                                      user.id,
-                                                      userId: user.id,
-                                                    );
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    const SnackBar(
-                                                      content: Text('Remise confirmée'),
-                                                      backgroundColor: Colors.green,
-                                                    ),
-                                                  );
-                                                  _codeController.clear();
-                                                }
-                                              } catch (e) {
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text('Erreur : $e'),
-                                                      backgroundColor: Colors.red,
-                                                    ),
-                                                  );
-                                                }
-                                              }
-                                            }
-                                          },
-                                    child: actionState.isLoading
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : const Text(
-                                            'Confirmer la remise',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-
-                    // ✅ Le technicien/admin peut confirmer le retour
-                    //    quand le ticket est EN_COURS
-                    if (isTechOrAdmin && etat == 'EN_COURS') ...[
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: actionState.isLoading
-                              ? null
-                              : () async {
-                                  try {
-                                    await ref
-                                        .read(ticketActionProvider.notifier)
-                                        .confirmReturn(id, user.id, userId: user.id);
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Retour confirmé !'),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      );
-                                    }
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Erreur : $e'),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                },
-                          child: actionState.isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : const Text(
-                                  'Confirmer le retour physique',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                        ),
-                      ),
-                    ],
-
-                    // ✅ Message pour l'utilisateur Simple
+                    // Message pour l'utilisateur Simple
                     if (!isTechOrAdmin &&
                         codeRemise.isNotEmpty &&
                         etat != 'RENDU' &&
@@ -359,6 +239,31 @@ class _TicketDetailPageState extends ConsumerState<TicketDetailPage> {
                               Expanded(
                                 child: Text(
                                   'Présentez ce code au technicien pour récupérer le matériel.',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+
+                    // Message pour le technicien
+                    if (isTechOrAdmin &&
+                        (etat == 'EN_ATTENTE' || etat == 'VALIDE') &&
+                        codeRemise.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Card(
+                        color: AppColors.warningContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.arrow_forward, color: AppColors.warning),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'Pour traiter ce ticket, allez dans la section "Tickets Zone" et utilisez le formulaire de remise.',
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ),
