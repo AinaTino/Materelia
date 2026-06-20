@@ -36,6 +36,8 @@ class ProfileController extends _$ProfileController {
   }
 }
 
+// ─── Anciens providers conservés pour compatibilité ────────────────────────
+
 @riverpod
 Future<Gerer?> zoneGeree(Ref ref) {
   return ref.read(profileServiceProvider).getZoneGeree();
@@ -44,4 +46,11 @@ Future<Gerer?> zoneGeree(Ref ref) {
 @riverpod
 Future<Zone> zoneById(Ref ref, String idZone) {
   return ref.read(profileServiceProvider).getZoneById(idZone);
+}
+
+// ─── Nouveau provider multi-zones ──────────────────────────────────────────
+
+@riverpod
+Future<List<ZoneAvecStocks>> zonesAvecStocks(Ref ref) {
+  return ref.read(profileServiceProvider).getZonesAvecStocks();
 }

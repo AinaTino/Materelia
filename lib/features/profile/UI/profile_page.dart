@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/features/profile/provider/profile_provider.dart';
+import 'package:materelia/features/profile/service/profile_service.dart';
 import 'package:materelia/shared/models/utilisateur.dart';
 import 'package:materelia/shared/tools/date_convert.dart';
 import 'package:materelia/shared/widgets/app_snack_bar.dart';
@@ -10,9 +11,9 @@ import 'package:materelia/shared/widgets/feedback_card.dart';
 import 'package:materelia/shared/widgets/loading.dart';
 
 const _roleLabels = {
-  'simple': (BadgeEtatType.secondary, 'Simple'),
-  'technicien': (BadgeEtatType.warning, 'Technicien'),
-  'admin': (BadgeEtatType.success, 'Admin'),
+  'SIMPLE': (BadgeEtatType.secondary, 'Simple'),
+  'TECHNICIEN': (BadgeEtatType.warning, 'Technicien'),
+  'ADMIN': (BadgeEtatType.success, 'Admin'),
 };
 
 class ProfilPage extends ConsumerWidget {
@@ -88,7 +89,7 @@ class _ProfilContentState extends ConsumerState<_ProfilContent> {
     final u = widget.utilisateur;
     final (badgeType, badgeLabel) =
         _roleLabels[u.role] ?? (BadgeEtatType.secondary, u.role);
-    final isTechnicien = u.role == 'technicien';
+    final isTechnicien = u.role == 'TECHNICIEN';
     final colorScheme = Theme.of(context).colorScheme;
     final isDesktop = MediaQuery.sizeOf(context).width >= 900;
 
@@ -217,6 +218,10 @@ class _ProfilContentState extends ConsumerState<_ProfilContent> {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Header
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _ProfileHeader extends StatelessWidget {
   final Utilisateur utilisateur;
   final BadgeEtatType badgeType;
@@ -313,6 +318,10 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Details
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _ProfileDetails extends StatelessWidget {
   final bool editMode;
   final GlobalKey<FormState> formKey;
@@ -342,7 +351,9 @@ class _ProfileDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _ProfilePanel(
-          icon: editMode ? Icons.edit_note_outlined : Icons.account_box_outlined,
+          icon: editMode
+              ? Icons.edit_note_outlined
+              : Icons.account_box_outlined,
           title: editMode ? 'Modifier mes informations' : 'Informations',
           child: editMode
               ? _EditForm(
@@ -357,22 +368,28 @@ class _ProfileDetails extends StatelessWidget {
         ),
         if (isTechnicien) ...[
           const SizedBox(height: 18),
-          const _ZoneCard(),
+          const _ZonesCard(),
         ],
       ],
     );
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Panel générique (titre + icône + contenu)
+// ─────────────────────────────────────────────────────────────────────────────
+
 class _ProfilePanel extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget child;
+  final Widget? trailing;
 
   const _ProfilePanel({
     required this.icon,
     required this.title,
     required this.child,
+    this.trailing,
   });
 
   @override
@@ -395,7 +412,8 @@ class _ProfilePanel extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer.withValues(alpha: 0.8),
+                  color:
+                      colorScheme.primaryContainer.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, size: 18, color: colorScheme.primary),
@@ -411,6 +429,7 @@ class _ProfilePanel extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              if (trailing != null) trailing!,
             ],
           ),
           const SizedBox(height: 18),
@@ -420,6 +439,10 @@ class _ProfilePanel extends StatelessWidget {
     );
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Infos (vue lecture)
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _InfosView extends StatelessWidget {
   final Utilisateur utilisateur;
@@ -451,6 +474,10 @@ class _InfosView extends StatelessWidget {
     );
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Formulaire d'édition
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _EditForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -530,58 +557,274 @@ class _EditForm extends StatelessWidget {
   }
 }
 
-class _ZoneCard extends ConsumerWidget {
-  const _ZoneCard();
+// ─────────────────────────────────────────────────────────────────────────────
+// Zones + Stocks — nouvelle carte multi-zones
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _ZonesCard extends ConsumerWidget {
+  const _ZonesCard();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _ProfilePanel(
-      icon: Icons.warehouse_outlined,
-      title: 'Zone gérée',
-      child: ref
-          .watch(zoneGereeProvider)
-          .when(
+      icon: Icons.map_outlined,
+      title: 'Zones & Stocks gérés',
+      child: ref.watch(zonesAvecStocksProvider).when(
             loading: () => const LinearProgressIndicator(),
             error: (e, _) => Text(
               'Erreur : $e',
               style: const TextStyle(color: Colors.red),
             ),
-            data: (gerer) => gerer == null
-                ? const FeedbackCard(
-                    type: FeedbackType.warning,
-                    message: 'Aucune zone ne vous est assignée.',
-                    dense: true,
-                  )
-                : ref
-                      .watch(zoneByIdProvider(gerer.idZone))
-                      .when(
-                        loading: () => const LinearProgressIndicator(),
-                        error: (e, _) => Text(
-                          'Erreur : $e',
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                        data: (zone) => Column(
-                          children: [
-                            _ProfilRow(
-                              icon: Icons.location_on_outlined,
-                              label: 'Nom',
-                              value: zone.nom,
-                            ),
-                            if (zone.description != null) ...[
-                              const Divider(height: 24),
-                              _ProfilRow(
-                                icon: Icons.info_outline,
-                                label: 'Description',
-                                value: zone.description!,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
+            data: (zones) {
+              if (zones.isEmpty) {
+                return const FeedbackCard(
+                  type: FeedbackType.warning,
+                  message: 'Aucune zone ne vous est assignée.',
+                  dense: true,
+                );
+              }
+              return Column(
+                children: [
+                  for (int i = 0; i < zones.length; i++) ...[
+                    if (i > 0) const SizedBox(height: 12),
+                    _ZoneTile(zoneAvecStocks: zones[i]),
+                  ],
+                ],
+              );
+            },
           ),
     );
   }
 }
+
+/// Affiche une zone avec son badge de comptage de stocks
+/// et la liste dépliable de ses stocks.
+class _ZoneTile extends StatefulWidget {
+  final ZoneAvecStocks zoneAvecStocks;
+
+  const _ZoneTile({required this.zoneAvecStocks});
+
+  @override
+  State<_ZoneTile> createState() => _ZoneTileState();
+}
+
+class _ZoneTileState extends State<_ZoneTile> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final zone = widget.zoneAvecStocks.zone;
+    final stocks = widget.zoneAvecStocks.stocks;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: _expanded
+              ? AppColors.primary.withValues(alpha: 0.35)
+              : colorScheme.outlineVariant,
+        ),
+      ),
+      child: Column(
+        children: [
+          // ── En-tête de la zone ──────────────────────────────────────────
+          InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: stocks.isNotEmpty
+                ? () => setState(() => _expanded = !_expanded)
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.location_on_outlined,
+                      size: 18,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          zone.nom,
+                          style: textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        if (zone.description != null &&
+                            zone.description!.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            zone.description!,
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Badge compteur de stocks
+                  _StockCountBadge(count: stocks.length),
+                  if (stocks.isNotEmpty) ...[
+                    const SizedBox(width: 4),
+                    AnimatedRotation(
+                      turns: _expanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 20,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+
+          // ── Liste des stocks (dépliable) ────────────────────────────────
+          if (_expanded && stocks.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 12,
+              ),
+              child: Column(
+                children: [
+                  Divider(
+                    height: 1,
+                    color: colorScheme.outlineVariant,
+                  ),
+                  const SizedBox(height: 10),
+                  for (int i = 0; i < stocks.length; i++) ...[
+                    if (i > 0)
+                      Divider(
+                        height: 16,
+                        indent: 36,
+                        color: colorScheme.outlineVariant.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    _StockRow(stock: stocks[i]),
+                  ],
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Petit badge qui affiche le nombre de stocks dans une zone.
+class _StockCountBadge extends StatelessWidget {
+  final int count;
+
+  const _StockCountBadge({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final hasStocks = count > 0;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: hasStocks
+            ? AppColors.primary.withValues(alpha: 0.12)
+            : colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.warehouse_outlined,
+            size: 13,
+            color: hasStocks
+                ? colorScheme.primary
+                : colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$count stock${count > 1 ? 's' : ''}',
+            style: textTheme.labelSmall?.copyWith(
+              color: hasStocks
+                  ? colorScheme.primary
+                  : colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Ligne d'un stock individuel dans la liste dépliée.
+class _StockRow extends StatelessWidget {
+  final dynamic stock; // Stock
+
+  const _StockRow({required this.stock});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.shelves,
+            size: 15,
+            color: colorScheme.secondary,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            stock.nom as String,
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Row générique (icône + label + valeur)
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _ProfilRow extends StatelessWidget {
   final IconData icon;

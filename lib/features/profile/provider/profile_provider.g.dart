@@ -195,3 +195,44 @@ final class ZoneByIdFamily extends $Family
   @override
   String toString() => r'zoneByIdProvider';
 }
+
+@ProviderFor(zonesAvecStocks)
+final zonesAvecStocksProvider = ZonesAvecStocksProvider._();
+
+final class ZonesAvecStocksProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ZoneAvecStocks>>,
+          List<ZoneAvecStocks>,
+          FutureOr<List<ZoneAvecStocks>>
+        >
+    with
+        $FutureModifier<List<ZoneAvecStocks>>,
+        $FutureProvider<List<ZoneAvecStocks>> {
+  ZonesAvecStocksProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'zonesAvecStocksProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$zonesAvecStocksHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<ZoneAvecStocks>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<ZoneAvecStocks>> create(Ref ref) {
+    return zonesAvecStocks(ref);
+  }
+}
+
+String _$zonesAvecStocksHash() => r'5f565d9b4898a7d12be307f2aa99df53945a6f6b';
