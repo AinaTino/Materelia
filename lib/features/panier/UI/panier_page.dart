@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:materelia/core/theme/app_colors.dart';
+import 'package:materelia/shared/widgets/app_snack_bar.dart';
+import 'package:materelia/shared/widgets/empty_state.dart';
+import 'package:materelia/shared/widgets/feedback_card.dart'; // ✅ Ajouter cet import
+import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/panier_provider.dart';
 import '../widgets/categorie_card.dart';
-import '../../../shared/widgets/empty_state.dart';
-import '../../../shared/widgets/toolbar.dart';
-import '../../../shared/widgets/feedback_card.dart';
-import '../../../shared/widgets/loading.dart';
-import '../../../shared/widgets/error_view.dart';
 
 class PanierPage extends ConsumerStatefulWidget {
   const PanierPage({super.key});
@@ -47,13 +46,32 @@ class _PanierPageState extends ConsumerState<PanierPage> {
 
           Expanded(
             child: categoriesAsync.when(
-              loading: () => const AppLoading(),
-              error: (e, _) => ErrorView(
-                message: e.toString(),
-                onRetry: () => ref.refresh(categoriesDisponiblesProvider),
+              loading: () => const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Chargement du catalogue...'),
+                  ],
+                ),
+              ),
+              error: (e, _) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: Colors.grey.shade400),
+                    const SizedBox(height: 16),
+                    Text('Erreur : $e'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => ref.refresh(categoriesDisponiblesProvider),
+                      child: const Text('Réessayer'),
+                    ),
+                  ],
+                ),
               ),
               data: (cats) {
-                // Filtrer par recherche
                 final filtered = cats.where((cat) {
                   final nom = cat['nom']?.toString() ?? '';
                   final desc = cat['description']?.toString() ?? '';
@@ -88,10 +106,16 @@ class _PanierPageState extends ConsumerState<PanierPage> {
                       final desc = cat['description']?.toString() ?? '';
                       final materiels = (cat['materiels'] as List<dynamic>?)
                               ?.whereType<Map<String, dynamic>>()
-                              .toList() ??
-                          [];
+                              .toList() ?? [];
                       final dispoCount = materiels.length;
                       final imageUrl = cat['image_url']?.toString();
+
+                      final existing = panier.lignes.firstWhere(
+                        (l) => l['id_categorie']?.toString() == id,
+                        orElse: () => {},
+                      );
+                      final currentQuantite = (existing['quantite'] as int?) ?? 0;
+                      final canAdd = currentQuantite < dispoCount;
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
@@ -100,18 +124,30 @@ class _PanierPageState extends ConsumerState<PanierPage> {
                           description: desc,
                           dispoCount: dispoCount,
                           imageUrl: imageUrl,
-                          onAdd: dispoCount == 0
+                          currentQuantite: currentQuantite,
+                          onAdd: !canAdd
                               ? null
                               : () {
-                                  ref.read(panierProvider.notifier).addCategorie(id, nom, quantite: 1);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('$nom ajouté au panier'),
-                                      backgroundColor: AppColors.success,
+                                  final success = ref.read(panierProvider.notifier).addCategorie(
+                                        id,
+                                        nom,
+                                        dispoCount,
+                                        quantite: 1,
+                                      );
+                                  if (success) {
+                                    AppSnackBar.show(
+                                      context,
+                                      message: '$nom ajouté au panier',
+                                      type: FeedbackType.success,
                                       duration: const Duration(seconds: 1),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
+                                    );
+                                  } else {
+                                    AppSnackBar.show(
+                                      context,
+                                      message: 'Quantité maximale atteinte pour $nom',
+                                      type: FeedbackType.error,
+                                    );
+                                  }
                                 },
                         ),
                       );

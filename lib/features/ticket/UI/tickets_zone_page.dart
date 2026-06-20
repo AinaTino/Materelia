@@ -6,7 +6,6 @@ import 'package:materelia/features/profile/provider/profile_provider.dart';
 import 'package:materelia/shared/widgets/app_snack_bar.dart';
 import 'package:materelia/shared/widgets/feedback_card.dart';
 import 'package:materelia/shared/widgets/loading.dart';
-import 'package:materelia/shared/widgets/toolbar.dart';
 import '../provider/ticket_provider.dart';
 
 class TicketsZonePage extends ConsumerStatefulWidget {
@@ -17,6 +16,7 @@ class TicketsZonePage extends ConsumerStatefulWidget {
 }
 
 class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _remiseCodeController = TextEditingController();
   final _remiseFormKey = GlobalKey<FormState>();
   final _retourCodeController = TextEditingController();
@@ -52,6 +52,7 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
         }
 
         return Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             title: const Text('Gestion des tickets'),
             elevation: 0,
@@ -61,14 +62,12 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Carte 1 : Remise du matériel
+                // ✅ Carte Remise
                 Card(
                   elevation: 2,
-                  shadowColor: Colors.black.withAlpha(30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Form(
@@ -147,31 +146,11 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
                                   : () async {
                                       if (_remiseFormKey.currentState?.validate() ?? false) {
                                         final code = _remiseCodeController.text.trim();
-                                        try {
-                                          await ref
-                                              .read(ticketActionProvider.notifier)
-                                              .confirmerRemiseParCode(
-                                                code,
-                                                user.id,
-                                                userId: user.id,
-                                              );
-                                          if (context.mounted) {
-                                            AppSnackBar.show(
-                                              context,
-                                              message: 'Remise confirmée avec succès',
-                                              type: FeedbackType.success,
-                                            );
-                                            _remiseCodeController.clear();
-                                          }
-                                        } catch (e) {
-                                          if (context.mounted) {
-                                            AppSnackBar.show(
-                                              context,
-                                              message: 'Erreur: $e',
-                                              type: FeedbackType.error,
-                                            );
-                                          }
-                                        }
+                                        await _showMaterielSelectionDialog(
+                                          context,
+                                          code,
+                                          user.id,
+                                        );
                                       }
                                     },
                               child: actionState.isLoading
@@ -200,14 +179,12 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
                 ),
                 const SizedBox(height: 16),
 
-                // Carte 2 : Retour du matériel
+                // ✅ Carte Retour
                 Card(
                   elevation: 2,
-                  shadowColor: Colors.black.withAlpha(30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Form(
@@ -300,8 +277,8 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
                                               message: 'Retour confirmé avec succès',
                                               type: FeedbackType.success,
                                             );
-                                            _retourCodeController.clear();
                                           }
+                                          _retourCodeController.clear();
                                         } catch (e) {
                                           if (context.mounted) {
                                             AppSnackBar.show(
@@ -350,5 +327,467 @@ class _TicketsZonePageState extends ConsumerState<TicketsZonePage> {
         ),
       ),
     );
+  }
+
+  // ✅ Dialogue de sélection des matériels
+  Future<void> _showMaterielSelectionDialog(
+    BuildContext context,
+    String code,
+    String technicienId,
+  ) async {
+    try {
+      // 1. Trouver le ticket par code
+      final ticket = await ref.read(ticketServiceProvider).trouverTicketParCode(code);
+      
+      if (ticket == null) {
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            message: 'Code invalide. Aucun ticket trouvé.',
+            type: FeedbackType.error,
+          );
+        }
+        return;
+      }
+
+      final ticketId = ticket['id_ticket'];
+      final currentEtat = ticket['etat']?.toString() ?? '';
+
+      if (currentEtat == 'RENDU' || currentEtat == 'REFUSE' || currentEtat == 'EXPIRE') {
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            message: 'Ce ticket est déjà terminé.',
+            type: FeedbackType.error,
+          );
+        }
+        return;
+      }
+
+      if (currentEtat == 'EN_COURS') {
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            message: 'Ce ticket est déjà en cours de traitement.',
+            type: FeedbackType.error,
+          );
+        }
+        return;
+      }
+
+      // 2. Récupérer les catégories demandées
+      List<Map<String, dynamic>> categories = [];
+      try {
+        categories = await ref.read(ticketCategoriesProvider(ticketId).future);
+      } catch (e) {
+        print('Erreur récupération catégories: $e');
+      }
+      
+      if (categories.isEmpty) {
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            message: 'Aucune catégorie trouvée pour ce ticket.',
+            type: FeedbackType.error,
+          );
+        }
+        return;
+      }
+
+      // 3. Calculer le nombre total de matériels demandés
+      int totalDemande = 0;
+      for (final cat in categories) {
+        totalDemande += (cat['quantite'] as int?) ?? 1;
+      }
+
+      // 4. Récupérer tous les matériels disponibles
+      Map<String, List<Map<String, dynamic>>> materielsParCategorie = {};
+      for (final cat in categories) {
+        final catId = cat['categorie_id']?.toString() ?? '';
+        final catData = cat['categories'] as Map<String, dynamic>?;
+        final catNom = catData?['nom'] ?? 'Catégorie';
+        
+        if (catId.isEmpty) continue;
+        
+        try {
+          final materiels = await ref
+              .read(materielsDisponiblesPourCategorieProvider(catId).future);
+          
+          materielsParCategorie[catId] = materiels.map((mat) => ({
+            ...mat,
+            'categorie_nom': catNom,
+            'categorie_id': catId,
+          })).toList();
+        } catch (e) {
+          print('Erreur récupération matériels pour catégorie $catId: $e');
+          materielsParCategorie[catId] = [];
+        }
+      }
+
+      // 5. État de sélection
+      final selectedIds = <String>[];
+      String selectedCategorieId = categories.isNotEmpty 
+          ? categories.first['categorie_id']?.toString() ?? '' 
+          : '';
+
+      if (!context.mounted) return;
+
+      // 6. Afficher le dialogue
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (dialogContext) => StatefulBuilder(
+          builder: (dialogContext, setState) {
+            // Filtrer les matériels par catégorie sélectionnée
+            List<Map<String, dynamic>> materielsFiltres = [];
+            if (selectedCategorieId.isNotEmpty && materielsParCategorie.containsKey(selectedCategorieId)) {
+              materielsFiltres = materielsParCategorie[selectedCategorieId] ?? [];
+            } else {
+              for (final mats in materielsParCategorie.values) {
+                materielsFiltres.addAll(mats);
+              }
+            }
+
+            return Container(
+              padding: const EdgeInsets.all(16),
+              height: MediaQuery.of(dialogContext).size.height * 0.85,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Titre
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Attribution des matériels',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(dialogContext),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  // Numéro du ticket
+                  Text(
+                    'Ticket #${ticketId.substring(0, 8).toUpperCase()}',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  
+                  // Total demandé
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.info_outline, color: AppColors.primary, size: 16),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Total demandé: $totalDemande matériel(s)',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${selectedIds.length} sélectionné(s)',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  const Divider(),
+                  const SizedBox(height: 8),
+
+                  // Catégories demandées
+                  Text(
+                    'Catégories demandées',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryContainer.withAlpha(50),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.primaryContainer),
+                    ),
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      children: categories.map((cat) {
+                        final catId = cat['categorie_id']?.toString() ?? '';
+                        final catData = cat['categories'] as Map<String, dynamic>?;
+                        final catNom = catData?['nom'] ?? 'Catégorie';
+                        final quantite = cat['quantite'] ?? 1;
+                        final isSelected = selectedCategorieId == catId;
+                        
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCategorieId = catId;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primary : Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  catNom,
+                                  style: TextStyle(
+                                    color: isSelected ? Colors.white : AppColors.textPrimary,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? Colors.white : AppColors.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    '$quantite',
+                                    style: TextStyle(
+                                      color: isSelected ? AppColors.primary : Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Matériels disponibles
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Matériels disponibles',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      Text(
+                        '${selectedIds.length} sélectionné(s)',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: selectedIds.isNotEmpty ? AppColors.success : Colors.grey.shade600,
+                          fontWeight: selectedIds.isNotEmpty ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: materielsFiltres.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.inventory_2_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  'Aucun matériel disponible pour cette catégorie',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: materielsFiltres.length,
+                            itemBuilder: (context, index) {
+                              final mat = materielsFiltres[index];
+                              final id = mat['id_materiel']?.toString() ?? '';
+                              final nom = mat['nom']?.toString() ?? 'Inconnu';
+                              final refe = mat['reference']?.toString() ?? '';
+                              final isSelected = selectedIds.contains(id);
+
+                              return Card(
+                                elevation: 0,
+                                margin: const EdgeInsets.symmetric(vertical: 3),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: isSelected ? AppColors.success : Colors.grey.shade200,
+                                    width: isSelected ? 2 : 1,
+                                  ),
+                                ),
+                                child: CheckboxListTile(
+                                  value: isSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value == true) {
+                                        selectedIds.add(id);
+                                      } else {
+                                        selectedIds.remove(id);
+                                      }
+                                    });
+                                  },
+                                  title: Text(
+                                    nom,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: isSelected ? AppColors.success : AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  subtitle: Text('Réf: $refe'),
+                                  secondary: isSelected
+                                      ? const Icon(Icons.check_circle, color: AppColors.success)
+                                      : const Icon(Icons.circle_outlined, color: Colors.grey),
+                                  selected: isSelected,
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  const Divider(),
+                  
+                  // ✅ Boutons avec AppSnackBar
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(dialogContext),
+                          child: const Text('Annuler'),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: selectedIds.isNotEmpty && selectedIds.length == totalDemande
+                                ? AppColors.success
+                                : Colors.grey.shade400,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: (selectedIds.isEmpty || selectedIds.length != totalDemande)
+                              ? null
+                              : () async {
+                                  // ✅ Sauvegarder le contexte de la page avant de fermer le dialogue
+                                  final pageContext = context;
+                                  
+                                  // Fermer le dialogue
+                                  Navigator.pop(dialogContext);
+                                  
+                                  try {
+                                    await ref
+                                        .read(ticketActionProvider.notifier)
+                                        .confirmerRemiseAvecMateriels(
+                                          code: code,
+                                          technicienId: technicienId,
+                                          materielIds: selectedIds,
+                                        );
+                                    
+                                    // ✅ Utiliser le contexte de la page pour afficher le toast
+                                    if (pageContext.mounted) {
+                                      AppSnackBar.show(
+                                        pageContext,
+                                        message: 'Remise confirmée avec succès',
+                                        type: FeedbackType.success,
+                                      );
+                                      _remiseCodeController.clear();
+                                    }
+                                  } catch (e) {
+                                    if (pageContext.mounted) {
+                                      AppSnackBar.show(
+                                        pageContext,
+                                        message: 'Erreur: $e',
+                                        type: FeedbackType.error,
+                                      );
+                                    }
+                                  }
+                                },
+                          child: Text(
+                            'Attribuer (${selectedIds.length})',
+                            style: TextStyle(
+                              color: selectedIds.isNotEmpty && selectedIds.length == totalDemande
+                                  ? Colors.white
+                                  : Colors.grey.shade600,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    } catch (e) {
+      print('Erreur générale dans _showMaterielSelectionDialog: $e');
+      if (context.mounted) {
+        AppSnackBar.show(
+          context,
+          message: 'Erreur: $e',
+          type: FeedbackType.error,
+        );
+      }
+    }
   }
 }

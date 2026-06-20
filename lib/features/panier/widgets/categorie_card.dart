@@ -6,6 +6,7 @@ class CategorieCard extends StatelessWidget {
   final String? description;
   final int dispoCount;
   final String? imageUrl;
+  final int currentQuantite;
   final VoidCallback? onAdd;
 
   const CategorieCard({
@@ -14,14 +15,17 @@ class CategorieCard extends StatelessWidget {
     this.description,
     required this.dispoCount,
     this.imageUrl,
+    this.currentQuantite = 0,
     this.onAdd,
   });
 
   @override
   Widget build(BuildContext context) {
+    final canAdd = onAdd != null && currentQuantite < dispoCount;
+
     return Card(
-      elevation: 0,
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      elevation: 2,
+      shadowColor: Colors.black.withAlpha(30),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
@@ -29,11 +33,13 @@ class CategorieCard extends StatelessWidget {
           width: 1,
         ),
       ),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            // Image (à gauche)
+            // Image
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: SizedBox(
@@ -48,7 +54,7 @@ class CategorieCard extends StatelessWidget {
                           child: const Icon(
                             Icons.category,
                             color: AppColors.primary,
-                            size: 40,
+                            size: 32,
                           ),
                         ),
                         loadingBuilder: (context, child, loadingProgress) {
@@ -72,14 +78,14 @@ class CategorieCard extends StatelessWidget {
                         child: const Icon(
                           Icons.category,
                           color: AppColors.primary,
-                          size: 40,
+                          size: 32,
                         ),
                       ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
 
-            // Infos (au centre)
+            // Infos
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,15 +99,17 @@ class CategorieCard extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
+                            color: AppColors.textPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      // Badge de disponibilité
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
+                          horizontal: 10,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
                           color: dispoCount > 0
@@ -109,13 +117,24 @@ class CategorieCard extends StatelessWidget {
                               : AppColors.errorContainer,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          dispoCount > 0 ? '$dispoCount' : '0',
-                          style: TextStyle(
-                            color: dispoCount > 0 ? AppColors.success : AppColors.error,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              dispoCount > 0 ? Icons.check_circle : Icons.block,
+                              size: 14,
+                              color: dispoCount > 0 ? AppColors.success : AppColors.error,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              dispoCount > 0 ? '$dispoCount' : '0',
+                              style: TextStyle(
+                                color: dispoCount > 0 ? AppColors.success : AppColors.error,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -126,21 +145,42 @@ class CategorieCard extends StatelessWidget {
                       description!,
                       style: TextStyle(
                         color: Colors.grey.shade600,
-                        fontSize: 12,
+                        fontSize: 13,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  if (currentQuantite > 0) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '$currentQuantite dans le panier',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ],
               ),
             ),
 
-            // ✅ Bouton Ajouter (à droite, icône uniquement)
-            if (onAdd != null && dispoCount > 0)
+            // ✅ Bouton Ajouter à droite
+            const SizedBox(width: 8),
+            if (canAdd)
               Container(
-                margin: const EdgeInsets.only(left: 8),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
@@ -149,23 +189,22 @@ class CategorieCard extends StatelessWidget {
                   icon: const Icon(
                     Icons.add_shopping_cart,
                     color: Colors.white,
-                    size: 20,
+                    size: 22,
                   ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
-                    minWidth: 40,
-                    minHeight: 40,
+                    minWidth: 44,
+                    minHeight: 44,
                   ),
                   style: IconButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                   ),
                 ),
               )
-            else if (dispoCount == 0)
+            else
               Container(
-                margin: const EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
                   shape: BoxShape.circle,
@@ -175,12 +214,12 @@ class CategorieCard extends StatelessWidget {
                   icon: Icon(
                     Icons.block,
                     color: Colors.grey,
-                    size: 20,
+                    size: 22,
                   ),
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(
-                    minWidth: 40,
-                    minHeight: 40,
+                    minWidth: 44,
+                    minHeight: 44,
                   ),
                 ),
               ),

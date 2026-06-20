@@ -46,12 +46,7 @@ class _TicketPageState extends ConsumerState<TicketPage> {
           ),
         ),
         data: (user) {
-          final isTechOrAdmin = user.role == AppConstants.roleTechnicien ||
-              user.role == AppConstants.roleAdmin;
-
-          final ticketsAsync = isTechOrAdmin
-              ? ref.watch(ticketsTechnicienProvider(user.id))
-              : ref.watch(ticketsUserProvider(user.id));
+          final ticketsAsync = ref.watch(ticketsUserProvider(user.id));
 
           return Column(
             children: [
@@ -60,11 +55,7 @@ class _TicketPageState extends ConsumerState<TicketPage> {
                 onSearch: (v) => setState(() => _search = v),
                 onToggleDetail: () {},
                 onRefresh: () {
-                  if (isTechOrAdmin) {
-                    ref.invalidate(ticketsTechnicienProvider(user.id));
-                  } else {
-                    ref.invalidate(ticketsUserProvider(user.id));
-                  }
+                  ref.invalidate(ticketsUserProvider(user.id));
                 },
                 creer: null,
               ),
@@ -90,20 +81,14 @@ class _TicketPageState extends ConsumerState<TicketPage> {
                   error: (e, _) => ErrorView(
                     message: e.toString(),
                     onRetry: () {
-                      if (isTechOrAdmin) {
-                        ref.invalidate(ticketsTechnicienProvider(user.id));
-                      } else {
-                        ref.invalidate(ticketsUserProvider(user.id));
-                      }
+                      ref.invalidate(ticketsUserProvider(user.id));
                     },
                   ),
                   data: (ticketsList) {
-                    // Filtrer par état
                     var filtered = ticketsList;
                     if (_filtreEtat != null) {
                       filtered = filtered.where((t) => t['etat'] == _filtreEtat).toList();
                     }
-                    // Filtrer par recherche (lieu)
                     if (_search.isNotEmpty) {
                       final search = _search.toLowerCase();
                       filtered = filtered.where((t) {
@@ -122,34 +107,39 @@ class _TicketPageState extends ConsumerState<TicketPage> {
                       );
                     }
 
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: filtered.length,
-                      itemBuilder: (context, index) {
-                        final t = filtered[index];
-                        final id = t['id_ticket']?.toString() ?? '';
-                        final etat = t['etat']?.toString() ?? '';
-                        final lieu = t['lieu_utilisation']?.toString() ?? 'Non spécifié';
-                        final dateRaw = t['date_creation']?.toString();
-                        final dateCreation = dateRaw != null ? DateTime.parse(dateRaw) : null;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: TicketCard(
-                            id: id,
-                            etat: etat,
-                            lieu: lieu,
-                            dateCreation: dateCreation,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => TicketDetailPage(ticketId: id),
-                                ),
-                              );
-                            },
-                          ),
-                        );
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        ref.invalidate(ticketsUserProvider(user.id));
                       },
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final t = filtered[index];
+                          final id = t['id_ticket']?.toString() ?? '';
+                          final etat = t['etat']?.toString() ?? '';
+                          final lieu = t['lieu_utilisation']?.toString() ?? 'Non spécifié';
+                          final dateRaw = t['date_creation']?.toString();
+                          final dateCreation = dateRaw != null ? DateTime.parse(dateRaw) : null;
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: TicketCard(
+                              id: id,
+                              etat: etat,
+                              lieu: lieu,
+                              dateCreation: dateCreation,
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => TicketDetailPage(ticketId: id),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     );
                   },
                 ),

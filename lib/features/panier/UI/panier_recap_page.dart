@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:materelia/core/theme/app_colors.dart';
 import 'package:materelia/shared/services/supabase_service.dart';
+import 'package:materelia/shared/widgets/app_snack_bar.dart';
+import 'package:materelia/shared/widgets/feedback_card.dart';
 import '../provider/panier_provider.dart';
 
 class PanierRecapPage extends ConsumerStatefulWidget {
@@ -72,81 +74,140 @@ class _PanierRecapPageState extends ConsumerState<PanierRecapPage> {
       body: Form(
         key: _formKey,
         child: panier.lignes.isEmpty
-            ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.shopping_cart_outlined, size: 64, color: Colors.grey),
-                    SizedBox(height: 16),
-                    Text(
-                      'Panier vide',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Ajoutez des catégories depuis le catalogue',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ],
+            ? Center(
+                child: FeedbackCard(
+                  icon: Icons.shopping_cart_outlined,
+                  type: FeedbackType.warning,
+                  title: 'Panier vide',
+                  message: 'Ajoutez des catégories depuis le catalogue.',
                 ),
               )
-            : Padding(
+            : SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.shopping_cart, color: AppColors.primary),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${panier.lignes.length} article(s)',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      'Catégories sélectionnées',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     const SizedBox(height: 8),
-                    Expanded(
-                      flex: 3,
-                      child: ListView.builder(
-                        itemCount: panier.lignes.length,
-                        itemBuilder: (c, i) {
-                          final l = panier.lignes[i];
-                          final catId = l['id_categorie']?.toString() ?? '';
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(color: Colors.grey.shade200),
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: AppColors.primaryContainer,
-                                child: Text(
-                                  '${l['quantite'] ?? 1}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: panier.lignes.length,
+                      itemBuilder: (c, i) {
+                        final l = panier.lignes[i];
+                        final catId = l['id_categorie']?.toString() ?? '';
+                        final quantite = (l['quantite'] as int?) ?? 1;
+                        final dispoMax = (l['dispoMax'] as int?) ?? 0;
+
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.grey.shade200),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: AppColors.primaryContainer,
+                                  child: Text(
+                                    '$quantite',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primary,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              title: Text(l['nom'] ?? 'Catégorie'),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete_outline, color: AppColors.error),
-                                onPressed: () {
-                                  ref.read(panierProvider.notifier).removeCategorie(catId);
-                                },
-                              ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        l['nom'] ?? 'Catégorie',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Max: $dispoMax disponible(s)',
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove_circle_outline),
+                                      color: quantite > 1 ? AppColors.primary : Colors.grey,
+                                      onPressed: quantite > 1
+                                          ? () {
+                                              final success = ref
+                                                  .read(panierProvider.notifier)
+                                                  .updateQuantite(catId, quantite - 1);
+                                              if (!success) {
+                                                AppSnackBar.show(
+                                                  context,
+                                                  message: 'Quantité minimale atteinte',
+                                                  type: FeedbackType.error,
+                                                );
+                                              }
+                                            }
+                                          : null,
+                                    ),
+                                    Text(
+                                      '$quantite',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add_circle_outline),
+                                      color: quantite < dispoMax ? AppColors.primary : Colors.grey,
+                                      onPressed: quantite < dispoMax
+                                          ? () {
+                                              final success = ref
+                                                  .read(panierProvider.notifier)
+                                                  .updateQuantite(catId, quantite + 1);
+                                              if (!success) {
+                                                AppSnackBar.show(
+                                                  context,
+                                                  message: 'Quantité maximale atteinte',
+                                                  type: FeedbackType.error,
+                                                );
+                                              }
+                                            }
+                                          : null,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                                      onPressed: () {
+                                        ref.read(panierProvider.notifier).removeCategorie(catId);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
+
                     const Divider(height: 32),
+
                     const Text(
                       'Informations d\'emprunt',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -233,35 +294,29 @@ class _PanierRecapPageState extends ConsumerState<PanierRecapPage> {
                             ? null
                             : () async {
                                 if (_lieuController.text.trim().isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Le lieu d\'utilisation est requis'),
-                                      backgroundColor: AppColors.error,
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
+                                  AppSnackBar.show(
+                                    context,
+                                    message: 'Le lieu d\'utilisation est requis',
+                                    type: FeedbackType.error,
                                   );
                                   return;
                                 }
                                 if (_dateFin == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('La date de fin est requise'),
-                                      backgroundColor: AppColors.error,
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
+                                  AppSnackBar.show(
+                                    context,
+                                    message: 'La date de fin est requise',
+                                    type: FeedbackType.error,
                                   );
                                   return;
                                 }
 
                                 if (_formKey.currentState?.validate() ?? false) {
-                                  final messenger = ScaffoldMessenger.of(context);
                                   final user = SupabaseService.currentUser;
                                   if (user == null) {
-                                    messenger.showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Utilisateur non connecté'),
-                                        backgroundColor: AppColors.error,
-                                      ),
+                                    AppSnackBar.show(
+                                      context,
+                                      message: 'Utilisateur non connecté',
+                                      type: FeedbackType.error,
                                     );
                                     return;
                                   }
@@ -274,21 +329,17 @@ class _PanierRecapPageState extends ConsumerState<PanierRecapPage> {
                                         );
                                     if (context.mounted) {
                                       context.go('/mes-tickets');
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Demande soumise avec succès !'),
-                                          backgroundColor: AppColors.success,
-                                          behavior: SnackBarBehavior.floating,
-                                        ),
+                                      AppSnackBar.show(
+                                        context,
+                                        message: 'Demande soumise avec succès',
+                                        type: FeedbackType.success,
                                       );
                                     }
                                   } catch (e) {
-                                    messenger.showSnackBar(
-                                      SnackBar(
-                                        content: Text('Erreur : $e'),
-                                        backgroundColor: AppColors.error,
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
+                                    AppSnackBar.show(
+                                      context,
+                                      message: 'Erreur: $e',
+                                      type: FeedbackType.error,
                                     );
                                   }
                                 }
@@ -302,20 +353,13 @@ class _PanierRecapPageState extends ConsumerState<PanierRecapPage> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.check_circle, color: Colors.white, size: 20),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Confirmer la demande',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                            : const Text(
+                                'Confirmer la demande',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
                       ),
                     ),
